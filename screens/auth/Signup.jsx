@@ -3,7 +3,7 @@ import { View, Text, TextInput, TouchableOpacity } from "react-native";
 import { useForm } from "react-hook-form";
 import firebase from "../../firebase";
 
-export default function Register() {
+export default function Signup() {
   const {
     handleSubmit,
     formState: { errors },

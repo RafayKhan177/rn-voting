@@ -1,16 +1,12 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, View } from "react-native";
-import ManagePositionOffice from "./screens/admin/ManagePositionOffice";
-// import Register from "./screens/auth/Signup";
-// import Signin from "./screens/auth/Signin";
-// import Verify from "./screens/auth/Verify";
-// import Dashboard from "./screens/admin/Dashboard";
-// import ManageNominee from "./screens/admin/ManageNominee";
+// import NewCampaign from "./screens/admin/NewCampaign";
+import ManageCampaign from "./screens/admin/ManageCampaign";
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <ManagePositionOffice />
+      <ManageCampaign />
       <StatusBar style="auto" />
     </View>
   );

@@ -1,9 +1,16 @@
 import React, { useState } from "react";
 import firebase from "../../firebase";
-import { View, Text, TextInput, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+} from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { colors } from "../../constants";
 
-export default function Signin() {
+export default function Signin({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -35,35 +42,101 @@ export default function Signin() {
   };
 
   return (
-    <View style={{ marginTop: 8, alignItems: "center" }}>
-      <Text>Sign in</Text>
-      <View>
-        <TextInput
-          style={{ marginVertical: 8 }}
-          placeholder="Email"
-          autoCompleteType="email"
-          autoFocus
-          onChangeText={(text) => setEmail(text)}
-        />
-        <TextInput
-          style={{ marginVertical: 8 }}
-          placeholder="Password"
-          secureTextEntry
-          autoCompleteType="password"
-          onChangeText={(text) => setPassword(text)}
-        />
-        <TouchableOpacity onPress={handleSubmit}>
-          <Text>Sign In</Text>
+    <View style={styles.container}>
+      <View style={styles.inputContainer}>
+        <Text style={styles.title}>Sign in</Text>
+        <View style={styles.textInput}>
+          <TextInput
+            style={styles.input}
+            placeholder="Email"
+            autoCompleteType="email"
+            autoFocus
+            onChangeText={(text) => setEmail(text)}
+            placeholderTextColor="#999999"
+          />
+        </View>
+
+        <View style={styles.textInput}>
+          <TextInput
+            style={styles.input}
+            placeholder="Password"
+            secureTextEntry
+            autoCompleteType="password"
+            onChangeText={(text) => setPassword(text)}
+            placeholderTextColor="#999999"
+          />
+        </View>
+
+        <TouchableOpacity style={styles.signInButton} onPress={handleSubmit}>
+          <Text style={styles.buttonText}>Sign In</Text>
         </TouchableOpacity>
-        <View>
+        <View style={styles.linkContainer}>
           <TouchableOpacity>
-            <Text>Forgot password?</Text>
+            <Text style={styles.linkText}>Forgot password?</Text>
           </TouchableOpacity>
-          <TouchableOpacity>
-            <Text>Don't have an account? Sign Up</Text>
+          <TouchableOpacity onPress={() => navigation.push("SignupScreen")}>
+            <Text style={styles.linkText}>Don't have an account? Sign Up</Text>
           </TouchableOpacity>
         </View>
       </View>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: colors.background,
+    paddingVertical: 16,
+    paddingHorizontal: 16,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: colors.text,
+    marginBottom: 16,
+  },
+  inputContainer: {
+    width: "100%",
+    maxWidth: 700,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  textInput: {
+    margin: 4,
+    maxWidth: 300,
+    width: 700,
+    padding: 5,
+  },
+  input: {
+    backgroundColor: colors.backgroundAccent,
+    width: "100%",
+    borderRadius: 8,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    color: colors.text,
+  },
+  signInButton: {
+    backgroundColor: colors.primaryAccent,
+    borderRadius: 8,
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    marginBottom: 8,
+  },
+  buttonText: {
+    color: colors.text,
+    fontSize: 16,
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  linkContainer: {
+    flexDirection: "row",
+  },
+  linkText: {
+    color: colors.primary,
+    fontSize: 14,
+    marginRight: 8,
+  },
+});

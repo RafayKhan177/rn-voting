@@ -1,6 +1,17 @@
 export const userPicture =
   "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=740&t=st=1688908975~exp=1688909575~hmac=1e9639f92a0b0665ed4f28843631fdc549ae8d2cc6923f12c55a1f3957400b76";
 
+export const colors = {
+  primary: "#177E89",
+  primaryAccent: "#084C61",
+  secoundary: "#DB3A34",
+  secoundaryAccent: "#FFC857",
+  background: "#323031",
+  backgroundAccent: "#2C2F33",
+  text: "#e0fbfc",
+  textLight: "#9db4c0",
+};
+
 export const AdminPages = [
   { name: "Dashboard", url: "Dashboard" },
   {

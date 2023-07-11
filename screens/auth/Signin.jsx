@@ -9,15 +9,26 @@ export default function Signin() {
 
   const handleSubmit = async () => {
     try {
-      const userCredential = await firebase
-        .auth()
-        .signInWithEmailAndPassword(email, password);
-      const user = userCredential.user;
+      // const userCredential =
+      await firebase.auth().signInWithEmailAndPassword(email, password);
+      // const user = userCredential.user;
+
+      // Fetch user data from "users" collection
+      const usersCollection = firebase.firestore().collection("users");
+      const userQuery = usersCollection.where("email", "==", email);
+      const userSnapshot = await userQuery.get();
+
+      if (userSnapshot.empty) {
+        console.log("User not found");
+        return;
+      }
+
+      const userData = userSnapshot.docs[0].data();
 
       // Save user data to AsyncStorage
-      await AsyncStorage.setItem("userData", JSON.stringify(user));
+      await AsyncStorage.setItem("userData", JSON.stringify(userData));
 
-      console.log("signed in", user);
+      // console.log("signed in", userData);
     } catch (error) {
       console.error("Error signing in:", error);
     }

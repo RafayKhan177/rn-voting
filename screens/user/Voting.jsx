@@ -1,0 +1,242 @@
+import React, { useEffect, useState } from "react";
+import { View, Text, Image, TouchableOpacity } from "react-native";
+import { Button, Card } from "react-native-paper";
+import firebase from "../../firebase";
+import { userPicture } from "../../constants";
+
+export default function Voting() {
+  const [campaigns, setCampaigns] = useState([]);
+  const [nomineeNames, setNomineeNames] = useState({});
+  const [nomineePictures, setNomineePictures] = useState([]);
+  const [positionNames, setPositionNames] = useState({});
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const db = firebase.firestore();
+      const campaignsCollection = db.collection("campaigns");
+
+      try {
+        const campaignsSnapshot = await campaignsCollection.get();
+        const campaignsData = campaignsSnapshot.docs.map((doc) => {
+          const campaign = doc.data();
+          campaign.id = doc.id;
+          return campaign;
+        });
+
+        const nomineeIds = campaignsData.flatMap((campaign) =>
+          Object.values(campaign.nominees)
+        );
+        const positionIds = campaignsData.map((campaign) => campaign.position);
+
+        const nomineeNamesPromises = nomineeIds.map(async (nomineeId) => {
+          const nomineeDoc = await db
+            .collection("nominees")
+            .doc(nomineeId)
+            .get();
+          if (nomineeDoc.exists) {
+            const nomineeData = nomineeDoc.data();
+            return {
+              [nomineeId]: nomineeData.firstName + " " + nomineeData.lastName,
+            };
+          }
+        });
+
+        const positionNamesPromises = positionIds.map(async (positionId) => {
+          const positionDoc = await db
+            .collection("positions")
+            .doc(positionId)
+            .get();
+          if (positionDoc.exists) {
+            const positionData = positionDoc.data();
+            return {
+              [positionId]:
+                positionData.name + ` / ` + positionData.description,
+            };
+          }
+        });
+
+        const nomineeNamesResults = await Promise.all(nomineeNamesPromises);
+        const positionNamesResults = await Promise.all(positionNamesPromises);
+
+        const nomineeNames = Object.assign({}, ...nomineeNamesResults);
+        const positionNames = Object.assign({}, ...positionNamesResults);
+
+        setCampaigns(campaignsData);
+        setNomineeNames(nomineeNames);
+        setPositionNames(positionNames);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const handleVote = async (campaignId, nomineeId) => {
+    const db = firebase.firestore();
+    const campaignRef = db.collection("campaigns").doc(campaignId);
+
+    try {
+      const campaignDoc = await campaignRef.get();
+      if (campaignDoc.exists) {
+        const campaignData = campaignDoc.data();
+        const votes = campaignData.votes || {};
+        const existingVote = Object.values(votes).find(
+          (vote) => vote === nomineeId
+        );
+
+        if (!existingVote) {
+          votes[Date.now()] = nomineeId;
+          await campaignRef.update({ votes });
+          console.log(`Vote recorded for nominee with ID ${nomineeId}`);
+        } else {
+          console.log("You have already voted for this position.");
+        }
+      }
+    } catch (error) {
+      console.error("Error recording vote:", error);
+    }
+  };
+
+  const currentDateTime = new Date();
+
+  const getNomineeWithMostVotes = async (campaign) => {
+    const db = firebase.firestore();
+    const votes = campaign.votes || {};
+    const voteCounts = {};
+
+    Object.values(votes).forEach((nomineeId) => {
+      voteCounts[nomineeId] = (voteCounts[nomineeId] || 0) + 1;
+    });
+
+    if (Object.keys(voteCounts).length === 0) {
+      return null;
+    }
+
+    const nomineeIds = Object.keys(voteCounts);
+    const nomineeWithMostVotes = nomineeIds.reduce((a, b) =>
+      voteCounts[a] > voteCounts[b] ? a : b
+    );
+
+    const nomineeDoc = await db
+      .collection("nominees")
+      .doc(nomineeWithMostVotes)
+      .get();
+
+    if (nomineeDoc.exists) {
+      const nomineeData = nomineeDoc.data();
+      const nomineeId = Object.keys(campaign.nominees).find(
+        (key) => campaign.nominees[key] === nomineeWithMostVotes
+      );
+
+      if (nomineeId) {
+        const pictureUrl = nomineeData.picture || userPicture;
+        return pictureUrl;
+      }
+    }
+
+    return null;
+  };
+
+  useEffect(() => {
+    const fetchNomineePictures = async () => {
+      const pictures = await Promise.all(
+        campaigns.map((campaign) => getNomineeWithMostVotes(campaign))
+      );
+      setNomineePictures(pictures);
+    };
+
+    fetchNomineePictures();
+  }, [campaigns]);
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.gridContainer}>
+        {loading ? (
+          <Text>Loading...</Text>
+        ) : (
+          campaigns.map((campaign, index) => {
+            const nomineeWithMostVotes = nomineePictures[index];
+            console.log(nomineeWithMostVotes);
+            return (
+              <Card key={campaign.id} style={styles.card}>
+                <Card.Cover
+                  source={{
+                    uri: nomineeWithMostVotes || userPicture,
+                  }}
+                  style={styles.cardMedia}
+                />
+
+                <Card.Content>
+                  <Text style={styles.positionText}>
+                    {positionNames[campaign.position] || "Position"}
+                  </Text>
+                  {Object.values(campaign.nominees).map((nomineeId, index) => (
+                    <View key={index}>
+                      <Text style={styles.nomineeText}>
+                        {nomineeNames[nomineeId] || "Nominee"}
+                      </Text>
+                      <Button
+                        mode="contained"
+                        onPress={() => handleVote(campaign.id, nomineeId)}
+                        disabled={
+                          currentDateTime < new Date(campaign.startDate) ||
+                          currentDateTime > new Date(campaign.endDate)
+                        }
+                        style={[
+                          styles.voteButton,
+                          {
+                            opacity:
+                              currentDateTime < new Date(campaign.startDate) ||
+                              currentDateTime > new Date(campaign.endDate)
+                                ? 0.5
+                                : 1,
+                          },
+                        ]}
+                      >
+                        Vote
+                      </Button>
+                    </View>
+                  ))}
+                </Card.Content>
+              </Card>
+            );
+          })
+        )}
+      </View>
+    </View>
+  );
+}
+
+const styles = {
+  container: {
+    flex: 1,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+  },
+  gridContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+  },
+  card: {
+    width: "48%",
+    marginBottom: 12,
+  },
+  cardMedia: {
+    height: 200,
+  },
+  positionText: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 8,
+  },
+  nomineeText: {
+    fontSize: 14,
+    marginBottom: 8,
+  },
+  voteButton: {},
+};

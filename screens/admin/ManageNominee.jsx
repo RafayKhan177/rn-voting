@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from "react";
 import {
   Button,
-  Image,
-  Modal,
   ScrollView,
+  StyleSheet,
   Text,
   TextInput,
+  TouchableOpacity,
   View,
 } from "react-native";
 import firebase from "../../firebase";
 import * as ImagePicker from "expo-image-picker";
+import { colors, userPicture } from "../../constants";
+import { Card } from "react-native-paper";
 
 export default function ManageNominee() {
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -156,101 +158,194 @@ export default function ManageNominee() {
   };
 
   return (
-    <View style={{ padding: 16 }}>
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
-          marginBottom: 12,
-        }}
-      >
-        <Text style={{ fontSize: 20, fontWeight: "bold" }}>
-          Manage Nominees
-        </Text>
-        <Button title="Add Nominee" onPress={handleDialogOpen} />
-      </View>
-      <ScrollView>
-        {nominees.map((nominee) => (
-          <View
-            key={nominee.id}
-            style={{
-              padding: 16,
-              borderWidth: 1,
-              borderColor: "#ccc",
-              borderRadius: 8,
-              marginBottom: 12,
-            }}
-          >
-            <Image
-              source={{ uri: nominee.picture }}
-              style={{
-                width: 100,
-                height: 100,
-                marginBottom: 8,
-                borderRadius: 50,
-              }}
-            />
-            <Text style={{ fontSize: 18, fontWeight: "bold", marginBottom: 4 }}>
-              {nominee.firstName} {nominee.lastName}
-            </Text>
-            <Text style={{ color: "#666", marginBottom: 8 }}>
-              {nominee.biography}
-            </Text>
-            <View style={{ flexDirection: "row", justifyContent: "flex-end" }}>
-              <Button
-                title="Edit"
-                onPress={() => handleEditNominee(nominee)}
-                style={{ marginRight: 8 }}
-              />
-              <Button
-                title="Delete"
-                onPress={() => handleDeleteNominee(nominee)}
-              />
-            </View>
-          </View>
-        ))}
-      </ScrollView>
-
+    <View style={styles.container}>
       {dialogOpen && (
-        <View>
-          <Text>{nomineeData.id ? "Edit" : "Add"} Nominee</Text>
+        <View style={styles.dialogContainer}>
+          <Text style={styles.dialogHeading}>
+            {nomineeData.id ? "Edit" : "Add"} Nominee
+          </Text>
           <View>
             <TextInput
+              placeholder="First Name"
+              placeholderTextColor={colors.textLight}
               label="First Name"
               value={nomineeData.firstName}
               onChangeText={(value) => handleInputChange("firstName", value)}
-              style={{ marginBottom: 8 }}
+              style={styles.input}
             />
             <TextInput
+              placeholder="Last Name"
+              placeholderTextColor={colors.textLight}
               label="Last Name"
               value={nomineeData.lastName}
               onChangeText={(value) => handleInputChange("lastName", value)}
-              style={{ marginBottom: 8 }}
+              style={styles.input}
             />
             <TextInput
+              placeholder="Biography"
+              placeholderTextColor={colors.textLight}
               label="Biography"
               value={nomineeData.biography}
               onChangeText={(value) => handleInputChange("biography", value)}
               multiline={true}
               numberOfLines={4}
-              style={{ marginBottom: 8 }}
+              style={styles.input}
             />
             <Button
-              title="Add Picture"
+              mode="contained"
               onPress={handlePickImage}
-              style={{ marginBottom: 8 }}
+              style={styles.addButton}
+              title="Add Picture"
             />
           </View>
-          <View style={{ flexDirection: "row", justifyContent: "flex-end" }}>
-            <Button title="cancel" onPress={handleDialogClose} />
-            <Button
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              mode="outlined"
+              onPress={handleDialogClose}
+              style={styles.button}
+            >
+              Cancel
+            </TouchableOpacity>
+            <TouchableOpacity
+              mode="contained"
               onPress={nomineeData.id ? handleUpdateNominee : handleSaveNominee}
-              title={nomineeData.id ? "Update" : "Save"}
-            />
+              style={styles.button}
+            >
+              {nomineeData.id ? "Update" : "Save"}
+            </TouchableOpacity>
           </View>
         </View>
       )}
+
+      <View style={styles.header}>
+        <Text style={styles.heading}>Manage Nominees</Text>
+        <TouchableOpacity
+          mode="contained"
+          onPress={handleDialogOpen}
+          style={styles.button}
+        >
+          Add Nominee
+        </TouchableOpacity>
+      </View>
+      <ScrollView>
+        {nominees.map((nominee) => (
+          <Card key={nominee.id} style={styles.card}>
+            <Card.Cover
+              source={{
+                uri: nominee.picture || userPicture,
+              }}
+              style={styles.image}
+            />
+            <Card.Content>
+              <Text style={styles.name}>
+                {nominee.firstName} {nominee.lastName}
+              </Text>
+              <Text style={styles.biography}>{nominee.biography}</Text>
+              <View style={styles.buttonContainer}>
+                <TouchableOpacity
+                  title="Edit"
+                  onPress={() => handleEditNominee(nominee)}
+                  style={styles.button}
+                >
+                  Edit
+                </TouchableOpacity>
+                <TouchableOpacity
+                  mode="contained"
+                  onPress={() => handleDeleteNominee(nominee)}
+                  style={styles.deleteButton}
+                >
+                  Delete
+                </TouchableOpacity>
+              </View>
+            </Card.Content>
+          </Card>
+        ))}
+      </ScrollView>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 16,
+    flex: 1,
+    backgroundColor: colors.background,
+  },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: 12,
+  },
+  heading: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: colors.text,
+  },
+  addButton: {
+    backgroundColor: colors.primary,
+  },
+  card: {
+    width: "100%",
+    marginBottom: 12,
+    backgroundColor: colors.backgroundAccent,
+    maxWidth: 400,
+    margin: 4,
+  },
+  image: {
+    height: 200,
+  },
+  name: {
+    fontSize: 18,
+    fontWeight: "900",
+    margin: 4,
+    color: colors.text,
+  },
+  biography: {
+    color: colors.textLight,
+    margin: 4,
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+  },
+  button: {
+    backgroundColor: colors.primaryAccent,
+    margin: 3,
+    fontSize: 15,
+    fontWeight: "900",
+    borderRadius: 7,
+    padding: 12,
+    color: colors.text,
+  },
+  deleteButton: {
+    backgroundColor: colors.secoundaryAccent,
+    margin: 3,
+    fontSize: 15,
+    fontWeight: "900",
+    borderRadius: 12,
+    padding: 12,
+    color: colors.text,
+  },
+  dialogContainer: {
+    padding: 16,
+    backgroundColor: colors.backgroundAccent,
+    borderRadius: 8,
+    marginTop: 16,
+  },
+  dialogHeading: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 16,
+    color: colors.text,
+  },
+  input: {
+    backgroundColor: colors.backgroundAccent,
+    width: "100%",
+    borderRadius: 8,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    color: colors.text,
+    margin: 4,
+  },
+});

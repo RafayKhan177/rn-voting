@@ -10,10 +10,18 @@ import {
   Animated,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { colors } from "../constants";
+import { useNavigation } from "@react-navigation/native";
 
-export default function TopBar() {
+export default function TopBar({ screens }) {
   const [showMenu, setShowMenu] = useState(false);
   const menuAnimation = useRef(new Animated.Value(0)).current;
+
+  const navigation = useNavigation();
+  const handleNavigate = (screen) => {
+    navigation.navigate(screen);
+    toggleMenu();
+  };
 
   const toggleMenu = () => {
     if (showMenu) {
@@ -60,15 +68,20 @@ export default function TopBar() {
               { width: menuWidth, transform: [{ translateX: menuTranslateX }] },
             ]}
           >
-            <TouchableOpacity onPress={toggleMenu} style={styles.menuItem}>
-              <Text style={styles.menuItemText}>Option 1</Text>
+            <TouchableOpacity onPress={toggleMenu} style={styles.closeButton}>
+              <Ionicons name="close" size={24} color={colors.text} />
             </TouchableOpacity>
-            <TouchableOpacity onPress={toggleMenu} style={styles.menuItem}>
-              <Text style={styles.menuItemText}>Option 2</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={toggleMenu} style={styles.menuItem}>
-              <Text style={styles.menuItemText}>Option 3</Text>
-            </TouchableOpacity>
+            {screens.map((screen, ind) => (
+              <TouchableOpacity
+                key={ind}
+                onPress={() => {
+                  toggleMenu, handleNavigate(screen.screen);
+                }}
+                style={styles.menuItem}
+              >
+                <Text style={styles.menuItemText}>{screen.name}</Text>
+              </TouchableOpacity>
+            ))}
           </Animated.View>
         </TouchableOpacity>
       </Modal>
@@ -91,7 +104,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    backgroundColor: "#2196f3",
+    backgroundColor: colors.primary,
     paddingHorizontal: 16,
     height: Platform.OS === "ios" ? 100 : 60,
     paddingTop: Platform.OS === "ios" ? 40 : 0,
@@ -100,17 +113,17 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   title: {
-    color: "white",
+    color: colors.text,
     fontSize: 18,
     fontWeight: "bold",
   },
   popupMenuOverlay: {
     flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    backgroundColor: colors.backgroundAccent,
     justifyContent: "flex-end",
   },
   popupMenu: {
-    backgroundColor: "white",
+    backgroundColor: colors.background,
     elevation: 2,
     paddingHorizontal: 16,
     paddingBottom: 16,
@@ -122,15 +135,22 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 10,
     borderBottomRightRadius: 10,
   },
+  closeButton: {
+    alignSelf: "flex-end",
+    marginTop: 0,
+    marginRight: -8,
+    paddingHorizontal: 8,
+    paddingVertical: 8,
+  },
   menuItem: {
     borderRadius: 10,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    padding: 12,
+    backgroundColor: colors.backgroundAccent,
+    padding: 25,
     margin: 5,
   },
   menuItemText: {
     fontSize: 16,
-    color: "#333",
+    color: colors.text,
     fontWeight: "bold",
   },
 });

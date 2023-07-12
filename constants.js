@@ -7,43 +7,21 @@ export const colors = {
   secoundary: "#DB3A34",
   secoundaryAccent: "#FFC857",
   background: "#323031",
-  backgroundAccent: "#2C2F33",
+  backgroundAccent: "rgba(0, 0, 0, 0.3)",
   text: "#e0fbfc",
   textLight: "#9db4c0",
 };
 
-export const AdminPages = [
-  { name: "Dashboard", url: "Dashboard" },
-  {
-    name: "Manage Campaign",
-    url: "Dashboard/Manage/Campaign",
-  },
-  {
-    name: "Manage Position/Office",
-    url: "Dashboard/Manage/Position",
-  },
-  {
-    name: "Manage Nominee",
-    url: "Dashboard/Manage/Nominee",
-  },
-  { name: "Result", url: "Result" },
-  { name: "Edit Profile", url: "Dashboard/EditProfile" },
-  { name: "Campaign Results", url: "Dashboard/Campaign/Results" },
+export const AdminScreens = [
+  { name: "Dashboard", screen: "DashboardScreen" },
+  { name: "Manage Campaign", screen: "ManageCampaignScreen" },
+  { name: "Manage Nominee", screen: "ManageNomineeScreen" },
+  { name: "Manage Position/Office", screen: "ManagePositionOfficeScreen" },
 ];
 
-export const UserPages = [
-  {
-    name: "Home",
-    url: "Home",
-  },
-  {
-    name: "Result",
-    url: "Home/Edit/Profile",
-  },
-  {
-    name: "Edit Profile",
-    url: "Home/Campaign/Results",
-  },
+export const UserScreens = [
+  { name: "Voting", screen: "HomeScreenScreen" },
+  { name: "Profile", screen: "ProfileScreenScreen" },
 ];
 
 export const countries = [

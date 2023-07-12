@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, Image, TouchableOpacity } from "react-native";
+import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { Button, Card } from "react-native-paper";
 import firebase from "../../firebase";
-import { userPicture } from "../../constants";
+import { colors, userPicture } from "../../constants";
 
 export default function Voting() {
   const [campaigns, setCampaigns] = useState([]);
@@ -176,9 +176,6 @@ export default function Voting() {
                   </Text>
                   {Object.values(campaign.nominees).map((nomineeId, index) => (
                     <View key={index}>
-                      <Text style={styles.nomineeText}>
-                        {nomineeNames[nomineeId] || "Nominee"}
-                      </Text>
                       <Button
                         mode="contained"
                         onPress={() => handleVote(campaign.id, nomineeId)}
@@ -197,7 +194,9 @@ export default function Voting() {
                           },
                         ]}
                       >
-                        Vote
+                        <Text style={styles.nomineeText}>
+                          Vote: {nomineeNames[nomineeId] || "Nominee"}
+                        </Text>
                       </Button>
                     </View>
                   ))}
@@ -211,32 +210,47 @@ export default function Voting() {
   );
 }
 
-const styles = {
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingVertical: 8,
     paddingHorizontal: 16,
+    backgroundColor: colors.background,
   },
   gridContainer: {
     flexDirection: "row",
     flexWrap: "wrap",
-    justifyContent: "space-between",
+    // justifyContent: "space-between",
   },
   card: {
-    width: "48%",
+    width: "100%",
     marginBottom: 12,
+    backgroundColor: colors.backgroundAccent,
+    maxWidth: 400,
+    margin: 4,
   },
   cardMedia: {
     height: 200,
   },
   positionText: {
-    fontSize: 18,
-    fontWeight: "bold",
+    fontSize: 20,
+    fontWeight: "900",
     marginBottom: 8,
+    color: colors.text,
+    marginHorizontal: "auto",
+    marginVertical: 10,
   },
   nomineeText: {
-    fontSize: 14,
-    marginBottom: 8,
+    fontSize: 20,
+    marginVertical: 4,
+    color: colors.textLight,
+    fontWeight: "bold",
   },
-  voteButton: {},
-};
+  voteButton: {
+    backgroundColor: colors.primary,
+    borderRadius: 4,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    marginTop: 8,
+  },
+});

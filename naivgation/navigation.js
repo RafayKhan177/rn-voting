@@ -9,11 +9,16 @@ import {
 } from "../screens/admin";
 import { Voting } from "../screens/user";
 import { Signin, Signup } from "../screens/auth";
+import TopBar from "../components/TopBar";
+import { AdminScreens, UserScreens } from "../constants";
 
 const Stack = createStackNavigator();
 
-const screenOption = {
-  headerShown: false,
+const userOptions = {
+  header: () => <TopBar screens={UserScreens} />,
+};
+const adminOptions = {
+  header: () => <TopBar screens={AdminScreens} />,
 };
 
 const UserStack = () => {
@@ -21,9 +26,15 @@ const UserStack = () => {
     <NavigationContainer>
       <Stack.Navigator
         initialRouteName="HomeScreenScreen"
-        screenOptions={screenOption}
+        screenOptions={userOptions}
       >
-        <Stack.Screen name="HomeScreenScreen" component={Voting} />
+        <Stack.Screen
+          name="HomeScreenScreen"
+          component={Voting}
+          options={{
+            headerShown: true,
+          }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -34,7 +45,7 @@ const AdminStack = () => {
     <NavigationContainer>
       <Stack.Navigator
         initialRouteName="DashboardScreen"
-        screenOptions={screenOption}
+        screenOptions={adminOptions}
       >
         <Stack.Screen name="DashboardScreen" component={Dashboard} />
         <Stack.Screen name="ManageCampaignScreen" component={ManageCampaign} />
@@ -54,7 +65,7 @@ const AuthStack = () => {
     <NavigationContainer>
       <Stack.Navigator
         initialRouteName="SigninScreen"
-        screenOptions={screenOption}
+        // screenOptions={screenOption}
       >
         <Stack.Screen name="SignupScreen" component={Signup} />
         <Stack.Screen name="SigninScreen" component={Signin} />

@@ -2,10 +2,9 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import {
   Dashboard,
-  ManageCampaign,
+  ManageCampaigns,
   ManageNominee,
   ManagePositionOffice,
-  NewCampaign,
 } from "../screens/admin";
 import { Voting } from "../screens/user";
 import { Signin, Signup } from "../screens/auth";
@@ -48,13 +47,15 @@ const AdminStack = () => {
         screenOptions={adminOptions}
       >
         <Stack.Screen name="DashboardScreen" component={Dashboard} />
-        <Stack.Screen name="ManageCampaignScreen" component={ManageCampaign} />
+        <Stack.Screen
+          name="ManageCampaignsScreen"
+          component={ManageCampaigns}
+        />
         <Stack.Screen name="ManageNomineeScreen" component={ManageNominee} />
         <Stack.Screen
           name="ManagePositionOfficeScreen"
           component={ManagePositionOffice}
         />
-        <Stack.Screen name="NewCampaignScreen" component={NewCampaign} />
       </Stack.Navigator>
     </NavigationContainer>
   );

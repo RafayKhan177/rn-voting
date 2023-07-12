@@ -1,14 +1,15 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, View } from "react-native";
 import AuthNavigation from "./naivgation/AuthNavigation";
-import { AdminScreens, colors } from "./constants";
-import TopBar from "./components/TopBar";
+import { colors } from "./constants";
+import { ScrollView } from "react-native";
 
 export default function App() {
   return (
     <View style={styles.container}>
-      {/* <TopBar screens={AdminScreens} /> */}
+      {/* <ScrollView> */}
       <AuthNavigation />
+      {/* </ScrollView> */}
       <StatusBar style="auto" />
     </View>
   );

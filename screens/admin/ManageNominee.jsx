@@ -159,75 +159,80 @@ export default function ManageNominee() {
 
   return (
     <View style={styles.container}>
-      {dialogOpen && (
-        <View style={styles.dialogContainer}>
-          <Text style={styles.dialogHeading}>
-            {nomineeData.id ? "Edit" : "Add"} Nominee
-          </Text>
-          <View>
-            <TextInput
-              placeholder="First Name"
-              placeholderTextColor={colors.textLight}
-              label="First Name"
-              value={nomineeData.firstName}
-              onChangeText={(value) => handleInputChange("firstName", value)}
-              style={styles.input}
-            />
-            <TextInput
-              placeholder="Last Name"
-              placeholderTextColor={colors.textLight}
-              label="Last Name"
-              value={nomineeData.lastName}
-              onChangeText={(value) => handleInputChange("lastName", value)}
-              style={styles.input}
-            />
-            <TextInput
-              placeholder="Biography"
-              placeholderTextColor={colors.textLight}
-              label="Biography"
-              value={nomineeData.biography}
-              onChangeText={(value) => handleInputChange("biography", value)}
-              multiline={true}
-              numberOfLines={4}
-              style={styles.input}
-            />
-            <Button
-              mode="contained"
-              onPress={handlePickImage}
-              style={styles.addButton}
-              title="Add Picture"
-            />
-          </View>
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity
-              mode="outlined"
-              onPress={handleDialogClose}
-              style={styles.button}
-            >
-              Cancel
-            </TouchableOpacity>
-            <TouchableOpacity
-              mode="contained"
-              onPress={nomineeData.id ? handleUpdateNominee : handleSaveNominee}
-              style={styles.button}
-            >
-              {nomineeData.id ? "Update" : "Save"}
-            </TouchableOpacity>
-          </View>
-        </View>
-      )}
-
-      <View style={styles.header}>
-        <Text style={styles.heading}>Manage Nominees</Text>
-        <TouchableOpacity
-          mode="contained"
-          onPress={handleDialogOpen}
-          style={styles.button}
-        >
-          Add Nominee
-        </TouchableOpacity>
-      </View>
       <ScrollView>
+        {dialogOpen && (
+          <View style={styles.dialogContainer}>
+            <Text style={styles.dialogHeading}>
+              {nomineeData.id ? "Edit" : "Add"} Nominee
+            </Text>
+            <View>
+              <TextInput
+                placeholder="First Name"
+                placeholderTextColor={colors.textLight}
+                label="First Name"
+                value={nomineeData.firstName}
+                onChangeText={(value) => handleInputChange("firstName", value)}
+                style={styles.input}
+              />
+              <TextInput
+                placeholder="Last Name"
+                placeholderTextColor={colors.textLight}
+                label="Last Name"
+                value={nomineeData.lastName}
+                onChangeText={(value) => handleInputChange("lastName", value)}
+                style={styles.input}
+              />
+              <TextInput
+                placeholder="Biography"
+                placeholderTextColor={colors.textLight}
+                label="Biography"
+                value={nomineeData.biography}
+                onChangeText={(value) => handleInputChange("biography", value)}
+                multiline={true}
+                numberOfLines={4}
+                style={styles.input}
+              />
+              <Button
+                mode="contained"
+                onPress={handlePickImage}
+                style={styles.addButton}
+                title="Add Picture"
+              />
+            </View>
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                mode="outlined"
+                onPress={handleDialogClose}
+                style={styles.button}
+              >
+                <Text style={styles.btntxt}>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                mode="contained"
+                onPress={
+                  nomineeData.id ? handleUpdateNominee : handleSaveNominee
+                }
+                style={styles.button}
+              >
+                <Text style={styles.btntxt}>
+                  {nomineeData.id ? "Update" : "Save"}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        )}
+
+        <View style={styles.header}>
+          <Text style={styles.heading}>Manage Nominees</Text>
+          <TouchableOpacity
+            mode="contained"
+            onPress={handleDialogOpen}
+            style={styles.button}
+          >
+            <Text style={styles.btntxt}>Add Nominee</Text>
+          </TouchableOpacity>
+        </View>
+
         {nominees.map((nominee) => (
           <Card key={nominee.id} style={styles.card}>
             <Card.Cover
@@ -243,18 +248,17 @@ export default function ManageNominee() {
               <Text style={styles.biography}>{nominee.biography}</Text>
               <View style={styles.buttonContainer}>
                 <TouchableOpacity
-                  title="Edit"
                   onPress={() => handleEditNominee(nominee)}
                   style={styles.button}
                 >
-                  Edit
+                  <Text style={styles.btntxt}>Edit </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   mode="contained"
                   onPress={() => handleDeleteNominee(nominee)}
                   style={styles.deleteButton}
                 >
-                  Delete
+                  <Text style={styles.btntxt}>Delete</Text>
                 </TouchableOpacity>
               </View>
             </Card.Content>
@@ -312,14 +316,18 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: colors.primaryAccent,
     margin: 3,
-    fontSize: 15,
-    fontWeight: "900",
+
     borderRadius: 7,
     padding: 12,
     color: colors.text,
   },
+  btntxt: {
+    fontSize: 15,
+    fontWeight: "900",
+    color: colors.text,
+  },
   deleteButton: {
-    backgroundColor: colors.secoundaryAccent,
+    backgroundColor: colors.secoundary,
     margin: 3,
     fontSize: 15,
     fontWeight: "900",

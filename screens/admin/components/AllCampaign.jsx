@@ -9,9 +9,9 @@ import {
   Picker,
   TextInput,
 } from "react-native";
-import firebase from "../../firebase";
+import firebase from "../../../firebase";
 
-export default function ManageCampaign() {
+export default function AllCampaign() {
   const [isLoading, setIsLoading] = useState(true);
   const [campaigns, setCampaigns] = useState([]);
   const [nominees, setNominees] = useState([]);

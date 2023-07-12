@@ -14,7 +14,7 @@ export const colors = {
 
 export const AdminScreens = [
   { name: "Dashboard", screen: "DashboardScreen" },
-  { name: "Manage Campaign", screen: "ManageCampaignScreen" },
+  { name: "Manage ManageCampaigns", screen: "ManageCampaignsScreen" },
   { name: "Manage Nominee", screen: "ManageNomineeScreen" },
   { name: "Manage Position/Office", screen: "ManagePositionOfficeScreen" },
 ];

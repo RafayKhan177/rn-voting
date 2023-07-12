@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Button, TextInput, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  Button,
+  TextInput,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
 import firebase from "../../firebase";
+import { colors } from "../../constants";
 
 export default function ManagePositionOffice() {
   const [positions, setPositions] = useState([]);
@@ -95,9 +103,13 @@ export default function ManagePositionOffice() {
           style={styles.input}
         />
         {editPosition ? (
-          <Button onPress={updatePosition} title="Update" />
+          <Button
+            onPress={updatePosition}
+            title="Update"
+            color={colors.primary}
+          />
         ) : (
-          <Button onPress={addPosition} title="Add" />
+          <Button onPress={addPosition} title="Add" color={colors.primary} />
         )}
       </View>
 
@@ -105,11 +117,22 @@ export default function ManagePositionOffice() {
         <View style={styles.positionContainer} key={position.id}>
           <View>
             <Text style={styles.positionName}>{position.name}</Text>
-            <Text>{position.description}</Text>
+            <Text style={styles.bio}>{position.description}</Text>
           </View>
           <View style={styles.buttonContainer}>
-            <Button title="Edit" onPress={() => editPositionData(position)} />
-            <Button title="Delete" onPress={() => deletePosition(position)} />
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => editPositionData(position)}
+            >
+              <Text style={styles.btntxt}>Edit</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => deletePosition(position)}
+              color={colors.danger}
+            >
+              <Text style={styles.btntxt}>Delete</Text>
+            </TouchableOpacity>
           </View>
         </View>
       ))}
@@ -121,26 +144,59 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
+    backgroundColor: colors.background,
+  },
+  btntxt: {
+    fontSize: 15,
+    fontWeight: "900",
+    color: colors.text,
+  },
+
+  button: {
+    backgroundColor: colors.primaryAccent,
+    margin: 3,
+    borderRadius: 7,
+    padding: 9,
+    color: colors.text,
   },
   title: {
     fontSize: 24,
     marginBottom: 16,
+    color: colors.text,
+    fontWeight: "bold",
   },
   formContainer: {
     marginBottom: 16,
   },
   input: {
-    marginBottom: 8,
-    padding: 8,
-    borderWidth: 1,
+    backgroundColor: colors.backgroundAccent,
+    width: "100%",
+    borderRadius: 8,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    color: colors.text,
+    margin: 4,
   },
   positionContainer: {
-    marginBottom: 8,
+    margin: 5,
+    backgroundColor: colors.backgroundAccent,
+    borderRadius: 7,
+    padding: 8,
   },
   positionName: {
     fontSize: 20,
+    fontWeight: "900",
+    color: colors.text,
   },
+  bio: {
+    fontSize: 14,
+    fontWeight: "bold",
+    color: colors.textLight,
+  },
+
   buttonContainer: {
     flexDirection: "row",
+    marginTop: 8,
+    color: colors.text,
   },
 });

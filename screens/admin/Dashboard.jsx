@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 import { Card } from "react-native-paper";
 import { AdminScreens, colors } from "../../constants";
 import { useNavigation } from "@react-navigation/native";
@@ -17,53 +17,58 @@ export default function Dashboard() {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.cardContainer}>
-        <Card style={styles.card}>
-          <Card.Content>
-            <Text style={styles.title}>Dashboard</Text>
+    <ScrollView>
+      <View style={styles.container}>
+        <View style={styles.cardContainer}>
+          <Card style={styles.card}>
+            <Card.Content>
+              <Text style={styles.title}>Dashboard</Text>
 
-            <View style={styles.rowContainer}>
-              <View style={styles.statContainer}>
-                <Text style={styles.statTitle}>Total Campaigns</Text>
-                <Text style={styles.statValue}>{totalCampaigns}</Text>
+              <View style={styles.rowContainer}>
+                <View style={styles.statContainer}>
+                  <Text style={styles.statTitle}>Total Campaigns</Text>
+                  <Text style={styles.statValue}>{totalCampaigns}</Text>
+                </View>
+
+                <View style={styles.statContainer}>
+                  <Text style={styles.statTitle}>Total Nominees</Text>
+                  <Text style={styles.statValue}>{totalNominees}</Text>
+                </View>
               </View>
 
-              <View style={styles.statContainer}>
-                <Text style={styles.statTitle}>Total Nominees</Text>
-                <Text style={styles.statValue}>{totalNominees}</Text>
-              </View>
-            </View>
+              <View style={styles.rowContainer}>
+                <View style={styles.statContainer}>
+                  <Text style={styles.statTitle}>Total Positions/Offices</Text>
+                  <Text style={styles.statValue}>{totalPositions}</Text>
+                </View>
 
-            <View style={styles.rowContainer}>
-              <View style={styles.statContainer}>
-                <Text style={styles.statTitle}>Total Positions/Offices</Text>
-                <Text style={styles.statValue}>{totalPositions}</Text>
+                <View style={styles.statContainer}>
+                  <Text style={styles.statTitle}>Total Users</Text>
+                  <Text style={styles.statValue}>{totalUsers}</Text>
+                </View>
               </View>
 
-              <View style={styles.statContainer}>
-                <Text style={styles.statTitle}>Total Users</Text>
-                <Text style={styles.statValue}>{totalUsers}</Text>
+              <View style={styles.managementContainer}>
+                <Text style={styles.sectionTitle}>Management Sections</Text>
+                <View style={styles.sectionContainer}>
+                  {AdminScreens.map((screen, ind) => (
+                    <TouchableOpacity
+                      key={ind}
+                      onPress={() => handleNavigate(screen.screen)}
+                      style={styles.sectionButton}
+                    >
+                      <Text style={styles.sectionButtonText}>
+                        {screen.name}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
               </View>
-            </View>
-
-            <View style={styles.managementContainer}>
-              <Text style={styles.sectionTitle}>Management Sections</Text>
-              <View style={styles.sectionContainer}>
-                {AdminScreens.map((screen, ind) => (
-                  <TouchableOpacity
-                    onPress={() => handleNavigate(screen.screen)}
-                    style={styles.sectionButton}
-                  >
-                    <Text style={styles.sectionButtonText}>{screen.name}</Text>
-                  </TouchableOpacity>
-                ))}
-              </View>
-            </View>
-          </Card.Content>
-        </Card>
+            </Card.Content>
+          </Card>
+        </View>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
@@ -95,16 +100,17 @@ const styles = {
     flexDirection: "row",
     justifyContent: "space-between",
     margin: 10,
+    flexDirection: "row",
+    flexWrap: "wrap",
   },
   statContainer: {
     backgroundColor: colors.cardBackgroundLight,
     borderRadius: 8,
-    padding: 12,
-    flex: 1,
     margin: 10,
     backgroundColor: colors.backgroundAccent,
     borderRadius: 10,
     padding: 20,
+    width: "100%",
   },
   statTitle: {
     fontSize: 18,

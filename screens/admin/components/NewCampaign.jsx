@@ -4,25 +4,26 @@ import {
   View,
   Text,
   Button,
-  CheckBox,
   TouchableWithoutFeedback,
+  Switch,
 } from "react-native";
-import DateTimePickerModal from "react-native-modal-datetime-picker";
 import firebase from "../../../firebase";
-import { Picker } from "react-native";
+import { Picker } from "@react-native-picker/picker";
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 export default function NewCampaign() {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [nominees, setNominees] = useState([]);
   const [positions, setPositions] = useState([]);
-  const [campaigns, setCampaigns] = useState([]);
   const [newCampaign, setNewCampaign] = useState({
     position: "",
     nominees: [],
     startDate: "",
     endDate: "",
   });
+  const [showStartDatePicker, setShowStartDatePicker] = useState(false);
+  const [showEndDatePicker, setShowEndDatePicker] = useState(false);
 
   useEffect(() => {
     const fetchCollections = async () => {
@@ -56,30 +57,14 @@ export default function NewCampaign() {
     fetchCollections();
   }, []);
 
-  const showStartDatePicker = () => {
-    setStartDatePickerVisible(true);
-  };
-
-  const hideStartDatePicker = () => {
-    setStartDatePickerVisible(false);
-  };
-
   const handleStartDateConfirm = (date) => {
     setStartDate(date);
-    hideStartDatePicker();
-  };
-
-  const showEndDatePicker = () => {
-    setEndDatePickerVisible(true);
-  };
-
-  const hideEndDatePicker = () => {
-    setEndDatePickerVisible(false);
+    setShowStartDatePicker(false);
   };
 
   const handleEndDateConfirm = (date) => {
     setEndDate(date);
-    hideEndDatePicker();
+    setShowEndDatePicker(false);
   };
 
   const handleAddCampaign = async () => {
@@ -146,7 +131,7 @@ export default function NewCampaign() {
         <Text style={styles.label}>Select Nominees:</Text>
         {nominees.map((nominee) => (
           <View key={nominee.id} style={styles.nomineeOption}>
-            <CheckBox
+            <Switch
               value={newCampaign.nominees.includes(nominee.id)}
               onValueChange={() => handleNomineeSelection(nominee.id)}
             />
@@ -157,34 +142,36 @@ export default function NewCampaign() {
         ))}
 
         <Text style={styles.label}>Start Date:</Text>
-        <TouchableWithoutFeedback onPress={showStartDatePicker}>
+        <TouchableWithoutFeedback onPress={() => setShowStartDatePicker(true)}>
           <View style={styles.dateInput}>
             <Text>
               {startDate ? startDate.toDateString() : "Select start date"}
             </Text>
           </View>
         </TouchableWithoutFeedback>
-        <DateTimePickerModal
-          isVisible={!!startDate}
-          mode="date"
-          date={startDate || new Date()}
-          onConfirm={handleStartDateConfirm}
-          onCancel={hideStartDatePicker}
-        />
+        {showStartDatePicker && (
+          <DateTimePicker
+            value={startDate || new Date()}
+            mode="date"
+            display="default"
+            onChange={(event, date) => handleStartDateConfirm(date)}
+          />
+        )}
 
         <Text style={styles.label}>End Date:</Text>
-        <TouchableWithoutFeedback onPress={showEndDatePicker}>
+        <TouchableWithoutFeedback onPress={() => setShowEndDatePicker(true)}>
           <View style={styles.dateInput}>
             <Text>{endDate ? endDate.toDateString() : "Select end date"}</Text>
           </View>
         </TouchableWithoutFeedback>
-        <DateTimePickerModal
-          isVisible={!!endDate}
-          mode="date"
-          date={endDate || new Date()}
-          onConfirm={handleEndDateConfirm}
-          onCancel={hideEndDatePicker}
-        />
+        {showEndDatePicker && (
+          <DateTimePicker
+            value={endDate || new Date()}
+            mode="date"
+            display="default"
+            onChange={(event, date) => handleEndDateConfirm(date)}
+          />
+        )}
 
         <View style={styles.buttonContainer}>
           <Button title="Add Campaign" onPress={handleAddCampaign} />
@@ -195,5 +182,28 @@ export default function NewCampaign() {
 }
 
 const styles = StyleSheet.create({
-  // Your styles here
+  addCampaignForm: {
+    // Your styles here
+  },
+  subtitle: {
+    // Your styles here
+  },
+  card: {
+    // Your styles here
+  },
+  input: {
+    // Your styles here
+  },
+  nomineeOption: {
+    // Your styles here
+  },
+  dateInput: {
+    // Your styles here
+  },
+  label: {
+    // Your styles here
+  },
+  buttonContainer: {
+    // Your styles here
+  },
 });

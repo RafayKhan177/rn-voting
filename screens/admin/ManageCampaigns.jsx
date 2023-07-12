@@ -5,7 +5,7 @@ import NewCampaign from "./components/NewCampaign";
 export default function ManageCampaigns() {
   return (
     <>
-      <NewCampaign />
+      {/* <NewCampaign /> */}
       <AllCampaign />
     </>
   );

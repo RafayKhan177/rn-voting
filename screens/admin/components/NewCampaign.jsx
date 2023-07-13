@@ -10,6 +10,7 @@ import {
 import firebase from "../../../firebase";
 import { Picker } from "@react-native-picker/picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { colors } from "../../../constants";
 
 export default function NewCampaign() {
   const [startDate, setStartDate] = useState(null);
@@ -19,8 +20,6 @@ export default function NewCampaign() {
   const [newCampaign, setNewCampaign] = useState({
     position: "",
     nominees: [],
-    startDate: "",
-    endDate: "",
   });
   const [showStartDatePicker, setShowStartDatePicker] = useState(false);
   const [showEndDatePicker, setShowEndDatePicker] = useState(false);
@@ -57,13 +56,17 @@ export default function NewCampaign() {
     fetchCollections();
   }, []);
 
-  const handleStartDateConfirm = (date) => {
-    setStartDate(date);
+  const handleStartDateConfirm = (event, date) => {
+    if (date) {
+      setStartDate(date);
+    }
     setShowStartDatePicker(false);
   };
 
-  const handleEndDateConfirm = (date) => {
-    setEndDate(date);
+  const handleEndDateConfirm = (event, date) => {
+    if (date) {
+      setEndDate(date);
+    }
     setShowEndDatePicker(false);
   };
 
@@ -72,17 +75,18 @@ export default function NewCampaign() {
     const campaignsCollection = db.collection("campaigns");
 
     try {
-      await campaignsCollection.add({
+      const campaignData = {
         position: newCampaign.position,
         nominees: newCampaign.nominees,
-        startDate,
-        endDate,
-      });
+        startDate: startDate.toLocaleDateString("en-GB"),
+        endDate: endDate.toLocaleDateString("en-GB"),
+      };
+
+      await campaignsCollection.add(campaignData);
+
       setNewCampaign({
         position: "",
         nominees: [],
-        startDate: "",
-        endDate: "",
       });
       setStartDate(null);
       setEndDate(null);
@@ -134,8 +138,9 @@ export default function NewCampaign() {
             <Switch
               value={newCampaign.nominees.includes(nominee.id)}
               onValueChange={() => handleNomineeSelection(nominee.id)}
+              style={styles.switch}
             />
-            <Text>
+            <Text style={styles.nomineeText}>
               {`${nominee.firstName} ${nominee.lastName}, Bio: ${nominee.biography}`}
             </Text>
           </View>
@@ -145,7 +150,9 @@ export default function NewCampaign() {
         <TouchableWithoutFeedback onPress={() => setShowStartDatePicker(true)}>
           <View style={styles.dateInput}>
             <Text>
-              {startDate ? startDate.toDateString() : "Select start date"}
+              {startDate
+                ? startDate.toLocaleDateString("en-GB")
+                : "Select start date"}
             </Text>
           </View>
         </TouchableWithoutFeedback>
@@ -154,14 +161,19 @@ export default function NewCampaign() {
             value={startDate || new Date()}
             mode="date"
             display="default"
-            onChange={(event, date) => handleStartDateConfirm(date)}
+            onChange={handleStartDateConfirm}
+            style={styles.dateTimePicker}
           />
         )}
 
         <Text style={styles.label}>End Date:</Text>
         <TouchableWithoutFeedback onPress={() => setShowEndDatePicker(true)}>
           <View style={styles.dateInput}>
-            <Text>{endDate ? endDate.toDateString() : "Select end date"}</Text>
+            <Text>
+              {endDate
+                ? endDate.toLocaleDateString("en-GB")
+                : "Select end date"}
+            </Text>
           </View>
         </TouchableWithoutFeedback>
         {showEndDatePicker && (
@@ -169,7 +181,8 @@ export default function NewCampaign() {
             value={endDate || new Date()}
             mode="date"
             display="default"
-            onChange={(event, date) => handleEndDateConfirm(date)}
+            onChange={handleEndDateConfirm}
+            style={styles.dateTimePicker}
           />
         )}
 
@@ -182,28 +195,69 @@ export default function NewCampaign() {
 }
 
 const styles = StyleSheet.create({
-  addCampaignForm: {
-    // Your styles here
-  },
   subtitle: {
-    // Your styles here
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 20,
+    color: "#333",
   },
   card: {
-    // Your styles here
+    backgroundColor: colors.backgroundAccent,
+    borderRadius: 8,
+    padding: 20,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    width: "100%",
   },
   input: {
-    // Your styles here
-  },
-  nomineeOption: {
-    // Your styles here
-  },
-  dateInput: {
-    // Your styles here
+    height: 40,
+    // borderColor: "#ccc",
+    borderWidth: 1,
+    marginBottom: 10,
+    paddingHorizontal: 10,
+    color: colors.text,
   },
   label: {
-    // Your styles here
+    fontSize: 18,
+    fontWeight: "bold",
+    marginTop: 10,
+    color: colors.text,
+  },
+  nomineeOption: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 5,
+  },
+  dateInput: {
+    height: 40,
+    // borderColor: "#ccc",
+    borderWidth: 1,
+    marginBottom: 10,
+    paddingHorizontal: 10,
+    justifyContent: "center",
+    color: colors.text,
   },
   buttonContainer: {
-    // Your styles here
+    marginTop: 20,
+  },
+  dateTimePickerContainer: {
+    marginBottom: 10,
+    borderRadius: 8,
+    backgroundColor: colors.backgroundAccent,
+  },
+  dateTimePicker: {
+    color: "#fff",
+  },
+  switch: {
+    marginRight: 10,
+  },
+  nomineeText: {
+    color: colors.text,
   },
 });

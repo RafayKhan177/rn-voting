@@ -6,10 +6,11 @@ import {
   FlatList,
   Button,
   Modal,
-  Picker,
   TextInput,
 } from "react-native";
 import firebase from "../../../firebase";
+import { Picker } from "@react-native-picker/picker";
+import { colors } from "../../../constants";
 
 export default function AllCampaign() {
   const [isLoading, setIsLoading] = useState(true);
@@ -18,11 +19,11 @@ export default function AllCampaign() {
   const [nomineeNames, setNomineeNames] = useState({});
   const [positions, setPositions] = useState([]);
   const [positionNames, setPositionNames] = useState({});
-  const [editCampaign, setEditCampaign] = useState({});
+  const [editCampaign, setEditCampaign] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const db = firebase.firestore();
-  // <<!======================================= Fetch nominees & positions
+
   useEffect(() => {
     const fetchCollections = async () => {
       const nomineesCollection = db.collection("nominees");
@@ -54,8 +55,6 @@ export default function AllCampaign() {
     fetchCollections();
   }, []);
 
-  // |===>
-  // <<!======================================= Fetch campaigns
   useEffect(() => {
     const campaignsCollection = db.collection("campaigns");
 
@@ -71,8 +70,6 @@ export default function AllCampaign() {
     };
   }, []);
 
-  // |===>
-  // <<!======================================= Fetch Position Name
   const fetchPositionName = async (positionId) => {
     const positionRef = db.collection("positions").doc(positionId);
 
@@ -103,11 +100,8 @@ export default function AllCampaign() {
     if (campaigns.length > 0) {
       fetchPositionNames(campaigns);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [campaigns]);
 
-  // |===>
-  // <<!======================================= Fetch Nominee Name
   const fetchNomineeNames = async (nomineeIds) => {
     const namesData = {};
 
@@ -137,29 +131,29 @@ export default function AllCampaign() {
       fetchNomineeNames(nomineeIds);
     }
   }, [campaigns]);
-  // |===>
 
-  // <<!======================================= To handle basic tasks
-  const handleInputChange = (e) => {
-    setNewCampaign({
-      ...newCampaign,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const handleEditInputChange = (e) => {
+  const handleEditInputChange = (name, value) => {
     setEditCampaign({
       ...editCampaign,
-      [e.target.name]: e.target.value,
+      [name]: value,
     });
   };
 
   const handleUpdateCampaign = async () => {
+    const { startDate, endDate } = editCampaign;
+
+    // Validate date format (dd/mm/yyyy)
+    const dateFormatRegex = /^\d{2}\/\d{2}\/\d{4}$/;
+    if (!startDate.match(dateFormatRegex) || !endDate.match(dateFormatRegex)) {
+      console.error("Invalid date format. Please use dd/mm/yyyy format.");
+      return;
+    }
+
     const campaignRef = db.collection("campaigns").doc(editCampaign.id);
 
     try {
       await campaignRef.update(editCampaign);
-      setOpenModal(false);
+      setIsModalOpen(false);
     } catch (error) {
       console.error("Error updating campaign: ", error);
     }
@@ -177,14 +171,13 @@ export default function AllCampaign() {
 
   const handleOpenEditModal = (campaign) => {
     setEditCampaign(campaign);
-    setOpenModal(true);
+    setIsModalOpen(true);
   };
 
   const handleCloseEditModal = () => {
     setEditCampaign(null);
-    setOpenModal(false);
+    setIsModalOpen(false);
   };
-  // |===>
 
   return (
     <View style={styles.container}>
@@ -224,11 +217,11 @@ export default function AllCampaign() {
           {editCampaign && (
             <View style={styles.modalCard}>
               <Picker
-                name="position"
-                value={editCampaign.position}
+                selectedValue={editCampaign.position}
                 onValueChange={(value) =>
                   handleEditInputChange("position", value)
                 }
+                style={styles.picker}
               >
                 {positions.map((position) => (
                   <Picker.Item
@@ -240,32 +233,38 @@ export default function AllCampaign() {
               </Picker>
 
               <Picker
-                name="nominees"
-                value={editCampaign.nominees}
+                selectedValue={editCampaign.nominees}
                 onValueChange={(value) =>
                   handleEditInputChange("nominees", value)
                 }
+                style={styles.picker}
                 multiple
               >
                 {nominees.map((nominee) => (
-                  <Picker.Item key={nominee.id} value={nominee.id}>
-                    {nominee.firstName}, {nominee.lastName}, {nominee.biography}
-                  </Picker.Item>
+                  <Picker.Item
+                    key={nominee.id}
+                    value={nominee.id}
+                    label={`${nominee.firstName}, ${nominee.lastName}, ${nominee.biography}`}
+                  />
                 ))}
               </Picker>
+
               <TextInput
+                style={styles.input}
                 name="startDate"
-                type="date"
-                label="Start Date"
                 value={editCampaign.startDate}
-                onChange={(value) => handleEditInputChange("startDate", value)}
+                onChangeText={(value) =>
+                  handleEditInputChange("startDate", value)
+                }
               />
+
               <TextInput
+                style={styles.input}
                 name="endDate"
-                type="date"
-                label="End Date"
                 value={editCampaign.endDate}
-                onChange={(value) => handleEditInputChange("endDate", value)}
+                onChangeText={(value) =>
+                  handleEditInputChange("endDate", value)
+                }
               />
 
               <View style={styles.modalButtonContainer}>
@@ -285,19 +284,71 @@ export default function AllCampaign() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 16,
-  },
   heading: {
     fontSize: 24,
     fontWeight: "bold",
-    marginBottom: 16,
+    marginBottom: 20,
+    color: colors.text,
   },
   card: {
-    marginBottom: 16,
-    padding: 16,
-    backgroundColor: "#ffffff",
-    borderRadius: 4,
+    borderWidth: 1,
+    // borderColor: "#ccc",
+    borderRadius: 8,
+    padding: 15,
+    marginBottom: 20,
+    backgroundColor: colors.backgroundAccent,
+  },
+  subheading: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 10,
+    color: colors.text,
+  },
+  bodyText: {
+    marginBottom: 5,
+    color: colors.textLight,
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginTop: 15,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    padding: 20,
+    backgroundColor: colors.background,
+  },
+  modalHeading: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 20,
+    textAlign: "center",
+    color: colors.text,
+  },
+  modalCard: {
+    borderWidth: 1,
+    // borderColor: "#ccc",
+    borderRadius: 8,
+    padding: 15,
+    marginBottom: 20,
+    backgroundColor: colors.backgroundAccent,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 10,
+    color: colors.text,
+  },
+  modalButtonContainer: {
+    marginTop: 10,
+  },
+  picker: {
+    color: colors.text,
+    height: 40,
+    marginBottom: 10,
+    paddingHorizontal: 10,
   },
 });

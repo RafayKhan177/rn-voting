@@ -4,7 +4,7 @@ import { AdminStack, AuthStack, UserStack } from "./navigation";
 
 export default function AuthNavigation() {
   const [userData, setUserData] = useState(null);
-  console.log(userData);
+  // console.log(userData);
 
   useEffect(() => {
     const getUserData = async () => {
@@ -19,17 +19,26 @@ export default function AuthNavigation() {
       }
     };
 
-    getUserData();
-  }, []);
+    const checkForDataChanges = async () => {
+      const newData = await AsyncStorage.getItem("userData");
+      if (newData !== JSON.stringify(userData)) {
+        getUserData();
+      }
+    };
+
+    const interval = setInterval(checkForDataChanges, 100);
+
+    // Clean up the interval when the component unmounts
+    return () => {
+      clearInterval(interval);
+    };
+  }, [userData]);
 
   if (userData && userData.role === "admin") {
     return <AdminStack />;
-    // return <h1>AdminStack</h1>;
   } else if (userData) {
     return <UserStack />;
-    // return <h1>UserStack</h1>;
   } else {
     return <AuthStack />;
-    // return <h1>AuthStack</h1>;
   }
 }

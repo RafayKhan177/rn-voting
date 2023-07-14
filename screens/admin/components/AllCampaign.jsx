@@ -7,10 +7,11 @@ import {
   Button,
   Modal,
   TextInput,
+  Switch,
 } from "react-native";
 import firebase from "../../../firebase";
-import { Picker } from "@react-native-picker/picker";
 import { colors } from "../../../constants";
+import { Picker } from "@react-native-picker/picker";
 
 export default function AllCampaign() {
   const [isLoading, setIsLoading] = useState(true);
@@ -181,8 +182,6 @@ export default function AllCampaign() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.heading}>Manage Campaigns</Text>
-
       <FlatList
         data={campaigns}
         keyExtractor={(item) => item.id}
@@ -232,22 +231,31 @@ export default function AllCampaign() {
                 ))}
               </Picker>
 
-              <Picker
-                selectedValue={editCampaign.nominees}
-                onValueChange={(value) =>
-                  handleEditInputChange("nominees", value)
-                }
-                style={styles.picker}
-                multiple
-              >
+              <View style={styles.switchContainer}>
+                <Text style={styles.switchLabel}>Nominees:</Text>
                 {nominees.map((nominee) => (
-                  <Picker.Item
-                    key={nominee.id}
-                    value={nominee.id}
-                    label={`${nominee.firstName}, ${nominee.lastName}, ${nominee.biography}`}
-                  />
+                  <View key={nominee.id} style={styles.switchItem}>
+                    <Text style={styles.switchText}>
+                      {nominee.firstName} {nominee.lastName}
+                    </Text>
+                    <Switch
+                      value={editCampaign.nominees.includes(nominee.id)}
+                      onValueChange={(value) => {
+                        const nominees = editCampaign.nominees;
+                        if (value) {
+                          nominees.push(nominee.id);
+                        } else {
+                          const index = nominees.indexOf(nominee.id);
+                          if (index > -1) {
+                            nominees.splice(index, 1);
+                          }
+                        }
+                        handleEditInputChange("nominees", [...nominees]);
+                      }}
+                    />
+                  </View>
                 ))}
-              </Picker>
+              </View>
 
               <TextInput
                 style={styles.input}
@@ -284,19 +292,16 @@ export default function AllCampaign() {
 }
 
 const styles = StyleSheet.create({
-  heading: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 20,
-    color: colors.text,
+  container: {
+    width: "100%",
   },
   card: {
-    borderWidth: 1,
-    // borderColor: "#ccc",
     borderRadius: 8,
     padding: 15,
     marginBottom: 20,
     backgroundColor: colors.backgroundAccent,
+    margin: 10,
+    width: "80%",
   },
   subheading: {
     fontSize: 18,
@@ -327,16 +332,12 @@ const styles = StyleSheet.create({
     color: colors.text,
   },
   modalCard: {
-    borderWidth: 1,
-    // borderColor: "#ccc",
     borderRadius: 8,
     padding: 15,
     marginBottom: 20,
     backgroundColor: colors.backgroundAccent,
   },
   input: {
-    borderWidth: 1,
-    borderColor: "#ccc",
     borderRadius: 5,
     padding: 10,
     marginBottom: 10,
@@ -345,10 +346,23 @@ const styles = StyleSheet.create({
   modalButtonContainer: {
     marginTop: 10,
   },
-  picker: {
-    color: colors.text,
-    height: 40,
+  switchContainer: {
     marginBottom: 10,
-    paddingHorizontal: 10,
+  },
+  switchItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 5,
+  },
+  switchLabel: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginBottom: 5,
+    color: colors.text,
+  },
+  switchText: {
+    flex: 1,
+    marginRight: 10,
+    color: colors.text,
   },
 });

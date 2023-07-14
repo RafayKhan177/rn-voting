@@ -7,12 +7,13 @@ export default function ScreenHading({ txt }) {
 
 const styles = StyleSheet.create({
   heading: {
-    fontSize: 30,
+    fontSize: 25,
     fontWeight: "900",
     color: colors.text,
     backgroundColor: colors.backgroundAccent,
     borderRadius: 10,
     padding: 15,
     margin: 10,
+    alignSelf: "center",
   },
 });

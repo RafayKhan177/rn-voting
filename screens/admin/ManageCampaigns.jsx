@@ -10,7 +10,7 @@ export default function ManageCampaigns() {
     <>
       <View style={styles.container}>
         <ScrollView>
-          <ScreenHading txt={"ManageCampaigns"} />
+          <ScreenHading txt={"Manage Campaigns"} />
           <NewCampaign />
           <AllCampaign />
         </ScrollView>

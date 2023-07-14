@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import {
-  Button,
   ScrollView,
   StyleSheet,
   Text,
@@ -160,8 +159,8 @@ export default function ManageNominee() {
 
   return (
     <View style={styles.container}>
-      <ScreenHading txt={"Manage Nominees"} />
       <ScrollView>
+        <ScreenHading txt={"Manage Nominees"} />
         {dialogOpen && (
           <View style={styles.dialogContainer}>
             <Text style={styles.dialogHeading}>

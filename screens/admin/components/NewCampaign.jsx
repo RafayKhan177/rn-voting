@@ -112,8 +112,6 @@ export default function NewCampaign() {
 
   return (
     <View style={styles.addCampaignForm}>
-      <Text style={styles.subtitle}>Add New Campaign</Text>
-
       <View style={styles.card}>
         <Picker
           name="position"

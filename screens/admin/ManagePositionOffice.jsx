@@ -6,6 +6,7 @@ import {
   TextInput,
   StyleSheet,
   TouchableOpacity,
+  ScrollView,
 } from "react-native";
 import firebase from "../../firebase";
 import { colors } from "../../constants";
@@ -86,58 +87,59 @@ export default function ManagePositionOffice() {
 
   return (
     <View style={styles.container}>
-      <ScreenHading txt={"Manage Positions/Offices"} />
-      <View style={styles.formContainer}>
-        <TextInput
-          name="name"
-          placeholder="Office"
-          value={newPosition.name}
-          onChangeText={(text) => handleInputChange("name", text)}
-          style={styles.input}
-        />
-        <TextInput
-          name="description"
-          placeholder="Position"
-          value={newPosition.description}
-          onChangeText={(text) => handleInputChange("description", text)}
-          style={styles.input}
-        />
-        {editPosition ? (
-          <Button
-            onPress={updatePosition}
-            title="Update"
-            color={colors.primary}
+      <ScrollView>
+        <ScreenHading txt={"Positions & Offices"} />
+        <View style={styles.formContainer}>
+          <TextInput
+            name="name"
+            placeholder="Office"
+            value={newPosition.name}
+            onChangeText={(text) => handleInputChange("name", text)}
+            style={styles.input}
           />
-        ) : (
-          <TouchableOpacity onPress={addPosition} style={styles.button}>
-            {" "}
-            <Text style={styles.btntxt}>Add Positions / Offices</Text>
-          </TouchableOpacity>
-        )}
-      </View>
-
-      {positions.map((position) => (
-        <View style={styles.positionContainer} key={position.id}>
-          <View>
-            <Text style={styles.positionName}>{position.name}</Text>
-            <Text style={styles.bio}>{position.description}</Text>
-          </View>
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => editPositionData(position)}
-            >
-              <Text style={styles.btntxt}>Edit</Text>
+          <TextInput
+            name="description"
+            placeholder="Position"
+            value={newPosition.description}
+            onChangeText={(text) => handleInputChange("description", text)}
+            style={styles.input}
+          />
+          {editPosition ? (
+            <Button
+              onPress={updatePosition}
+              title="Update"
+              color={colors.primary}
+            />
+          ) : (
+            <TouchableOpacity onPress={addPosition} style={styles.button}>
+              <Text style={styles.btntxt}>Add Positions / Offices</Text>
             </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.errorbutton}
-              onPress={() => deletePosition(position)}
-            >
-              <Text style={styles.btntxt}>Delete</Text>
-            </TouchableOpacity>
-          </View>
+          )}
         </View>
-      ))}
+
+        {positions.map((position, index) => (
+          <View style={styles.positionContainer} key={index}>
+            <View>
+              <Text style={styles.positionName}>{position.name}</Text>
+              <Text style={styles.bio}>{position.description}</Text>
+            </View>
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => editPositionData(position)}
+              >
+                <Text style={styles.btntxt}>Edit</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.errorbutton}
+                onPress={() => deletePosition(position)}
+              >
+                <Text style={styles.btntxt}>Delete</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        ))}
+      </ScrollView>
     </View>
   );
 }

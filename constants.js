@@ -2,26 +2,30 @@ export const userPicture =
   "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=740&t=st=1688908975~exp=1688909575~hmac=1e9639f92a0b0665ed4f28843631fdc549ae8d2cc6923f12c55a1f3957400b76";
 
 export const colors = {
-  primary: "#177E89",
-  primaryAccent: "#084C61",
-  secoundary: "#DB3A34",
+  primary: "#ef233c",
+  primaryAccent: "#1e96fc",
+  secoundary: "#d80032",
   secoundaryAccent: "#FFC857",
-  background: "#323031",
-  backgroundAccent: "rgba(0, 0, 0, 0.3)",
-  text: "#e0fbfc",
-  textLight: "#9db4c0",
+  background: "#000",
+  backgroundAccent: "rgba(240, 248, 255, 0.082)",
+  text: "#fefae0",
+  textLight: "#e5e5e5",
 };
 
 export const AdminScreens = [
-  { name: "Dashboard", screen: "DashboardScreen" },
-  { name: "Manage ManageCampaigns", screen: "ManageCampaignsScreen" },
-  { name: "Manage Nominee", screen: "ManageNomineeScreen" },
-  { name: "Manage Position/Office", screen: "ManagePositionOfficeScreen" },
+  { name: "Dashboard", screen: "DashboardScreen", icon: "dashboard" },
+  { name: "Manage Nominee", screen: "ManageNomineeScreen", icon: "users" },
+  { name: "Manage Campaigns", screen: "ManageCampaignsScreen", icon: "file-o" },
+  {
+    name: "Manage Position & Office",
+    screen: "ManagePositionOfficeScreen",
+    icon: "briefcase",
+  },
 ];
 
 export const UserScreens = [
-  { name: "Voting", screen: "HomeScreenScreen" },
-  { name: "Profile", screen: "ProfileScreenScreen" },
+  { name: "Voting", screen: "HomeScreenScreen", icon: "check-square-o" },
+  { name: "Profile", screen: "ProfileScreenScreen", icon: "user" },
 ];
 
 export const countries = [

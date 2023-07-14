@@ -12,6 +12,7 @@ import firebase from "../../firebase";
 import * as ImagePicker from "expo-image-picker";
 import { colors, userPicture } from "../../constants";
 import { Card } from "react-native-paper";
+import { ScreenHading } from "../../components";
 
 export default function ManageNominee() {
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -159,6 +160,7 @@ export default function ManageNominee() {
 
   return (
     <View style={styles.container}>
+      <ScreenHading txt={"Manage Nominees"} />
       <ScrollView>
         {dialogOpen && (
           <View style={styles.dialogContainer}>
@@ -192,18 +194,25 @@ export default function ManageNominee() {
                 numberOfLines={4}
                 style={styles.input}
               />
-              <Button
+              <TouchableOpacity
                 mode="contained"
                 onPress={handlePickImage}
-                style={styles.addButton}
+                style={{
+                  padding: 10,
+                  margin: 5,
+                  borderRadius: 5,
+                  backgroundColor: colors.primary,
+                }}
                 title="Add Picture"
-              />
+              >
+                <Text style={styles.btntxt}>Add Picture</Text>
+              </TouchableOpacity>
             </View>
             <View style={styles.buttonContainer}>
               <TouchableOpacity
                 mode="outlined"
                 onPress={handleDialogClose}
-                style={styles.button}
+                style={styles.errorButton}
               >
                 <Text style={styles.btntxt}>Cancel</Text>
               </TouchableOpacity>
@@ -223,47 +232,49 @@ export default function ManageNominee() {
         )}
 
         <View style={styles.header}>
-          <Text style={styles.heading}>Manage Nominees</Text>
-          <TouchableOpacity
-            mode="contained"
-            onPress={handleDialogOpen}
-            style={styles.button}
-          >
-            <Text style={styles.btntxt}>Add Nominee</Text>
-          </TouchableOpacity>
+          {!dialogOpen && (
+            <TouchableOpacity
+              mode="contained"
+              onPress={handleDialogOpen}
+              style={styles.button}
+            >
+              <Text style={styles.btntxt}>Add Nominee</Text>
+            </TouchableOpacity>
+          )}
         </View>
-
-        {nominees.map((nominee) => (
-          <Card key={nominee.id} style={styles.card}>
-            <Card.Cover
-              source={{
-                uri: nominee.picture || userPicture,
-              }}
-              style={styles.image}
-            />
-            <Card.Content>
-              <Text style={styles.name}>
-                {nominee.firstName} {nominee.lastName}
-              </Text>
-              <Text style={styles.biography}>{nominee.biography}</Text>
-              <View style={styles.buttonContainer}>
-                <TouchableOpacity
-                  onPress={() => handleEditNominee(nominee)}
-                  style={styles.button}
-                >
-                  <Text style={styles.btntxt}>Edit </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  mode="contained"
-                  onPress={() => handleDeleteNominee(nominee)}
-                  style={styles.deleteButton}
-                >
-                  <Text style={styles.btntxt}>Delete</Text>
-                </TouchableOpacity>
-              </View>
-            </Card.Content>
-          </Card>
-        ))}
+        <View style={styles.cards_conatiner}>
+          {nominees.map((nominee) => (
+            <Card key={nominee.id} style={styles.card}>
+              <Card.Cover
+                source={{
+                  uri: nominee.picture || userPicture,
+                }}
+                style={styles.image}
+              />
+              <Card.Content>
+                <Text style={styles.name}>
+                  {nominee.firstName} {nominee.lastName}
+                </Text>
+                <Text style={styles.biography}>{nominee.biography}</Text>
+                <View style={styles.buttonContainer}>
+                  <TouchableOpacity
+                    onPress={() => handleEditNominee(nominee)}
+                    style={styles.button}
+                  >
+                    <Text style={styles.btntxt}>Edit </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    mode="contained"
+                    onPress={() => handleDeleteNominee(nominee)}
+                    style={styles.errorButton}
+                  >
+                    <Text style={styles.btntxt}>Delete</Text>
+                  </TouchableOpacity>
+                </View>
+              </Card.Content>
+            </Card>
+          ))}
+        </View>
       </ScrollView>
     </View>
   );
@@ -281,13 +292,16 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     marginBottom: 12,
   },
-  heading: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: colors.text,
-  },
+
   addButton: {
     backgroundColor: colors.primary,
+  },
+  cards_conatiner: {
+    display: "flex",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    // alignItems: "center",
+    justifyContent: "center",
   },
   card: {
     width: "100%",
@@ -326,12 +340,12 @@ const styles = StyleSheet.create({
     fontWeight: "900",
     color: colors.text,
   },
-  deleteButton: {
+  errorButton: {
     backgroundColor: colors.secoundary,
     margin: 3,
     fontSize: 15,
     fontWeight: "900",
-    borderRadius: 12,
+    borderRadius: 7,
     padding: 12,
     color: colors.text,
   },

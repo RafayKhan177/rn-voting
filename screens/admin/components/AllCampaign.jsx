@@ -192,7 +192,7 @@ export default function AllCampaign() {
               Office / Position: {positionNames[item.position] || "none"}
             </Text>
             {item.nominees.map((data, ind) => (
-              <Text key={data.id} style={styles.bodyText}>
+              <Text key={ind} style={styles.bodyText}>
                 ({ind + 1}) Nominee: {nomineeNames[data]}
               </Text>
             ))}

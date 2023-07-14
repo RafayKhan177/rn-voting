@@ -11,6 +11,7 @@ import {
   StatusBar,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import Icon from "react-native-vector-icons/FontAwesome";
 import { colors } from "../constants";
 import { useNavigation } from "@react-navigation/native";
 
@@ -80,6 +81,12 @@ export default function TopBar({ screens }) {
                 }}
                 style={styles.menuItem}
               >
+                <Icon
+                  style={{ textAlign: "center", paddingHorizontal: 10 }}
+                  name={screen.icon}
+                  size={20}
+                  color={colors.textLight}
+                />
                 <Text style={styles.menuItemText}>{screen.name}</Text>
               </TouchableOpacity>
             ))}
@@ -94,7 +101,18 @@ export default function TopBar({ screens }) {
       <TouchableOpacity onPress={toggleMenu} style={styles.menuButton}>
         <Ionicons name="menu" size={24} color="white" />
       </TouchableOpacity>
-      <Text style={styles.title}>Voting</Text>
+      <View style={{ flexDirection: "row" }}>
+        <Text style={styles.title}>VOTING</Text>
+        <Icon
+          style={{
+            textAlign: "center",
+            paddingHorizontal: 15,
+          }}
+          name={"check-square"}
+          size={20}
+          color={colors.textLight}
+        />
+      </View>
       {showMenu && renderPopupMenu()}
     </View>
   );
@@ -148,9 +166,11 @@ const styles = StyleSheet.create({
     backgroundColor: colors.backgroundAccent,
     padding: 25,
     margin: 5,
+    display: "flex",
+    flexDirection: "row",
   },
   menuItemText: {
-    fontSize: 16,
+    fontSize: 18,
     color: colors.text,
     fontWeight: "bold",
   },

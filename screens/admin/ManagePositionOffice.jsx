@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import firebase from "../../firebase";
 import { colors } from "../../constants";
+import ScreenHading from "../../components/ScreenHading";
 
 export default function ManagePositionOffice() {
   const [positions, setPositions] = useState([]);
@@ -85,8 +86,7 @@ export default function ManagePositionOffice() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Manage Positions/Offices</Text>
-
+      <ScreenHading txt={"Manage Positions/Offices"} />
       <View style={styles.formContainer}>
         <TextInput
           name="name"
@@ -109,7 +109,10 @@ export default function ManagePositionOffice() {
             color={colors.primary}
           />
         ) : (
-          <Button onPress={addPosition} title="Add" color={colors.primary} />
+          <TouchableOpacity onPress={addPosition} style={styles.button}>
+            {" "}
+            <Text style={styles.btntxt}>Add Positions / Offices</Text>
+          </TouchableOpacity>
         )}
       </View>
 
@@ -127,9 +130,8 @@ export default function ManagePositionOffice() {
               <Text style={styles.btntxt}>Edit</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={styles.button}
+              style={styles.errorbutton}
               onPress={() => deletePosition(position)}
-              color={colors.danger}
             >
               <Text style={styles.btntxt}>Delete</Text>
             </TouchableOpacity>
@@ -157,7 +159,12 @@ const styles = StyleSheet.create({
     margin: 3,
     borderRadius: 7,
     padding: 9,
-    color: colors.text,
+  },
+  errorbutton: {
+    backgroundColor: colors.secoundary,
+    margin: 3,
+    borderRadius: 7,
+    padding: 9,
   },
   title: {
     fontSize: 24,
@@ -181,7 +188,7 @@ const styles = StyleSheet.create({
     margin: 5,
     backgroundColor: colors.backgroundAccent,
     borderRadius: 7,
-    padding: 8,
+    padding: 20,
   },
   positionName: {
     fontSize: 20,
@@ -197,6 +204,5 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: "row",
     marginTop: 8,
-    color: colors.text,
   },
 });

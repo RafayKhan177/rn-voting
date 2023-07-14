@@ -6,7 +6,7 @@ import {
   ManageNominee,
   ManagePositionOffice,
 } from "../screens/admin";
-import { Voting } from "../screens/user";
+import { MyAccount, Voting } from "../screens/user";
 import { Signin, Signup } from "../screens/auth";
 import TopBar from "../components/TopBar";
 import { AdminScreens, UserScreens } from "../constants";
@@ -34,6 +34,7 @@ const UserStack = () => {
             headerShown: true,
           }}
         />
+        <Stack.Screen name="MyAccountScreen" component={MyAccount} />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -56,6 +57,7 @@ const AdminStack = () => {
           name="ManagePositionOfficeScreen"
           component={ManagePositionOffice}
         />
+        <Stack.Screen name="MyAccountScreen" component={MyAccount} />
       </Stack.Navigator>
     </NavigationContainer>
   );

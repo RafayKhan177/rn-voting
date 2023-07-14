@@ -15,17 +15,23 @@ export const colors = {
 export const AdminScreens = [
   { name: "Dashboard", screen: "DashboardScreen", icon: "dashboard" },
   { name: "Manage Nominee", screen: "ManageNomineeScreen", icon: "users" },
-  { name: "Manage Campaigns", screen: "ManageCampaignsScreen", icon: "file-o" },
+  {
+    name: "Manage Campaigns",
+    screen: "ManageCampaignsScreen",
+    icon: "list",
+  },
   {
     name: "Manage Position & Office",
     screen: "ManagePositionOfficeScreen",
     icon: "briefcase",
   },
+  { name: "My Account", screen: "MyAccountScreen", icon: "address-card" },
 ];
 
 export const UserScreens = [
   { name: "Voting", screen: "HomeScreenScreen", icon: "check-square-o" },
   { name: "Profile", screen: "ProfileScreenScreen", icon: "user" },
+  { name: "My Account", screen: "MyAccountScreen", icon: "address-card" },
 ];
 
 export const countries = [

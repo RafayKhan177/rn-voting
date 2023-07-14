@@ -6,6 +6,7 @@ import {
   Button,
   TouchableWithoutFeedback,
   Switch,
+  TouchableOpacity,
 } from "react-native";
 import firebase from "../../../firebase";
 import { Picker } from "@react-native-picker/picker";
@@ -111,7 +112,7 @@ export default function NewCampaign() {
   };
 
   return (
-    <View style={styles.addCampaignForm}>
+    <View style={styles.container}>
       <View style={styles.card}>
         <Picker
           name="position"
@@ -185,7 +186,12 @@ export default function NewCampaign() {
         )}
 
         <View style={styles.buttonContainer}>
-          <Button title="Add Campaign" onPress={handleAddCampaign} />
+          <TouchableOpacity
+            style={styles.errorButton}
+            onPress={handleAddCampaign}
+          >
+            <Text style={styles.btntxt}>Add Campaign</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </View>
@@ -193,16 +199,21 @@ export default function NewCampaign() {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    width: "90%",
+    // backgroundColor: colors.primary,
+  },
   subtitle: {
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 20,
     color: "#333",
+    flex: 1,
   },
   card: {
     backgroundColor: colors.backgroundAccent,
     borderRadius: 8,
-    padding: 20,
+    padding: 30,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -214,11 +225,12 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   input: {
-    height: 40,
-    // borderColor: "#ccc",
-    borderWidth: 1,
-    marginBottom: 10,
+    // Your default style properties for the Picker component
+    backgroundColor: colors.backgroundAccent,
+    borderRadius: 5,
     paddingHorizontal: 10,
+    paddingVertical: 8,
+    fontSize: 16,
     color: colors.text,
   },
   label: {
@@ -256,6 +268,27 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   nomineeText: {
+    color: colors.text,
+  },
+  button: {
+    backgroundColor: colors.primaryAccent,
+    margin: 3,
+    borderRadius: 7,
+    padding: 12,
+    color: colors.text,
+  },
+  btntxt: {
+    fontSize: 15,
+    fontWeight: "900",
+    color: colors.text,
+  },
+  errorButton: {
+    backgroundColor: colors.secoundary,
+    margin: 3,
+    fontSize: 15,
+    fontWeight: "900",
+    borderRadius: 7,
+    padding: 12,
     color: colors.text,
   },
 });

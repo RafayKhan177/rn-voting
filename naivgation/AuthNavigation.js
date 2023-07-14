@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AdminStack, AuthStack, UserStack } from "./navigation";
+import { ScreenLoading } from "../components";
 
 export default function AuthNavigation() {
   const [userData, setUserData] = useState(null);
-  // console.log(userData);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const getUserData = async () => {
@@ -16,6 +17,8 @@ export default function AuthNavigation() {
         }
       } catch (error) {
         console.log("Error retrieving user data:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -34,7 +37,9 @@ export default function AuthNavigation() {
     };
   }, [userData]);
 
-  if (userData && userData.role === "admin") {
+  if (loading) {
+    return <ScreenLoading />;
+  } else if (userData && userData.role === "admin") {
     return <AdminStack />;
   } else if (userData) {
     return <UserStack />;

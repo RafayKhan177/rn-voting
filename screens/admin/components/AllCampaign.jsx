@@ -8,10 +8,12 @@ import {
   Modal,
   TextInput,
   Switch,
+  TouchableOpacity,
 } from "react-native";
 import firebase from "../../../firebase";
 import { colors } from "../../../constants";
 import { Picker } from "@react-native-picker/picker";
+import ScreenHading from "../../../components/ScreenHading";
 
 export default function AllCampaign() {
   const [isLoading, setIsLoading] = useState(true);
@@ -199,11 +201,19 @@ export default function AllCampaign() {
             <Text style={styles.bodyText}>End Date: {item.endDate}</Text>
 
             <View style={styles.buttonContainer}>
-              <Button title="Edit" onPress={() => handleOpenEditModal(item)} />
-              <Button
-                title="Delete"
+              <TouchableOpacity
+                onPress={() => handleOpenEditModal(item)}
+                style={styles.button}
+              >
+                <Text style={styles.btntxt}>Edit</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
                 onPress={() => handleDeleteCampaign(item.id)}
-              />
+                style={styles.errorButton}
+              >
+                <Text style={styles.btntxt}>Delete</Text>
+              </TouchableOpacity>
             </View>
           </View>
         )}
@@ -211,8 +221,7 @@ export default function AllCampaign() {
 
       <Modal visible={isModalOpen} animationType="slide">
         <View style={styles.modalContainer}>
-          <Text style={styles.modalHeading}>Edit Campaign</Text>
-
+          <ScreenHading txt={"Edit Campaign"} />
           {editCampaign && (
             <View style={styles.modalCard}>
               <Picker
@@ -276,15 +285,22 @@ export default function AllCampaign() {
               />
 
               <View style={styles.modalButtonContainer}>
-                <Button
-                  title="Update Campaign"
+                <TouchableOpacity
                   onPress={handleUpdateCampaign}
-                />
+                  style={styles.button}
+                >
+                  <Text style={styles.btntxt}>Update Campaign</Text>
+                </TouchableOpacity>
               </View>
             </View>
           )}
 
-          <Button title="Close" onPress={handleCloseEditModal} />
+          <TouchableOpacity
+            onPress={handleCloseEditModal}
+            style={styles.errorButton}
+          >
+            <Text style={styles.btntxt}>Close</Text>
+          </TouchableOpacity>
         </View>
       </Modal>
     </View>
@@ -294,14 +310,18 @@ export default function AllCampaign() {
 const styles = StyleSheet.create({
   container: {
     width: "100%",
+    alignSelf: "center",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
   },
   card: {
     borderRadius: 8,
-    padding: 15,
+    padding: 25,
     marginBottom: 20,
     backgroundColor: colors.backgroundAccent,
     margin: 10,
-    width: "80%",
+    width: 300,
   },
   subheading: {
     fontSize: 18,
@@ -364,5 +384,26 @@ const styles = StyleSheet.create({
     flex: 1,
     marginRight: 10,
     color: colors.text,
+  },
+  button: {
+    backgroundColor: colors.primaryAccent,
+    margin: 3,
+    borderRadius: 7,
+    padding: 12,
+    color: colors.text,
+    minWidth: 140,
+  },
+  btntxt: {
+    fontSize: 15,
+    fontWeight: "900",
+    color: colors.text,
+  },
+  errorButton: {
+    backgroundColor: colors.secoundary,
+    margin: 3,
+    borderRadius: 7,
+    padding: 12,
+    color: colors.text,
+    width: 110,
   },
 });

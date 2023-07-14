@@ -8,13 +8,14 @@ import ScreenHading from "../../components/ScreenHading";
 export default function ManageCampaigns() {
   return (
     <>
-      <View style={styles.container}>
-        <ScrollView>
+      <ScrollView>
+        <View style={styles.container}>
           <ScreenHading txt={"Manage Campaigns"} />
           <NewCampaign />
+          <ScreenHading txt={"All Campaigns"} />
           <AllCampaign />
-        </ScrollView>
-      </View>
+        </View>
+      </ScrollView>
     </>
   );
 }

@@ -5,6 +5,7 @@ import firebase from "../../firebase";
 import { colors } from "../../constants";
 import NetInfo from "@react-native-community/netinfo";
 import ScreenHading from "../../components/ScreenHading";
+// import { getUserDataAuth } from "../../naivgation/AuthNavigation";
 
 export default function MyAccount() {
   const [userData, setUserData] = useState({});
@@ -86,9 +87,17 @@ export default function MyAccount() {
     }
   };
 
+  const handleSignOut = async () => {
+    try {
+      await AsyncStorage.removeItem("userData");
+    } catch (error) {
+      console.error("Error signing out: ", error);
+    }
+  };
+
   return (
     <View style={styles.container}>
-      <ScreenHading txt={`Email: ${userData.email || storedUserData.email}`} />s
+      <ScreenHading txt={`Email: ${userData.email || storedUserData.email}`} />
       <View style={styles.subContainer}>
         <Text style={styles.txt}>Class:</Text>
         {editMode ? (
@@ -151,10 +160,13 @@ export default function MyAccount() {
         ) : (
           <Button title="Edit" onPress={handleEdit} disabled={!isOnline} />
         )}
+
+        <Button title="Sign Out" onPress={handleSignOut} />
       </View>
     </View>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -186,19 +198,5 @@ const styles = StyleSheet.create({
     color: colors.text,
     backgroundColor: colors.backgroundAccent,
     borderRadius: 10,
-  },
-  saveButton: {
-    backgroundColor: colors.primary,
-    marginBottom: 8,
-  },
-  saveButtonText: {
-    color: colors.buttonText,
-  },
-  editButton: {
-    backgroundColor: colors.secondary,
-    marginBottom: 8,
-  },
-  editText: {
-    color: colors.buttonText,
   },
 });

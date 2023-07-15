@@ -30,7 +30,6 @@ export const AdminScreens = [
 
 export const UserScreens = [
   { name: "Voting", screen: "HomeScreenScreen", icon: "check-square-o" },
-  { name: "Profile", screen: "ProfileScreenScreen", icon: "user" },
   { name: "My Account", screen: "MyAccountScreen", icon: "address-card" },
 ];
 

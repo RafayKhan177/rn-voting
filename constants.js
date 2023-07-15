@@ -26,11 +26,13 @@ export const AdminScreens = [
     icon: "briefcase",
   },
   { name: "My Account", screen: "MyAccountScreen", icon: "address-card" },
+  { name: "Result Screen", screen: "ResultScreen", icon: "address-card" },
 ];
 
 export const UserScreens = [
-  { name: "Voting", screen: "HomeScreenScreen", icon: "check-square-o" },
+  { name: "Voting", screen: "HomeScreen", icon: "check-square-o" },
   { name: "My Account", screen: "MyAccountScreen", icon: "address-card" },
+  { name: "Result Screen", screen: "ResultScreen", icon: "address-card" },
 ];
 
 export const countries = [

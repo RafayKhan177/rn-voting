@@ -6,7 +6,7 @@ import {
   ManageNominee,
   ManagePositionOffice,
 } from "../screens/admin";
-import { MyAccount, Voting } from "../screens/user";
+import { MyAccount, Result, Voting } from "../screens/user";
 import { Signin, Signup } from "../screens/auth";
 import TopBar from "../components/TopBar";
 import { AdminScreens, UserScreens } from "../constants";
@@ -24,17 +24,18 @@ const UserStack = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="HomeScreenScreen"
+        initialRouteName="HomeScreen"
         screenOptions={userOptions}
       >
         <Stack.Screen
-          name="HomeScreenScreen"
+          name="HomeScreen"
           component={Voting}
           options={{
             headerShown: true,
           }}
         />
         <Stack.Screen name="MyAccountScreen" component={MyAccount} />
+        <Stack.Screen name="ResultScreen" component={Result} />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -58,6 +59,7 @@ const AdminStack = () => {
           component={ManagePositionOffice}
         />
         <Stack.Screen name="MyAccountScreen" component={MyAccount} />
+        <Stack.Screen name="ResultScreen" component={Result} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -3,6 +3,7 @@ import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { Button, Card } from "react-native-paper";
 import firebase from "../../firebase";
 import { colors, userPicture } from "../../constants";
+import ScreenHading from "../../components/ScreenHading";
 
 export default function Voting() {
   const [campaigns, setCampaigns] = useState([]);
@@ -154,6 +155,7 @@ export default function Voting() {
 
   return (
     <View style={styles.container}>
+      <ScreenHading txt={"All Campaigns"} />
       <View style={styles.gridContainer}>
         {loading ? (
           <Text>Loading...</Text>

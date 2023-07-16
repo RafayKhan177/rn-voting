@@ -38,7 +38,8 @@ export default function AuthNavigation() {
   }, [userData]);
 
   if (loading) {
-    return <ScreenLoading />;
+    // return <ScreenLoading />;
+    return <Text>ScreenLoading</Text>;
   } else if (userData && userData.role === "admin") {
     return <AdminStack />;
   } else if (userData) {

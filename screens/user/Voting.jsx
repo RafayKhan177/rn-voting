@@ -185,15 +185,33 @@ export default function Voting() {
                         mode="contained"
                         onPress={() => handleVote(campaign.id, nomineeId)}
                         disabled={
-                          currentDateTime < new Date(campaign.startDate) ||
-                          currentDateTime > new Date(campaign.endDate)
+                          currentDateTime <
+                            new Date(
+                              campaign.startDate.split("/").reverse().join("-")
+                            ) ||
+                          currentDateTime >
+                            new Date(
+                              campaign.endDate.split("/").reverse().join("-")
+                            )
                         }
                         style={[
                           styles.voteButton,
                           {
                             opacity:
-                              currentDateTime < new Date(campaign.startDate) ||
-                              currentDateTime > new Date(campaign.endDate)
+                              currentDateTime <
+                                new Date(
+                                  campaign.startDate
+                                    .split("/")
+                                    .reverse()
+                                    .join("-")
+                                ) ||
+                              currentDateTime >
+                                new Date(
+                                  campaign.endDate
+                                    .split("/")
+                                    .reverse()
+                                    .join("-")
+                                )
                                 ? 0.5
                                 : 1,
                           },

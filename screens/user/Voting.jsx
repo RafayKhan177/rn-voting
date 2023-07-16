@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { Button, Card } from "react-native-paper";
 import firebase from "../../firebase";
@@ -77,6 +78,10 @@ export default function Voting() {
   }, []);
 
   const handleVote = async (campaignId, nomineeId) => {
+    const user = await AsyncStorage.getItem("userData");
+    const userData = JSON.parse(user);
+    const userEmail = userData.email;
+
     const db = firebase.firestore();
     const campaignRef = db.collection("campaigns").doc(campaignId);
 
@@ -85,12 +90,10 @@ export default function Voting() {
       if (campaignDoc.exists) {
         const campaignData = campaignDoc.data();
         const votes = campaignData.votes || {};
-        const existingVote = Object.values(votes).find(
-          (vote) => vote === nomineeId
-        );
 
-        if (!existingVote) {
-          votes[Date.now()] = nomineeId;
+        // Check if the user with this email has already voted for this campaign
+        if (!votes[userEmail]) {
+          votes[userEmail] = nomineeId;
           await campaignRef.update({ votes });
           console.log(`Vote recorded for nominee with ID ${nomineeId}`);
         } else {
@@ -162,7 +165,7 @@ export default function Voting() {
         ) : (
           campaigns.map((campaign, index) => {
             const nomineeWithMostVotes = nomineePictures[index];
-            console.log(nomineeWithMostVotes);
+            // console.log(nomineeWithMostVotes);
             return (
               <Card key={campaign.id} style={styles.card}>
                 <Card.Cover

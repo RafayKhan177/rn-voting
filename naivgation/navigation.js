@@ -24,18 +24,18 @@ const UserStack = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="HomeScreen"
+        initialRouteName="VotingScreen"
         screenOptions={userOptions}
       >
         <Stack.Screen
-          name="HomeScreen"
+          name="VotingScreen"
           component={Voting}
           options={{
             headerShown: true,
           }}
         />
-        <Stack.Screen name="MyAccountScreen" component={MyAccount} />
         <Stack.Screen name="ResultScreen" component={Result} />
+        <Stack.Screen name="MyAccountScreen" component={MyAccount} />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -48,6 +48,13 @@ const AdminStack = () => {
         initialRouteName="DashboardScreen"
         screenOptions={adminOptions}
       >
+        <Stack.Screen
+          name="VotingScreen"
+          component={Voting}
+          options={{
+            headerShown: true,
+          }}
+        />
         <Stack.Screen name="DashboardScreen" component={Dashboard} />
         <Stack.Screen
           name="ManageCampaignsScreen"

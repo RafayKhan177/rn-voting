@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, Image, StyleSheet } from "react-native";
-import { Card } from "react-native-paper";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
+import { Button, Card } from "react-native-paper";
 import firebase from "../../firebase";
 import { colors, userPicture } from "../../constants";
+import ScreenHading from "../../components/ScreenHading";
 
-export default function ResultPage() {
+export default function Voting() {
   const [campaigns, setCampaigns] = useState([]);
   const [nomineeNames, setNomineeNames] = useState({});
+  const [nomineePictures, setNomineePictures] = useState([]);
   const [positionNames, setPositionNames] = useState({});
   const [loading, setLoading] = useState(true);
 
@@ -23,10 +26,20 @@ export default function ResultPage() {
           return campaign;
         });
 
-        const nomineeIds = campaignsData.flatMap((campaign) =>
+        // Filter campaigns based on the end date
+        const currentDate = new Date();
+        const filteredCampaigns = campaignsData.filter(
+          (campaign) =>
+            new Date(campaign.endDate.split("/").reverse().join("-")) <
+            currentDate
+        );
+
+        const nomineeIds = filteredCampaigns.flatMap((campaign) =>
           Object.values(campaign.nominees)
         );
-        const positionIds = campaignsData.map((campaign) => campaign.position);
+        const positionIds = filteredCampaigns.map(
+          (campaign) => campaign.position
+        );
 
         const nomineeNamesPromises = nomineeIds.map(async (nomineeId) => {
           const nomineeDoc = await db
@@ -37,10 +50,6 @@ export default function ResultPage() {
             const nomineeData = nomineeDoc.data();
             return {
               [nomineeId]: nomineeData.firstName + " " + nomineeData.lastName,
-            };
-          } else {
-            return {
-              [nomineeId]: "Nominee",
             };
           }
         });
@@ -65,7 +74,7 @@ export default function ResultPage() {
         const nomineeNames = Object.assign({}, ...nomineeNamesResults);
         const positionNames = Object.assign({}, ...positionNamesResults);
 
-        setCampaigns(campaignsData);
+        setCampaigns(filteredCampaigns); // Update to use 'filteredCampaigns' instead of 'campaignsData'
         setNomineeNames(nomineeNames);
         setPositionNames(positionNames);
         setLoading(false);
@@ -74,9 +83,38 @@ export default function ResultPage() {
         setLoading(false);
       }
     };
-
     fetchData();
   }, []);
+
+  const handleVote = async (campaignId, nomineeId) => {
+    const user = await AsyncStorage.getItem("userData");
+    const userData = JSON.parse(user);
+    const userEmail = userData.email;
+
+    const db = firebase.firestore();
+    const campaignRef = db.collection("campaigns").doc(campaignId);
+
+    try {
+      const campaignDoc = await campaignRef.get();
+      if (campaignDoc.exists) {
+        const campaignData = campaignDoc.data();
+        const votes = campaignData.votes || {};
+
+        // Check if the user with this email has already voted for this campaign
+        if (!votes[userEmail]) {
+          votes[userEmail] = nomineeId;
+          await campaignRef.update({ votes });
+          console.log(`Vote recorded for nominee with ID ${nomineeId}`);
+        } else {
+          console.log("You have already voted for this position.");
+        }
+      }
+    } catch (error) {
+      console.error("Error recording vote:", error);
+    }
+  };
+
+  const currentDateTime = new Date();
 
   const getNomineeWithMostVotes = async (campaign) => {
     const db = firebase.firestore();
@@ -109,89 +147,76 @@ export default function ResultPage() {
 
       if (nomineeId) {
         const pictureUrl = nomineeData.picture || userPicture;
-        return {
-          pictureUrl,
-          nomineeId,
-          voteCount: voteCounts[nomineeWithMostVotes],
-        };
+        return pictureUrl;
       }
     }
 
     return null;
   };
 
-  const parseFirebaseDate = (dateString) => {
-    const [month, day, year] = dateString.split("/");
-    // Note: JavaScript Date uses zero-based month index, so subtract 1 from the month
-    return new Date(year, month - 1, day);
-  };
+  useEffect(() => {
+    const fetchNomineePictures = async () => {
+      const pictures = await Promise.all(
+        campaigns.map((campaign) => getNomineeWithMostVotes(campaign))
+      );
+      setNomineePictures(pictures);
+    };
 
-  const renderResultCard = (campaign) => {
-    const endDate = parseFirebaseDate(campaign.endDate);
-    const currentDateTime = new Date();
-
-    if (endDate > currentDateTime) {
-      // Skip campaigns that haven't ended yet
-      return null;
-    }
-
-    const winnerInfo = getNomineeWithMostVotes(campaign);
-
-    if (!winnerInfo) {
-      return null;
-    }
-
-    const { pictureUrl, nomineeId, voteCount } = winnerInfo;
-    const nomineeName = nomineeNames[nomineeId] || "Nominee";
-
-    return (
-      <Card key={campaign.id} style={styles.card}>
-        <Card.Cover
-          source={{
-            uri: pictureUrl || userPicture,
-          }}
-          style={styles.cardMedia}
-        />
-
-        <Card.Content>
-          <Text style={styles.positionText}>
-            {positionNames[campaign.position] || "Position"}
-          </Text>
-          <View style={styles.resultContainer}>
-            <Text style={styles.winnerLabel}>WINNER</Text>
-            <Text style={styles.voteCountText}>{voteCount} votes</Text>
-            <Text style={styles.nomineeText}>{nomineeName}</Text>
-          </View>
-          <Text style={styles.otherVotesText}>Other Votes:</Text>
-          {Object.keys(campaign.nominees).map((nomineeId) => {
-            if (nomineeId !== winnerInfo.nomineeId) {
-              const votes = campaign.votes || {};
-              const nomineeVotes = Object.values(votes).filter(
-                (vote) => vote === nomineeId
-              );
-              const nominee = nomineeNames[nomineeId] || "Nominee";
-              return (
-                <Text key={nomineeId} style={styles.voteDetailsText}>
-                  {nominee}: {nomineeVotes.length} votes
-                </Text>
-              );
-            }
-            return null;
-          })}
-        </Card.Content>
-      </Card>
-    );
-  };
+    fetchNomineePictures();
+  }, [campaigns]);
 
   return (
     <View style={styles.container}>
-      {loading ? (
-        <Text>Loading...</Text>
-      ) : campaigns.length === 0 ? (
-        <Text>No campaigns found</Text>
-      ) : (
-        campaigns.map(renderResultCard)
-      )}
+      <ScreenHading txt={"Campaigns Results"} />
+      <View style={styles.gridContainer}>
+        {loading ? (
+          <Text>Loading...</Text>
+        ) : (
+          campaigns.map((campaign, index) => {
+            const nomineeWithMostVotes = nomineePictures[index];
+            return (
+              <Card key={campaign.id} style={styles.card}>
+                <Card.Cover
+                  source={{
+                    uri: nomineeWithMostVotes || userPicture,
+                  }}
+                  style={styles.cardMedia}
+                />
+
+                <Card.Content>
+                  <Text style={styles.positionText}>
+                    {positionNames[campaign.position] || "Position"}
+                  </Text>
+                  {Object.values(campaign.nominees).map((nomineeId, index) => {
+                    const voteCount = Object.values(
+                      campaign.votes || {}
+                    ).filter(
+                      (voteNomineeId) => voteNomineeId === nomineeId
+                    ).length;
+
+                    return (
+                      <View key={index}>
+                        <Button
+                          mode="contained"
+                          onPress={() => handleVote(campaign.id, nomineeId)}
+                          disabled={true}
+                          style={[styles.voteButton]}
+                        >
+                          <Text style={styles.nomineeText}>
+                            {`${
+                              nomineeNames[nomineeId] || "Nominee"
+                            } (${voteCount} votes)`}
+                          </Text>
+                        </Button>
+                      </View>
+                    );
+                  })}
+                </Card.Content>
+              </Card>
+            );
+          })
+        )}
+      </View>
     </View>
   );
 }
@@ -202,6 +227,11 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 16,
     backgroundColor: colors.background,
+  },
+  gridContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    // justifyContent: "space-between",
   },
   card: {
     width: "100%",
@@ -221,37 +251,17 @@ const styles = StyleSheet.create({
     marginHorizontal: "auto",
     marginVertical: 10,
   },
-  resultContainer: {
-    alignItems: "center",
-  },
-  winnerLabel: {
-    fontSize: 16,
-    marginVertical: 4,
-    color: "green",
-    fontWeight: "bold",
-  },
-  voteCountText: {
-    fontSize: 16,
-    marginVertical: 4,
-    color: colors.textLight,
-    fontWeight: "bold",
-  },
   nomineeText: {
     fontSize: 20,
     marginVertical: 4,
-    color: colors.text,
-    fontWeight: "bold",
-  },
-  otherVotesText: {
-    fontSize: 16,
-    marginTop: 8,
-    marginBottom: 4,
-    color: colors.text,
-    fontWeight: "bold",
-  },
-  voteDetailsText: {
-    fontSize: 16,
-    marginVertical: 4,
     color: colors.textLight,
+    fontWeight: "bold",
+  },
+  voteButton: {
+    backgroundColor: colors.primaryAccent,
+    borderRadius: 4,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    marginTop: 8,
   },
 });

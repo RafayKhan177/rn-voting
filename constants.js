@@ -25,14 +25,15 @@ export const AdminScreens = [
     screen: "ManagePositionOfficeScreen",
     icon: "briefcase",
   },
+  { name: "Voting", screen: "VotingScreen", icon: "check-square-o" },
+  { name: "Campaigns Result", screen: "ResultScreen", icon: "address-card" },
   { name: "My Account", screen: "MyAccountScreen", icon: "address-card" },
-  { name: "Result Screen", screen: "ResultScreen", icon: "address-card" },
 ];
 
 export const UserScreens = [
-  { name: "Voting", screen: "HomeScreen", icon: "check-square-o" },
+  { name: "Voting", screen: "VotingScreen", icon: "check-square-o" },
   { name: "My Account", screen: "MyAccountScreen", icon: "address-card" },
-  { name: "Result Screen", screen: "ResultScreen", icon: "address-card" },
+  { name: "Campaigns Result", screen: "ResultScreen", icon: "address-card" },
 ];
 
 export const countries = [

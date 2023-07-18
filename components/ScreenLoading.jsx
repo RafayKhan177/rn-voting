@@ -1,18 +1,12 @@
 import React from "react";
-import ReactLoading from "react-loading";
 import { colors } from "../constants";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, ActivityIndicator } from "react-native";
 
 export default function ScreenLoading() {
   return (
     <View style={styles.container}>
       <View style={styles.loaderContainer}>
-        <ReactLoading
-          type="bubbles"
-          color={colors.primary}
-          height={50}
-          width={50}
-        />
+        <ActivityIndicator size="large" color={colors.primary} />
       </View>
     </View>
   );

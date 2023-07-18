@@ -36,6 +36,11 @@ export const UserScreens = [
   { name: "Campaigns Result", screen: "ResultScreen", icon: "address-card" },
 ];
 
+export const AuthScreens = [
+  { name: "Sign In", screen: "SignupScreen" },
+  { name: "Sign Up", screen: "SigninScreen" },
+];
+
 export const countries = [
   { code: "AD", label: "Andorra", phone: "376" },
   {

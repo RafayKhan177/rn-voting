@@ -24,6 +24,10 @@ export default function TopBar({ screens }) {
     toggleMenu();
   };
 
+  const handleGoBack = () => {
+    navigation.goBack();
+  };
+
   const toggleMenu = () => {
     if (showMenu) {
       Animated.timing(menuAnimation, {
@@ -97,12 +101,12 @@ export default function TopBar({ screens }) {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={toggleMenu} style={styles.menuButton}>
-        <Ionicons name="menu" size={24} color="white" />
-      </TouchableOpacity>
       <View style={{ flexDirection: "row" }}>
+        <TouchableOpacity onPress={toggleMenu} style={styles.menuButton}>
+          <Ionicons name="menu" size={24} color="white" />
+        </TouchableOpacity>
         <Text style={styles.title}>VOTING</Text>
-        <Icon
+        {/* <Icon
           style={{
             textAlign: "center",
             paddingHorizontal: 15,
@@ -110,8 +114,13 @@ export default function TopBar({ screens }) {
           name={"check-square"}
           size={20}
           color={colors.textLight}
-        />
+        /> */}
       </View>
+      {navigation.canGoBack() && (
+        <TouchableOpacity onPress={handleGoBack} style={styles.backButton}>
+          <Ionicons name="arrow-back" size={24} color="white" />
+        </TouchableOpacity>
+      )}
       {showMenu && renderPopupMenu()}
     </View>
   );

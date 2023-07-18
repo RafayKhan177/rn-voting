@@ -9,7 +9,7 @@ import {
 import { MyAccount, Result, Voting } from "../screens/user";
 import { Signin, Signup } from "../screens/auth";
 import TopBar from "../components/TopBar";
-import { AdminScreens, UserScreens } from "../constants";
+import { AdminScreens, AuthScreens, UserScreens } from "../constants";
 
 const Stack = createStackNavigator();
 
@@ -18,6 +18,10 @@ const userOptions = {
 };
 const adminOptions = {
   header: () => <TopBar screens={AdminScreens} />,
+};
+
+const authOptions = {
+  header: () => <TopBar screens={AuthScreens} />,
 };
 
 const UserStack = () => {
@@ -77,7 +81,7 @@ const AuthStack = () => {
     <NavigationContainer>
       <Stack.Navigator
         initialRouteName="SigninScreen"
-        // screenOptions={screenOption}
+        screenOptions={authOptions}
       >
         <Stack.Screen name="SignupScreen" component={Signup} />
         <Stack.Screen name="SigninScreen" component={Signin} />

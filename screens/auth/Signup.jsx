@@ -54,6 +54,7 @@ export default function Signup({ navigation }) {
         <View style={styles.textInput}>
           {/* <Text style={styles.textInputText}>First Name</Text> */}
           <TextInput
+            placeholderTextColor={colors.text}
             placeholder="First Name"
             style={styles.input}
             onChangeText={(text) => setValue("firstName", text)}
@@ -63,6 +64,7 @@ export default function Signup({ navigation }) {
         <View style={styles.textInput}>
           {/* <Text style={styles.textInputText}>Last Name</Text> */}
           <TextInput
+            placeholderTextColor={colors.text}
             placeholder="Last Name"
             style={styles.input}
             onChangeText={(text) => setValue("lastName", text)}
@@ -75,6 +77,7 @@ export default function Signup({ navigation }) {
         <View style={styles.textInput}>
           {/* <Text style={styles.textInputText}>House Color</Text> */}
           <TextInput
+            placeholderTextColor={colors.text}
             placeholder="House Color"
             style={styles.input}
             onChangeText={(text) => setValue("houseColor", text)}
@@ -85,6 +88,7 @@ export default function Signup({ navigation }) {
         <View style={styles.textInput}>
           {/* <Text style={styles.textInputText}>Class</Text> */}
           <TextInput
+            placeholderTextColor={colors.text}
             placeholder="Class"
             style={styles.input}
             onChangeText={(text) => setValue("class", text)}
@@ -97,6 +101,7 @@ export default function Signup({ navigation }) {
         <View style={styles.textInput}>
           {/* <Text style={styles.textInputText}>Email Address</Text> */}
           <TextInput
+            placeholderTextColor={colors.text}
             placeholder="Email Address"
             style={styles.input}
             onChangeText={(text) => setValue("email", text)}
@@ -109,6 +114,7 @@ export default function Signup({ navigation }) {
         <View style={styles.textInput}>
           {/* <Text style={styles.textInputText}>Password</Text> */}
           <TextInput
+            placeholderTextColor={colors.text}
             placeholder="Password"
             style={styles.input}
             onChangeText={(text) => setValue("password", text)}
@@ -120,6 +126,7 @@ export default function Signup({ navigation }) {
         <View style={styles.textInput}>
           {/* <Text style={styles.textInputText}>Confirm Password</Text> */}
           <TextInput
+            placeholderTextColor={colors.text}
             placeholder="Confirm Password"
             style={styles.input}
             onChangeText={(text) => setValue("confirmPassword", text)}

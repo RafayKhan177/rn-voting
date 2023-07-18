@@ -1,16 +1,40 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 import { AdminScreens, colors } from "../../constants";
 import { useNavigation } from "@react-navigation/native";
 import { ScreenHading } from "../../components";
 import Icon from "react-native-vector-icons/FontAwesome";
+import firebase from "../../firebase";
 
 export default function Dashboard() {
-  // Example data
-  const totalCampaigns = 10;
-  const totalNominees = 25;
-  const totalPositions = 5;
-  const totalUsers = 100;
+  const [totalCampaigns, setTotalCampaigns] = useState(0);
+  const [totalNominees, setTotalNominees] = useState(0);
+  const [totalPositions, setTotalPositions] = useState(0);
+  const [totalUsers, setTotalUsers] = useState(0);
+
+  const db = firebase.firestore();
+
+  useEffect(() => {
+    const fetchCollections = async () => {
+      try {
+        const campaignsSnapshot = await db.collection("campaigns").get();
+        setTotalCampaigns(campaignsSnapshot.size);
+
+        const nomineesSnapshot = await db.collection("nominees").get();
+        setTotalNominees(nomineesSnapshot.size);
+
+        const positionsSnapshot = await db.collection("positions").get();
+        setTotalPositions(positionsSnapshot.size);
+
+        const usersSnapshot = await db.collection("users").get();
+        setTotalUsers(usersSnapshot.size);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchCollections();
+  }, []);
 
   const navigation = useNavigation();
   const handleNavigate = (screen) => {
@@ -96,7 +120,6 @@ export default function Dashboard() {
     </ScrollView>
   );
 }
-
 const styles = {
   container: {
     // flex: 1,

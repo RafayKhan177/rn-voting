@@ -5,7 +5,6 @@ import firebase from "../../firebase";
 import { colors } from "../../constants";
 import NetInfo from "@react-native-community/netinfo";
 import ScreenHading from "../../components/ScreenHading";
-// import { getUserDataAuth } from "../../naivgation/AuthNavigation";
 
 export default function MyAccount() {
   const [userData, setUserData] = useState({});

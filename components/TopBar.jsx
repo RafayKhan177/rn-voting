@@ -106,15 +106,6 @@ export default function TopBar({ screens }) {
           <Ionicons name="menu" size={24} color="white" />
         </TouchableOpacity>
         <Text style={styles.title}>VOTING</Text>
-        {/* <Icon
-          style={{
-            textAlign: "center",
-            paddingHorizontal: 15,
-          }}
-          name={"check-square"}
-          size={20}
-          color={colors.textLight}
-        /> */}
       </View>
       {navigation.canGoBack() && (
         <TouchableOpacity onPress={handleGoBack} style={styles.backButton}>

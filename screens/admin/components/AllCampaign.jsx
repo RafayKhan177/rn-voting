@@ -15,7 +15,7 @@ import { Picker } from "@react-native-picker/picker";
 import ScreenHading from "../../../components/ScreenHading";
 
 export default function AllCampaign() {
-  const [isLoading, setIsLoading] = useState(true);
+  // const [isLoading, setIsLoading] = useState(true);
   const [campaigns, setCampaigns] = useState([]);
   const [nominees, setNominees] = useState([]);
   const [nomineeNames, setNomineeNames] = useState({});
@@ -95,7 +95,7 @@ export default function AllCampaign() {
     }
 
     setPositionNames(positionsData);
-    setIsLoading(false);
+    // setIsLoading(false);
   };
 
   useEffect(() => {
@@ -122,7 +122,7 @@ export default function AllCampaign() {
     }
 
     setNomineeNames(namesData);
-    setIsLoading(false);
+    // setIsLoading(false);
   };
 
   useEffect(() => {

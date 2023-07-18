@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import { Button, Card } from "react-native-paper";
 import firebase from "../../firebase";
 import { colors, userPicture } from "../../constants";

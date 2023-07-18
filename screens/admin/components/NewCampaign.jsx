@@ -3,7 +3,6 @@ import {
   StyleSheet,
   View,
   Text,
-  Button,
   TouchableWithoutFeedback,
   Switch,
   TouchableOpacity,
@@ -246,7 +245,6 @@ const styles = StyleSheet.create({
   },
   dateInput: {
     height: 40,
-    // borderColor: "#ccc",
     borderWidth: 1,
     marginBottom: 10,
     paddingHorizontal: 10,

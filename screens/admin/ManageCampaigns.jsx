@@ -1,7 +1,7 @@
 import React from "react";
 import AllCampaign from "./components/AllCampaign";
 import NewCampaign from "./components/NewCampaign";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { SafeAreaView, ScrollView, StyleSheet, View } from "react-native";
 import { colors } from "../../constants";
 import ScreenHading from "../../components/ScreenHading";
 
@@ -9,12 +9,12 @@ export default function ManageCampaigns() {
   return (
     <>
       <ScrollView>
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
           <ScreenHading txt={"Manage Campaigns"} />
           <NewCampaign />
           <ScreenHading txt={"All Campaigns"} />
           <AllCampaign />
-        </View>
+        </SafeAreaView>
       </ScrollView>
     </>
   );

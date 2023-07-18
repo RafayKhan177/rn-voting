@@ -13,6 +13,7 @@ import { Ionicons } from "@expo/vector-icons";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { colors } from "../constants";
 import { useNavigation } from "@react-navigation/native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function TopBar({ screens }) {
   const [showMenu, setShowMenu] = useState(false);
@@ -100,7 +101,7 @@ export default function TopBar({ screens }) {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={{ flexDirection: "row" }}>
         <TouchableOpacity onPress={toggleMenu} style={styles.menuButton}>
           <Ionicons name="menu" size={24} color="white" />
@@ -113,7 +114,7 @@ export default function TopBar({ screens }) {
         </TouchableOpacity>
       )}
       {showMenu && renderPopupMenu()}
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -124,8 +125,9 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     backgroundColor: colors.primary,
     paddingHorizontal: 16,
-    height: Platform.OS === "ios" ? 100 : 60,
-    paddingTop: Platform.OS === "ios" ? 40 : 0,
+    // height: Platform.OS === "ios" ? 100 : 60,
+    // paddingTop: Platform.OS === "ios" ? 40 : 0,
+    paddingBottom: 10,
   },
   menuButton: {
     marginRight: 8,
@@ -169,7 +171,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   menuItemText: {
-    fontSize: 18,
+    fontSize: 15,
     color: colors.text,
     fontWeight: "bold",
   },

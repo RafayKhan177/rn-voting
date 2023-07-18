@@ -387,7 +387,7 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: colors.primaryAccent,
     margin: 3,
-    borderRadius: 7,
+    borderRadius: 3,
     padding: 12,
     color: colors.text,
     minWidth: 140,
@@ -400,9 +400,10 @@ const styles = StyleSheet.create({
   errorButton: {
     backgroundColor: colors.secoundary,
     margin: 3,
-    borderRadius: 7,
+    borderRadius: 3,
     padding: 12,
     color: colors.text,
     width: 110,
+    marginLeft: 8,
   },
 });

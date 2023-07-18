@@ -3,7 +3,7 @@ export const userPicture =
 
 export const colors = {
   primary: "#ef233c",
-  primaryAccent: "#1e96fc",
+  primaryAccent: "#1d3557",
   secoundary: "#d80032",
   secoundaryAccent: "#FFC857",
   background: "#000",

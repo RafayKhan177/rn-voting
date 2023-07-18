@@ -86,36 +86,6 @@ export default function Voting() {
     fetchData();
   }, []);
 
-  const handleVote = async (campaignId, nomineeId) => {
-    const user = await AsyncStorage.getItem("userData");
-    const userData = JSON.parse(user);
-    const userEmail = userData.email;
-
-    const db = firebase.firestore();
-    const campaignRef = db.collection("campaigns").doc(campaignId);
-
-    try {
-      const campaignDoc = await campaignRef.get();
-      if (campaignDoc.exists) {
-        const campaignData = campaignDoc.data();
-        const votes = campaignData.votes || {};
-
-        // Check if the user with this email has already voted for this campaign
-        if (!votes[userEmail]) {
-          votes[userEmail] = nomineeId;
-          await campaignRef.update({ votes });
-          console.log(`Vote recorded for nominee with ID ${nomineeId}`);
-        } else {
-          console.log("You have already voted for this position.");
-        }
-      }
-    } catch (error) {
-      console.error("Error recording vote:", error);
-    }
-  };
-
-  const currentDateTime = new Date();
-
   const getNomineeWithMostVotes = async (campaign) => {
     const db = firebase.firestore();
     const votes = campaign.votes || {};
@@ -198,7 +168,6 @@ export default function Voting() {
                       <View key={index}>
                         <Button
                           mode="contained"
-                          onPress={() => handleVote(campaign.id, nomineeId)}
                           disabled={true}
                           style={[styles.voteButton]}
                         >
@@ -252,7 +221,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   nomineeText: {
-    fontSize: 20,
+    fontSize: 12,
     marginVertical: 4,
     color: colors.textLight,
     fontWeight: "bold",

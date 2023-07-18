@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+} from "react-native";
 import { Button, Card } from "react-native-paper";
 import firebase from "../../firebase";
 import { colors, userPicture } from "../../constants";
@@ -157,47 +164,36 @@ export default function Voting() {
   }, [campaigns]);
 
   return (
-    <View style={styles.container}>
-      <ScreenHading txt={"All Campaigns"} />
-      <View style={styles.gridContainer}>
-        {loading ? (
-          <Text>Loading...</Text>
-        ) : (
-          campaigns.map((campaign, index) => {
-            const nomineeWithMostVotes = nomineePictures[index];
-            // console.log(nomineeWithMostVotes);
-            return (
-              <Card key={campaign.id} style={styles.card}>
-                <Card.Cover
-                  source={{
-                    uri: nomineeWithMostVotes || userPicture,
-                  }}
-                  style={styles.cardMedia}
-                />
+    <ScrollView>
+      <View style={styles.container}>
+        <ScreenHading txt={"All Campaigns"} />
+        <View style={styles.gridContainer}>
+          {loading ? (
+            <Text>Loading...</Text>
+          ) : (
+            campaigns.map((campaign, index) => {
+              const nomineeWithMostVotes = nomineePictures[index];
+              // console.log(nomineeWithMostVotes);
+              return (
+                <Card key={campaign.id} style={styles.card}>
+                  <Card.Cover
+                    source={{
+                      uri: nomineeWithMostVotes || userPicture,
+                    }}
+                    style={styles.cardMedia}
+                  />
 
-                <Card.Content>
-                  <Text style={styles.positionText}>
-                    {positionNames[campaign.position] || "Position"}
-                  </Text>
-                  {Object.values(campaign.nominees).map((nomineeId, index) => (
-                    <View key={index}>
-                      <Button
-                        mode="contained"
-                        onPress={() => handleVote(campaign.id, nomineeId)}
-                        disabled={
-                          currentDateTime <
-                            new Date(
-                              campaign.startDate.split("/").reverse().join("-")
-                            ) ||
-                          currentDateTime >
-                            new Date(
-                              campaign.endDate.split("/").reverse().join("-")
-                            )
-                        }
-                        style={[
-                          styles.voteButton,
-                          {
-                            opacity:
+                  <Card.Content>
+                    <Text style={styles.positionText}>
+                      {positionNames[campaign.position] || "Position"}
+                    </Text>
+                    {Object.values(campaign.nominees).map(
+                      (nomineeId, index) => (
+                        <View key={index}>
+                          <Button
+                            mode="contained"
+                            onPress={() => handleVote(campaign.id, nomineeId)}
+                            disabled={
                               currentDateTime <
                                 new Date(
                                   campaign.startDate
@@ -212,24 +208,45 @@ export default function Voting() {
                                     .reverse()
                                     .join("-")
                                 )
-                                ? 0.5
-                                : 1,
-                          },
-                        ]}
-                      >
-                        <Text style={styles.nomineeText}>
-                          Vote: {nomineeNames[nomineeId] || "Nominee"}
-                        </Text>
-                      </Button>
-                    </View>
-                  ))}
-                </Card.Content>
-              </Card>
-            );
-          })
-        )}
+                            }
+                            style={[
+                              styles.voteButton,
+                              {
+                                opacity:
+                                  currentDateTime <
+                                    new Date(
+                                      campaign.startDate
+                                        .split("/")
+                                        .reverse()
+                                        .join("-")
+                                    ) ||
+                                  currentDateTime >
+                                    new Date(
+                                      campaign.endDate
+                                        .split("/")
+                                        .reverse()
+                                        .join("-")
+                                    )
+                                    ? 0.5
+                                    : 1,
+                              },
+                            ]}
+                          >
+                            <Text style={styles.nomineeText}>
+                              Vote: {nomineeNames[nomineeId] || "Nominee"}
+                            </Text>
+                          </Button>
+                        </View>
+                      )
+                    )}
+                  </Card.Content>
+                </Card>
+              );
+            })
+          )}
+        </View>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 

@@ -43,8 +43,15 @@ export default function ManagePositionOffice() {
   };
 
   const addPosition = async () => {
+    if (!newPosition.name || !newPosition.description) {
+      // If either the name or description is empty, don't save the data
+      console.warn("Both name and description must be filled.");
+      return;
+    }
+
     const db = firebase.firestore();
     const positionsCollection = db.collection("positions");
+
     try {
       const newPositionDoc = await positionsCollection.add(newPosition);
       const newPositionData = { id: newPositionDoc.id, ...newPosition };
@@ -93,6 +100,7 @@ export default function ManagePositionOffice() {
           <TextInput
             name="name"
             placeholder="Office"
+            placeholderTextColor={colors.text}
             value={newPosition.name}
             onChangeText={(text) => handleInputChange("name", text)}
             style={styles.input}
@@ -100,6 +108,7 @@ export default function ManagePositionOffice() {
           <TextInput
             name="description"
             placeholder="Position"
+            placeholderTextColor={colors.text}
             value={newPosition.description}
             onChangeText={(text) => handleInputChange("description", text)}
             style={styles.input}

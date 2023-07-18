@@ -97,7 +97,10 @@ export default function MyAccount() {
 
   return (
     <View style={styles.container}>
-      <ScreenHading txt={`Email: ${userData.email || storedUserData.email}`} />
+      <ScreenHading
+        txt={`${userData.email || storedUserData.email}`}
+        size={12}
+      />
       <View style={styles.subContainer}>
         <Text style={styles.txt}>Class:</Text>
         {editMode ? (

@@ -95,9 +95,9 @@ export default function Voting() {
         if (!votes[userEmail]) {
           votes[userEmail] = nomineeId;
           await campaignRef.update({ votes });
-          console.log(`Vote recorded for nominee with ID ${nomineeId}`);
+          alert(`Vote recorded for nominee with ID ${nomineeId}`);
         } else {
-          console.log("You have already voted for this position.");
+          alert("You have already voted for this position.");
         }
       }
     } catch (error) {

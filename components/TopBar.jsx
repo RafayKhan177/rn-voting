@@ -20,6 +20,7 @@ export default function TopBar({ screens }) {
   const menuAnimation = useRef(new Animated.Value(0)).current;
 
   const navigation = useNavigation();
+
   const handleNavigate = (screen) => {
     navigation.navigate(screen);
     toggleMenu();
@@ -80,9 +81,7 @@ export default function TopBar({ screens }) {
             {screens.map((screen, ind) => (
               <TouchableOpacity
                 key={ind}
-                onPress={() => {
-                  toggleMenu, handleNavigate(screen.screen);
-                }}
+                onPress={() => handleNavigate(screen.screen)}
                 style={styles.menuItem}
               >
                 <Icon

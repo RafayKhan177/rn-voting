@@ -22,13 +22,10 @@ export default function AuthNavigation() {
       }
     };
 
-    getUserData(); // Call the async function immediately inside useEffect
+    getUserData();
 
-    // Clean up the component (optional)
-    return () => {
-      // You can add cleanup code here if needed
-    };
-  }, []); // The empty dependency array ensures the useEffect runs only once on mount
+    return () => {};
+  }, []);
 
   if (loading) {
     return <ScreenLoading />;

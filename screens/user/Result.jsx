@@ -4,6 +4,7 @@ import { Button, Card } from "react-native-paper";
 import firebase from "../../firebase";
 import { colors, userPicture } from "../../constants";
 import ScreenHading from "../../components/ScreenHading";
+import { ScrollView } from "react-native";
 
 export default function Voting() {
   const [campaigns, setCampaigns] = useState([]);
@@ -135,57 +136,61 @@ export default function Voting() {
   }, [campaigns]);
 
   return (
-    <View style={styles.container}>
-      <ScreenHading txt={"Campaigns Results"} />
-      <View style={styles.gridContainer}>
-        {loading ? (
-          <Text>Loading...</Text>
-        ) : (
-          campaigns.map((campaign, index) => {
-            const nomineeWithMostVotes = nomineePictures[index];
-            return (
-              <Card key={campaign.id} style={styles.card}>
-                <Card.Cover
-                  source={{
-                    uri: nomineeWithMostVotes || userPicture,
-                  }}
-                  style={styles.cardMedia}
-                />
+    <ScrollView>
+      <View style={styles.container}>
+        <ScreenHading txt={"Campaigns Results"} />
+        <View style={styles.gridContainer}>
+          {loading ? (
+            <Text>Loading...</Text>
+          ) : (
+            campaigns.map((campaign, index) => {
+              const nomineeWithMostVotes = nomineePictures[index];
+              return (
+                <Card key={campaign.id} style={styles.card}>
+                  <Card.Cover
+                    source={{
+                      uri: nomineeWithMostVotes || userPicture,
+                    }}
+                    style={styles.cardMedia}
+                  />
 
-                <Card.Content>
-                  <Text style={styles.positionText}>
-                    {positionNames[campaign.position] || "Position"}
-                  </Text>
-                  {Object.values(campaign.nominees).map((nomineeId, index) => {
-                    const voteCount = Object.values(
-                      campaign.votes || {}
-                    ).filter(
-                      (voteNomineeId) => voteNomineeId === nomineeId
-                    ).length;
+                  <Card.Content>
+                    <Text style={styles.positionText}>
+                      {positionNames[campaign.position] || "Position"}
+                    </Text>
+                    {Object.values(campaign.nominees).map(
+                      (nomineeId, index) => {
+                        const voteCount = Object.values(
+                          campaign.votes || {}
+                        ).filter(
+                          (voteNomineeId) => voteNomineeId === nomineeId
+                        ).length;
 
-                    return (
-                      <View key={index}>
-                        <Button
-                          mode="contained"
-                          disabled={true}
-                          style={[styles.voteButton]}
-                        >
-                          <Text style={styles.nomineeText}>
-                            {`${
-                              nomineeNames[nomineeId] || "Nominee"
-                            } (${voteCount} votes)`}
-                          </Text>
-                        </Button>
-                      </View>
-                    );
-                  })}
-                </Card.Content>
-              </Card>
-            );
-          })
-        )}
+                        return (
+                          <View key={index}>
+                            <Button
+                              mode="contained"
+                              disabled={true}
+                              style={[styles.voteButton]}
+                            >
+                              <Text style={styles.nomineeText}>
+                                {`${
+                                  nomineeNames[nomineeId] || "Nominee"
+                                } (${voteCount} votes)`}
+                              </Text>
+                            </Button>
+                          </View>
+                        );
+                      }
+                    )}
+                  </Card.Content>
+                </Card>
+              );
+            })
+          )}
+        </View>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 

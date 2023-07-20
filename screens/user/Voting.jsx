@@ -95,7 +95,7 @@ export default function Voting() {
         if (!votes[userEmail]) {
           votes[userEmail] = nomineeId;
           await campaignRef.update({ votes });
-          alert(`Vote recorded for nominee with ID ${nomineeId}`);
+          alert(`Vote recorded for selected nominee`);
         } else {
           alert("You have already voted for this position.");
         }
@@ -274,7 +274,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   nomineeText: {
-    fontSize: 20,
+    fontSize: 12,
     marginVertical: 4,
     color: colors.textLight,
     fontWeight: "bold",

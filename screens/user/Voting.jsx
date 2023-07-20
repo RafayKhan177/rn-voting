@@ -157,8 +157,8 @@ export default function Voting() {
   }, [campaigns]);
 
   return (
-    <ScrollView>
-      <View style={styles.container}>
+    <View style={styles.container}>
+      <ScrollView>
         <ScreenHading txt={"All Campaigns"} />
         <View style={styles.gridContainer}>
           {loading ? (
@@ -238,8 +238,8 @@ export default function Voting() {
             })
           )}
         </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 }
 
@@ -253,7 +253,7 @@ const styles = StyleSheet.create({
   gridContainer: {
     flexDirection: "row",
     flexWrap: "wrap",
-    // justifyContent: "space-between",
+    justifyContent: "center",
   },
   card: {
     width: "100%",

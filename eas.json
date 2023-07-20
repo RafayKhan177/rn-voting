@@ -2,22 +2,17 @@
   "build": {
     "preview": {
       "android": {
-        "buildType": "apk",
-        "channel": "preview-channel"
+        "buildType": "apk"
       }
     },
     "preview2": {
       "android": {
-        "gradleCommand": ":app:assembleRelease",
-        "channel": "preview2-channel"
+        "gradleCommand": ":app:assembleRelease"
       }
     },
     "preview3": {
-      "developmentClient": true,
-      "channel": "preview3-channel"
+      "developmentClient": true
     },
-    "production": {
-      "channel": "production-channel"
-    }
+    "production": {}
   }
 }

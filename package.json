@@ -9,7 +9,7 @@
     "web": "expo start --web"
   },
   "dependencies": {
-    "@babel/preset-env": "^7.1.6",
+    "@babel/preset-env": "^7.22.9",
     "@expo/webpack-config": "^18.0.1",
     "@react-native-community/checkbox": "^0.5.16",
     "@react-native-community/datetimepicker": "6.7.3",
@@ -19,7 +19,6 @@
     "@react-navigation/stack": "^6.3.17",
     "expo": "~48.0.18",
     "expo-image-picker": "~14.1.1",
-    "expo-modules-autolinking": "^0.8.1",
     "expo-status-bar": "~1.4.4",
     "expo-system-ui": "~2.2.1",
     "expo-updates": "~0.16.4",

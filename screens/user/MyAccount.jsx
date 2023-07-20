@@ -5,6 +5,7 @@ import firebase from "../../firebase";
 import { colors } from "../../constants";
 import NetInfo from "@react-native-community/netinfo";
 import ScreenHading from "../../components/ScreenHading";
+import * as Updates from "expo-updates";
 
 export default function MyAccount() {
   const [userData, setUserData] = useState({});
@@ -89,6 +90,8 @@ export default function MyAccount() {
   const handleSignOut = async () => {
     try {
       await AsyncStorage.removeItem("userData");
+
+      Updates.reloadAsync();
     } catch (error) {
       console.error("Error signing out: ", error);
     }

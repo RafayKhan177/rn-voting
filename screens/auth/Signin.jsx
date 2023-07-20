@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { colors } from "../../constants";
+import * as Updates from "expo-updates";
 
 export default function Signin({ navigation }) {
   const [email, setEmail] = useState("");
@@ -28,8 +29,7 @@ export default function Signin({ navigation }) {
 
       const userData = userSnapshot.docs[0].data();
       await AsyncStorage.setItem("userData", JSON.stringify(userData));
-
-      // console.log("signed in", userData);
+      Updates.reloadAsync();
     } catch (error) {
       console.error("Error signing in:", error);
     }

@@ -22,20 +22,13 @@ export default function AuthNavigation() {
       }
     };
 
-    const checkForDataChanges = async () => {
-      const newData = await AsyncStorage.getItem("userData");
-      if (newData !== JSON.stringify(userData)) {
-        getUserData();
-      }
-    };
+    getUserData(); // Call the async function immediately inside useEffect
 
-    const interval = setInterval(checkForDataChanges, 100);
-
-    // Clean up the interval when the component unmounts
+    // Clean up the component (optional)
     return () => {
-      clearInterval(interval);
+      // You can add cleanup code here if needed
     };
-  }, [userData]);
+  }, []); // The empty dependency array ensures the useEffect runs only once on mount
 
   if (loading) {
     return <ScreenLoading />;

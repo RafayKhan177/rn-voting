@@ -154,8 +154,24 @@ export default function Voting() {
                   />
 
                   <Card.Content>
+                    <View
+                      style={{
+                        backgroundColor: colors.secoundary,
+                        borderRadius: 15,
+                        paddingHorizontal: 15,
+                        margin: 15,
+                        alignSelf: "center",
+                        paddingVertical: 5,
+                      }}
+                    >
+                      <Text
+                        style={{ fontWeight: "900", color: colors.textLight }}
+                      >
+                        WINNER
+                      </Text>
+                    </View>
                     <Text style={styles.positionText}>
-                      {positionNames[campaign.position] || "Position"}
+                      {positionNames[campaign.position] || "Position"}{" "}
                     </Text>
                     {Object.values(campaign.nominees).map(
                       (nomineeId, index) => {

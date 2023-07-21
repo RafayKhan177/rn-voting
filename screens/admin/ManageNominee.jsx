@@ -134,7 +134,7 @@ export default function ManageNominee() {
         await ImagePicker.requestMediaLibraryPermissionsAsync();
 
       if (permissionResult.granted === false) {
-        alert("Permission to access camera roll is required!");
+        alert("Permission to access the camera roll is required!");
         return;
       }
 
@@ -145,11 +145,11 @@ export default function ManageNominee() {
         quality: 1,
       });
 
-      if (!result.cancelled) {
-        setSelectedFile(result.uri);
+      if (!result.canceled) {
+        setSelectedFile(result.assets[0].uri);
         setNomineeData((prevData) => ({
           ...prevData,
-          picture: result.uri,
+          picture: result.assets[0].uri,
         }));
       }
     } catch (error) {

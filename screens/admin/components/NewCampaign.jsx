@@ -147,7 +147,7 @@ export default function NewCampaign() {
         <Text style={styles.label}>Start Date:</Text>
         <TouchableWithoutFeedback onPress={() => setShowStartDatePicker(true)}>
           <View style={styles.dateInput}>
-            <Text>
+            <Text style={{ color: colors.textLight }}>
               {startDate
                 ? startDate.toLocaleDateString("en-GB")
                 : "Select start date"}
@@ -167,7 +167,7 @@ export default function NewCampaign() {
         <Text style={styles.label}>End Date:</Text>
         <TouchableWithoutFeedback onPress={() => setShowEndDatePicker(true)}>
           <View style={styles.dateInput}>
-            <Text>
+            <Text style={{ color: colors.textLight }}>
               {endDate
                 ? endDate.toLocaleDateString("en-GB")
                 : "Select end date"}
@@ -177,6 +177,7 @@ export default function NewCampaign() {
         {showEndDatePicker && (
           <DateTimePicker
             value={endDate || new Date()}
+            plh
             mode="date"
             display="default"
             onChange={handleEndDateConfirm}

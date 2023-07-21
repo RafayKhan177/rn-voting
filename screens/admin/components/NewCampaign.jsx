@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from "react";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import { Picker } from "@react-native-picker/picker";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
-  View,
-  Text,
-  TouchableWithoutFeedback,
   Switch,
+  Text,
   TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
 } from "react-native";
-import firebase from "../../../firebase";
-import { Picker } from "@react-native-picker/picker";
-import DateTimePicker from "@react-native-community/datetimepicker";
 import { colors } from "../../../constants";
+import firebase from "../../../firebase";
 
 export default function NewCampaign() {
   const [startDate, setStartDate] = useState(null);
@@ -56,14 +56,14 @@ export default function NewCampaign() {
     fetchCollections();
   }, []);
 
-  const handleStartDateConfirm = (event, date) => {
+  const handleStartDateConfirm = (_event, date) => {
     if (date) {
       setStartDate(date);
     }
     setShowStartDatePicker(false);
   };
 
-  const handleEndDateConfirm = (event, date) => {
+  const handleEndDateConfirm = (_event, date) => {
     if (date) {
       setEndDate(date);
     }

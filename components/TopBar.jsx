@@ -1,19 +1,19 @@
-import React, { useState, useRef } from "react";
+import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import React, { useRef, useState } from "react";
 import {
-  View,
-  TouchableOpacity,
-  Text,
-  StyleSheet,
+  Animated,
+  Dimensions,
   Modal,
   Platform,
-  Dimensions,
-  Animated,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { colors } from "../constants";
-import { useNavigation } from "@react-navigation/native";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function TopBar({ screens }) {
   const [showMenu, setShowMenu] = useState(false);

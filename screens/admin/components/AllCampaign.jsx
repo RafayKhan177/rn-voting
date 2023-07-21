@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from "react";
+import { Picker } from "@react-native-picker/picker";
+import React, { useEffect, useState } from "react";
 import {
-  View,
-  Text,
-  StyleSheet,
   FlatList,
   Modal,
-  TextInput,
+  StyleSheet,
   Switch,
+  Text,
+  TextInput,
   TouchableOpacity,
+  View,
 } from "react-native";
-import firebase from "../../../firebase";
-import { colors } from "../../../constants";
-import { Picker } from "@react-native-picker/picker";
 import ScreenHading from "../../../components/ScreenHading";
+import { colors } from "../../../constants";
+import firebase from "../../../firebase";
 
 export default function AllCampaign() {
   // const [isLoading, setIsLoading] = useState(true);

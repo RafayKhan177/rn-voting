@@ -1,6 +1,6 @@
 import React from "react";
+import { ActivityIndicator, StyleSheet, View } from "react-native";
 import { colors } from "../constants";
-import { View, StyleSheet, ActivityIndicator } from "react-native";
 
 export default function ScreenLoading() {
   return (

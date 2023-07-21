@@ -1,9 +1,9 @@
 import React from "react";
+import { StyleSheet, View } from "react-native";
+import ScreenHading from "../../components/ScreenHading";
+import { colors } from "../../constants";
 import AllCampaign from "./components/AllCampaign";
 import NewCampaign from "./components/NewCampaign";
-import { StyleSheet, View } from "react-native";
-import { colors } from "../../constants";
-import ScreenHading from "../../components/ScreenHading";
 
 export default function ManageCampaigns() {
   return (

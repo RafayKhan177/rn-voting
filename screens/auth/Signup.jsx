@@ -1,14 +1,14 @@
 import React from "react";
+import { useForm } from "react-hook-form";
 import {
-  View,
+  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
-  StyleSheet,
+  View,
 } from "react-native";
-import { useForm } from "react-hook-form";
-import firebase from "../../firebase";
 import { colors } from "../../constants";
+import firebase from "../../firebase";
 
 export default function Signup({ navigation }) {
   const {

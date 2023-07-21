@@ -1,15 +1,15 @@
-import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import TopBar from "../components/TopBar";
+import { AdminScreens, AuthScreens, UserScreens } from "../constants";
 import {
   Dashboard,
   ManageCampaigns,
   ManageNominee,
   ManagePositionOffice,
 } from "../screens/admin";
-import { MyAccount, Result, Voting } from "../screens/user";
 import { Signin, Signup } from "../screens/auth";
-import TopBar from "../components/TopBar";
-import { AdminScreens, AuthScreens, UserScreens } from "../constants";
+import { MyAccount, Result, Voting } from "../screens/user";
 
 const Stack = createStackNavigator();
 
@@ -90,4 +90,4 @@ const AuthStack = () => {
   );
 };
 
-export { UserStack, AdminStack, AuthStack };
+export { AdminStack, AuthStack, UserStack };

@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import React, { useEffect, useState } from "react";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { Button, Card } from "react-native-paper";
-import firebase from "../../firebase";
-import { colors, userPicture } from "../../constants";
 import ScreenHading from "../../components/ScreenHading";
+import { colors, userPicture } from "../../constants";
+import firebase from "../../firebase";
 
 export default function Voting() {
   const [campaigns, setCampaigns] = useState([]);

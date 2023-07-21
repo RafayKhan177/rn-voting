@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
-  View,
-  Text,
   Button,
-  TextInput,
-  StyleSheet,
-  TouchableOpacity,
   ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
-import firebase from "../../firebase";
-import { colors } from "../../constants";
 import ScreenHading from "../../components/ScreenHading";
+import { colors } from "../../constants";
+import firebase from "../../firebase";
 
 export default function ManagePositionOffice() {
   const [positions, setPositions] = useState([]);

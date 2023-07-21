@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import * as ImagePicker from "expo-image-picker";
+import React, { useEffect, useState } from "react";
 import {
   ScrollView,
   StyleSheet,
@@ -7,11 +8,10 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import firebase from "../../firebase";
-import * as ImagePicker from "expo-image-picker";
-import { colors, userPicture } from "../../constants";
 import { Card } from "react-native-paper";
 import { ScreenHading } from "../../components";
+import { colors, userPicture } from "../../constants";
+import firebase from "../../firebase";
 
 export default function ManageNominee() {
   const [dialogOpen, setDialogOpen] = useState(false);

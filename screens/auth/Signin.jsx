@@ -1,15 +1,15 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as Updates from "expo-updates";
 import React, { useState } from "react";
-import firebase from "../../firebase";
 import {
-  View,
+  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
-  StyleSheet,
+  View,
 } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { colors } from "../../constants";
-import * as Updates from "expo-updates";
+import firebase from "../../firebase";
 
 export default function Signin({ navigation }) {
   const [email, setEmail] = useState("");

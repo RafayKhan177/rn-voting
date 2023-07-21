@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, TextInput, Button, StyleSheet } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import firebase from "../../firebase";
-import { colors } from "../../constants";
 import NetInfo from "@react-native-community/netinfo";
-import ScreenHading from "../../components/ScreenHading";
 import * as Updates from "expo-updates";
+import React, { useEffect, useState } from "react";
+import { Button, StyleSheet, Text, TextInput, View } from "react-native";
+import ScreenHading from "../../components/ScreenHading";
+import { colors } from "../../constants";
+import firebase from "../../firebase";
 
 export default function MyAccount() {
   const [userData, setUserData] = useState({});

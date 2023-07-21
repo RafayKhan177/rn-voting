@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, ScrollView } from "react-native";
-import { AdminScreens, colors } from "../../constants";
 import { useNavigation } from "@react-navigation/native";
-import { ScreenHading } from "../../components";
+import React, { useEffect, useState } from "react";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
+import { ScreenHading } from "../../components";
+import { AdminScreens, colors } from "../../constants";
 import firebase from "../../firebase";
 
 export default function Dashboard() {

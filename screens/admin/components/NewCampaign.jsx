@@ -214,18 +214,10 @@ const styles = StyleSheet.create({
     backgroundColor: colors.backgroundAccent,
     borderRadius: 8,
     padding: 30,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
     elevation: 5,
     width: "100%",
   },
   input: {
-    // Your default style properties for the Picker component
     backgroundColor: colors.backgroundAccent,
     borderRadius: 5,
     paddingHorizontal: 10,

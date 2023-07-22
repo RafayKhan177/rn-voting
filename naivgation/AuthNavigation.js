@@ -1,5 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { ScreenLoading } from "../components";
 import { AdminStack, AuthStack, UserStack } from "./navigation";
 

@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import NetInfo from "@react-native-community/netinfo";
 import * as Updates from "expo-updates";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, StyleSheet, Text, TextInput, View } from "react-native";
 import ScreenHading from "../../components/ScreenHading";
 import { colors } from "../../constants";

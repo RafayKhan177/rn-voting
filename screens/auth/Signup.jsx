@@ -1,6 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import {
+  Alert,
   StyleSheet,
   Text,
   TextInput,
@@ -18,7 +19,7 @@ export default function Signup({ navigation }) {
   } = useForm();
 
   const onSubmit = async (data) => {
-    if (data.password === data.confirmPassword) {
+    if (data && data.password === data.confirmPassword) {
       try {
         const userCredential = await firebase
           .auth()
@@ -36,14 +37,16 @@ export default function Signup({ navigation }) {
           email: data.email,
           firstPassword: data.password,
         });
-        console.log("User data stored successfully");
+        console.log("Account data stored successfully");
         navigation.push("SigninScreen");
-        console.log("User created successfully:", user);
+        console.log("Account created successfully");
       } catch (error) {
-        console.error("Error creating user:", error);
+        console.error("Error creating user:", error.message);
+        Alert.alert("Error creating user. Please try again later.");
       }
     } else {
-      console.log("Passwords must be the same");
+      Alert.alert("Don't leave any field empty and make sure passwords match.");
+      console.log("Don't leave any field empty and make sure passwords match.");
     }
   };
 

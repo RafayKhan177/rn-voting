@@ -7,6 +7,7 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  Alert,
 } from "react-native";
 import { colors } from "../../constants";
 import firebase from "../../firebase";
@@ -16,22 +17,31 @@ export default function Signin({ navigation }) {
   const [password, setPassword] = useState("");
 
   const handleSubmit = async () => {
-    try {
-      await firebase.auth().signInWithEmailAndPassword(email, password);
-      const usersCollection = firebase.firestore().collection("users");
-      const userQuery = usersCollection.where("email", "==", email);
-      const userSnapshot = await userQuery.get();
+    const trimmedEmail = email.trim().toLowerCase(); // Remove extra spaces and convert to lowercase
+    console.log(password);
+    if (trimmedEmail && password) {
+      try {
+        await firebase
+          .auth()
+          .signInWithEmailAndPassword(trimmedEmail, password);
+        const usersCollection = firebase.firestore().collection("users");
+        const userQuery = usersCollection.where("email", "==", trimmedEmail);
+        const userSnapshot = await userQuery.get();
 
-      if (userSnapshot.empty) {
-        console.log("User not found");
-        return;
+        if (userSnapshot.empty) {
+          Alert.alert("User not found");
+          return;
+        }
+
+        const userData = userSnapshot.docs[0].data();
+        await AsyncStorage.setItem("userData", JSON.stringify(userData));
+        Updates.reloadAsync();
+      } catch (error) {
+        console.error("Error signing in:", error);
+        Alert.alert("Error signing in. Please try again later.", error.message);
       }
-
-      const userData = userSnapshot.docs[0].data();
-      await AsyncStorage.setItem("userData", JSON.stringify(userData));
-      Updates.reloadAsync();
-    } catch (error) {
-      console.error("Error signing in:", error);
+    } else {
+      console.log("Don't leave any field empty");
     }
   };
 

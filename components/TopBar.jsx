@@ -6,6 +6,7 @@ import {
   Dimensions,
   Modal,
   Platform,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -49,9 +50,9 @@ export default function TopBar({ screens }) {
 
   const renderPopupMenu = () => {
     const screenWidth = Dimensions.get("window").width;
-    const isSmallDevice = screenWidth <= 414; // Adjust the threshold to your preference
+    const isSmallDevice = screenWidth <= 800; // Adjust the threshold to your preference
 
-    const menuWidth = isSmallDevice ? screenWidth * 0.8 : screenWidth * 0.3;
+    const menuWidth = isSmallDevice ? screenWidth * 0.7 : screenWidth * 0.3;
     const menuTranslateX = menuAnimation.interpolate({
       inputRange: [0, 1],
       outputRange: [-menuWidth, 0],
@@ -72,27 +73,32 @@ export default function TopBar({ screens }) {
           <Animated.View
             style={[
               styles.popupMenu,
-              { width: menuWidth, transform: [{ translateX: menuTranslateX }] },
+              {
+                width: menuWidth,
+                transform: [{ translateX: menuTranslateX }],
+              },
             ]}
           >
             <TouchableOpacity onPress={toggleMenu} style={styles.closeButton}>
               <Ionicons name="close" size={24} color={colors.text} />
             </TouchableOpacity>
-            {screens.map((screen, ind) => (
-              <TouchableOpacity
-                key={ind}
-                onPress={() => handleNavigate(screen.screen)}
-                style={styles.menuItem}
-              >
-                <Icon
-                  style={{ textAlign: "center", paddingHorizontal: 10 }}
-                  name={screen.icon}
-                  size={20}
-                  color={colors.textLight}
-                />
-                <Text style={styles.menuItemText}>{screen.name}</Text>
-              </TouchableOpacity>
-            ))}
+            <ScrollView>
+              {screens.map((screen, ind) => (
+                <TouchableOpacity
+                  key={ind}
+                  onPress={() => handleNavigate(screen.screen)}
+                  style={styles.menuItem}
+                >
+                  <Icon
+                    style={{ textAlign: "center", paddingHorizontal: 10 }}
+                    name={screen.icon}
+                    size={20}
+                    color={colors.textLight}
+                  />
+                  <Text style={styles.menuItemText}>{screen.name}</Text>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
           </Animated.View>
         </TouchableOpacity>
       </Modal>
@@ -124,8 +130,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     backgroundColor: colors.primary,
     paddingHorizontal: 16,
-    // height: Platform.OS === "ios" ? 100 : 60,
-    // paddingTop: Platform.OS === "ios" ? 40 : 0,
     paddingBottom: 10,
   },
   menuButton: {

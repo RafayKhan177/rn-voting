@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -6,12 +6,14 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
+import { Searchbar } from "react-native-paper"; // Import the Searchbar from React Native Paper
 import firebase from "../../firebase";
 import { colors } from "../../constants";
 import ScreenHeading from "../../components/ScreenHading";
 
 const ManageUsers = ({ navigation }) => {
   const [users, setUsers] = useState([]);
+  const [searchQuery, setSearchQuery] = useState(""); // State for search query
 
   useEffect(() => {
     const usersCollection = firebase.firestore().collection("users");
@@ -42,11 +44,25 @@ const ManageUsers = ({ navigation }) => {
     </TouchableOpacity>
   );
 
+  // Filter users based on search query
+  const filteredUsers = users.filter(
+    (user) =>
+      user.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      user.lastName.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <View style={styles.container}>
       <ScreenHeading txt="Users List" />
+      {/* Add the Searchbar */}
+      <Searchbar
+        placeholder="Search users..."
+        value={searchQuery}
+        onChangeText={(query) => setSearchQuery(query)}
+        style={styles.searchBar}
+      />
       <FlatList
-        data={users}
+        data={filteredUsers} // Use the filteredUsers instead of the original users array
         keyExtractor={(item) => item.id}
         renderItem={renderUserItem}
         contentContainerStyle={styles.flatListContent}
@@ -73,7 +89,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 16,
     backgroundColor: colors.backgroundAccent,
-    // shadowColor: colors.backgroundAccent,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
@@ -88,6 +103,11 @@ const styles = StyleSheet.create({
   email: {
     fontSize: 16,
     color: colors.textLight,
+  },
+  searchBar: {
+    marginTop: 8,
+    marginBottom: 16,
+    backgroundColor: colors.backgroundAccent,
   },
 });
 

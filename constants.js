@@ -25,6 +25,7 @@ export const AdminScreens = [
     screen: "ManagePositionOfficeScreen",
     icon: "briefcase",
   },
+  { name: "Manage Users", screen: "ManageUsersScreen", icon: "check-square-o" },
   { name: "Voting", screen: "VotingScreen", icon: "check-square-o" },
   { name: "Campaigns Result", screen: "ResultScreen", icon: "address-card" },
   { name: "My Account", screen: "MyAccountScreen", icon: "address-card" },

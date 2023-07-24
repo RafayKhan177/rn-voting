@@ -7,9 +7,11 @@ import {
   ManageCampaigns,
   ManageNominee,
   ManagePositionOffice,
+  ManageUsers,
 } from "../screens/admin";
 import { Signin, Signup } from "../screens/auth";
 import { MyAccount, Result, Voting } from "../screens/user";
+import ManageUsersDetails from "../screens/admin/ManageUsersDetails";
 
 const Stack = createStackNavigator();
 
@@ -52,12 +54,10 @@ const AdminStack = () => {
         initialRouteName="DashboardScreen"
         screenOptions={adminOptions}
       >
+        <Stack.Screen name="VotingScreen" component={Voting} />
         <Stack.Screen
-          name="VotingScreen"
-          component={Voting}
-          options={{
-            headerShown: true,
-          }}
+          name="ManageUsersDetailsScreen"
+          component={ManageUsersDetails}
         />
         <Stack.Screen name="DashboardScreen" component={Dashboard} />
         <Stack.Screen
@@ -71,6 +71,7 @@ const AdminStack = () => {
         />
         <Stack.Screen name="MyAccountScreen" component={MyAccount} />
         <Stack.Screen name="ResultScreen" component={Result} />
+        <Stack.Screen name="ManageUsersScreen" component={ManageUsers} />
       </Stack.Navigator>
     </NavigationContainer>
   );

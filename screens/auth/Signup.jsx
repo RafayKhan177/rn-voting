@@ -37,6 +37,7 @@ export default function Signup({ navigation }) {
           firstPassword: data.password,
         });
         console.log("User data stored successfully");
+        navigation.push("SigninScreen");
         console.log("User created successfully:", user);
       } catch (error) {
         console.error("Error creating user:", error);

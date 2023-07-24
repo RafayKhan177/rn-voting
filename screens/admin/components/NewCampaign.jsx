@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { colors } from "../../../constants";
 import firebase from "../../../firebase";
+import ScreenHeading from "../../../components/ScreenHading";
 
 export default function NewCampaign() {
   const [startDate, setStartDate] = useState(null);
@@ -112,6 +113,7 @@ export default function NewCampaign() {
 
   return (
     <View style={styles.container}>
+      <ScreenHeading txt={"Manage Campaigns"} />
       <View style={styles.card}>
         <Picker
           name="position"
@@ -200,8 +202,7 @@ export default function NewCampaign() {
 
 const styles = StyleSheet.create({
   container: {
-    width: "90%",
-    // backgroundColor: colors.primary,
+    flex: 1,
   },
   subtitle: {
     fontSize: 24,
@@ -215,7 +216,8 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 30,
     elevation: 5,
-    width: "100%",
+    width: "90%",
+    marginLeft: "3%",
   },
   input: {
     backgroundColor: colors.backgroundAccent,

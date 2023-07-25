@@ -100,7 +100,7 @@ export default function ManagePositionOffice() {
           <TextInput
             name="name"
             placeholder="Office"
-            placeholderTextColor={colors.text}
+            placeholderTextColor={colors.textPrimary}
             value={newPosition.name}
             onChangeText={(text) => handleInputChange("name", text)}
             style={styles.input}
@@ -108,7 +108,7 @@ export default function ManagePositionOffice() {
           <TextInput
             name="description"
             placeholder="Position"
-            placeholderTextColor={colors.text}
+            placeholderTextColor={colors.textPrimary}
             value={newPosition.description}
             onChangeText={(text) => handleInputChange("description", text)}
             style={styles.input}
@@ -157,12 +157,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: colors.background,
+    backgroundColor: colors.backgroundPrimary,
   },
   btntxt: {
     fontSize: 15,
     fontWeight: "900",
-    color: colors.text,
+    color: colors.textPrimary,
   },
 
   button: {
@@ -180,36 +180,36 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     marginBottom: 16,
-    color: colors.text,
+    color: colors.textPrimary,
     fontWeight: "bold",
   },
   formContainer: {
     marginBottom: 16,
   },
   input: {
-    backgroundColor: colors.backgroundAccent,
+    backgroundColor: colors.backgroundSecoundary,
     width: "100%",
     borderRadius: 8,
     paddingVertical: 12,
     paddingHorizontal: 16,
-    color: colors.text,
+    color: colors.textPrimary,
     margin: 4,
   },
   positionContainer: {
     margin: 5,
-    backgroundColor: colors.backgroundAccent,
+    backgroundColor: colors.backgroundSecoundary,
     borderRadius: 7,
     padding: 20,
   },
   positionName: {
     fontSize: 20,
     fontWeight: "900",
-    color: colors.text,
+    color: colors.textPrimary,
   },
   bio: {
     fontSize: 14,
     fontWeight: "bold",
-    color: colors.textLight,
+    color: colors.textsecoundary,
   },
 
   buttonContainer: {

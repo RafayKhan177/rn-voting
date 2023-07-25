@@ -8,8 +8,8 @@ export default function ScreenHeading({ txt, size }) {
 const styles = StyleSheet.create({
   heading: {
     fontWeight: "900",
-    color: colors.text,
-    backgroundColor: colors.backgroundAccent,
+    color: colors.textPrimary,
+    backgroundColor: colors.backgroundSecoundary,
     borderRadius: 10,
     padding: 15,
     margin: 10,

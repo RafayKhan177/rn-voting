@@ -110,7 +110,7 @@ export default function Dashboard() {
                 style={{ textAlign: "center", paddingHorizontal: 10 }}
                 name={screen.icon}
                 size={20}
-                color={colors.textLight}
+                color={colors.textsecoundary}
               />
               <Text style={styles.sectionButtonText}>{screen.name}</Text>
             </TouchableOpacity>
@@ -125,7 +125,7 @@ const styles = {
     // flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: colors.background,
+    backgroundColor: colors.backgroundPrimary,
     paddingTop: 30,
     paddingBottom: 30,
   },
@@ -138,7 +138,7 @@ const styles = {
     justifyContent: "center",
   },
   card: {
-    backgroundColor: colors.backgroundAccent,
+    backgroundColor: colors.backgroundSecoundary,
     borderRadius: 8,
     paddingHorizontal: 16,
     paddingVertical: 29,
@@ -155,14 +155,14 @@ const styles = {
   title: {
     fontSize: 24,
     fontWeight: "bold",
-    color: colors.text,
+    color: colors.textPrimary,
     marginBottom: 16,
   },
 
   statTitle: {
     fontSize: 18,
     fontWeight: "bold",
-    color: colors.text,
+    color: colors.textPrimary,
     marginBottom: 8,
   },
   statValue: {
@@ -173,7 +173,7 @@ const styles = {
   sectionTitle: {
     fontSize: 20,
     fontWeight: "bold",
-    color: colors.text,
+    color: colors.textPrimary,
     marginBottom: 16,
   },
   sectionContainer: {
@@ -200,7 +200,7 @@ const styles = {
   sectionButtonText: {
     fontSize: 16,
     fontWeight: "bold",
-    color: colors.textLight,
+    color: colors.textsecoundary,
     textAlign: "center",
   },
 };

@@ -175,7 +175,7 @@ export default function MyAccount() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.background,
+    backgroundColor: colors.backgroundPrimary,
     padding: 16,
     display: "flex",
     justifyContent: "center",
@@ -185,12 +185,12 @@ const styles = StyleSheet.create({
     width: "90%",
     maxWidth: 500,
     minWidth: 200,
-    backgroundColor: colors.backgroundAccent,
+    backgroundColor: colors.backgroundSecoundary,
     padding: 30,
     borderRadius: 15,
   },
   txt: {
-    color: colors.text,
+    color: colors.textPrimary,
     fontSize: 16,
     marginBottom: 8,
   },
@@ -200,8 +200,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 8,
     paddingHorizontal: 8,
-    color: colors.text,
-    backgroundColor: colors.backgroundAccent,
+    color: colors.textPrimary,
+    backgroundColor: colors.backgroundSecoundary,
     borderRadius: 10,
   },
 });

@@ -80,7 +80,7 @@ export default function TopBar({ screens }) {
             ]}
           >
             <TouchableOpacity onPress={toggleMenu} style={styles.closeButton}>
-              <Ionicons name="close" size={24} color={colors.text} />
+              <Ionicons name="close" size={24} color={colors.textPrimary} />
             </TouchableOpacity>
             <ScrollView>
               {screens.map((screen, ind) => (
@@ -93,7 +93,7 @@ export default function TopBar({ screens }) {
                     style={{ textAlign: "center", paddingHorizontal: 10 }}
                     name={screen.icon}
                     size={20}
-                    color={colors.textLight}
+                    color={colors.textsecoundary}
                   />
                   <Text style={styles.menuItemText}>{screen.name}</Text>
                 </TouchableOpacity>
@@ -136,17 +136,17 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   title: {
-    color: colors.text,
+    color: colors.textPrimary,
     fontSize: 18,
     fontWeight: "bold",
   },
   popupMenuOverlay: {
     flex: 1,
-    backgroundColor: colors.backgroundAccent,
+    backgroundColor: colors.backgroundSecoundary,
     justifyContent: "flex-end",
   },
   popupMenu: {
-    backgroundColor: colors.background,
+    backgroundColor: colors.backgroundPrimary,
     elevation: 2,
     paddingHorizontal: 16,
     paddingBottom: 16,
@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
   },
   menuItem: {
     borderRadius: 10,
-    backgroundColor: colors.backgroundAccent,
+    backgroundColor: colors.backgroundSecoundary,
     padding: 25,
     margin: 5,
     display: "flex",
@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
   },
   menuItemText: {
     fontSize: 15,
-    color: colors.text,
+    color: colors.textPrimary,
     fontWeight: "bold",
   },
 });

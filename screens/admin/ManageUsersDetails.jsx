@@ -84,7 +84,7 @@ const UserDetails = ({ route, navigation }) => {
                 setEditedUser({ ...editedUser, role: text })
               }
               placeholder="Role"
-              color={colors.textLight}
+              color={colors.textsecoundary}
             />
             <TextInput
               style={styles.input}
@@ -93,7 +93,7 @@ const UserDetails = ({ route, navigation }) => {
                 setEditedUser({ ...editedUser, firstName: text })
               }
               placeholder="First Name"
-              color={colors.textLight}
+              color={colors.textsecoundary}
             />
             <TextInput
               style={styles.input}
@@ -102,7 +102,7 @@ const UserDetails = ({ route, navigation }) => {
                 setEditedUser({ ...editedUser, lastName: text })
               }
               placeholder="Last Name"
-              color={colors.textLight}
+              color={colors.textsecoundary}
             />
             <TextInput
               style={styles.input}
@@ -111,7 +111,7 @@ const UserDetails = ({ route, navigation }) => {
                 setEditedUser({ ...editedUser, houseColor: text })
               }
               placeholder="House Color"
-              color={colors.textLight}
+              color={colors.textsecoundary}
             />
             <TextInput
               style={styles.input}
@@ -120,7 +120,7 @@ const UserDetails = ({ route, navigation }) => {
                 setEditedUser({ ...editedUser, class: text })
               }
               placeholder="Class"
-              color={colors.textLight}
+              color={colors.textsecoundary}
             />
             <View style={styles.buttonContainer}>
               <TouchableOpacity onPress={handleUpdate}>
@@ -146,16 +146,16 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: colors.background,
+    backgroundColor: colors.backgroundPrimary,
   },
   heading: {
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 16,
-    color: colors.text,
+    color: colors.textPrimary,
   },
   detailsContainer: {
-    backgroundColor: colors.backgroundAccent,
+    backgroundColor: colors.backgroundSecoundary,
     padding: 16,
     borderRadius: 8,
     shadowColor: "#000",
@@ -172,11 +172,11 @@ const styles = StyleSheet.create({
   detailLabel: {
     fontSize: 16,
     fontWeight: "bold",
-    color: colors.text,
+    color: colors.textPrimary,
   },
   detailValue: {
     fontSize: 16,
-    color: colors.textLight,
+    color: colors.textsecoundary,
   },
   editButton: {
     alignItems: "center",
@@ -186,7 +186,7 @@ const styles = StyleSheet.create({
     marginTop: 16,
   },
   editButtonText: {
-    color: colors.text,
+    color: colors.textPrimary,
     fontSize: 16,
     fontWeight: "bold",
   },
@@ -194,15 +194,15 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     padding: 16,
-    backgroundColor: colors.background,
+    backgroundColor: colors.backgroundPrimary,
   },
   input: {
     borderWidth: 1,
-    borderColor: colors.backgroundAccent,
+    borderColor: colors.backgroundSecoundary,
     padding: 8,
     marginBottom: 16,
     borderRadius: 8,
-    color: colors.text,
+    color: colors.textPrimary,
   },
   buttonContainer: {
     flexDirection: "row",

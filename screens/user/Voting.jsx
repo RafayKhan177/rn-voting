@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { Button, Card } from "react-native-paper";
 import ScreenHading from "../../components/ScreenHading";
-import { colors, userPicture } from "../../constants";
+import { colors } from "../../constants";
 import firebase from "../../firebase";
 
 export default function Voting() {
@@ -170,9 +170,11 @@ export default function Voting() {
               return (
                 <Card key={campaign.id} style={styles.card}>
                   <Card.Cover
-                    source={{
-                      uri: nomineeWithMostVotes || userPicture,
-                    }}
+                    source={
+                      nomineeWithMostVotes
+                        ? { uri: nomineeWithMostVotes }
+                        : require("../../assets/businessman-character-avatar.jpg")
+                    }
                     style={styles.cardMedia}
                   />
 
@@ -248,7 +250,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 8,
     paddingHorizontal: 16,
-    backgroundColor: colors.background,
+    backgroundColor: colors.backgroundPrimary,
   },
   gridContainer: {
     flexDirection: "row",
@@ -258,7 +260,7 @@ const styles = StyleSheet.create({
   card: {
     width: "100%",
     marginBottom: 12,
-    backgroundColor: colors.backgroundAccent,
+    backgroundColor: colors.backgroundSecoundary,
     maxWidth: 400,
     margin: 4,
   },
@@ -269,14 +271,14 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "900",
     marginBottom: 8,
-    color: colors.text,
+    color: colors.textPrimary,
     marginHorizontal: "auto",
     marginVertical: 10,
   },
   nomineeText: {
     fontSize: 12,
     marginVertical: 4,
-    color: colors.textLight,
+    color: colors.textsecoundary,
     fontWeight: "bold",
   },
   voteButton: {

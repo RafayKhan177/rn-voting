@@ -1,14 +1,15 @@
-const userPicture = require('./assets/businessman-character-avatar.webp');
- 
+// import avatar from './assets/businessman-character-avatar.jpg'
+// const avatar =require( './assets/businessman-character-avatar.jpg')
+
 const colors = {
   primary: "#ef233c",
   primaryAccent: "#1d3557",
   secoundary: "#d80032",
   secoundaryAccent: "#FFC857",
-  background: "#000",
-  backgroundAccent: "rgba(240, 248, 255, 0.082)",
-  text: "#fefae0",
-  textLight: "#e5e5e5",
+  backgroundPrimary: "#000",
+  backgroundSecoundary: "rgba(240, 248, 255, 0.099)",
+  textPrimary: "#fefae0",
+  textsecoundary: "#e5e5e5",
 };
 
 const AdminScreens = [
@@ -42,7 +43,7 @@ const AuthScreens = [
 ];
 
 export {
-  userPicture,
+  // avatar,
   colors,
   AdminScreens,
   UserScreens,

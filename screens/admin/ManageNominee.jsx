@@ -169,7 +169,7 @@ export default function ManageNominee() {
             <View>
               <TextInput
                 placeholder="First Name"
-                placeholderTextColor={colors.textLight}
+                placeholderTextColor={colors.textsecoundary}
                 label="First Name"
                 value={nomineeData.firstName}
                 onChangeText={(value) => handleInputChange("firstName", value)}
@@ -177,7 +177,7 @@ export default function ManageNominee() {
               />
               <TextInput
                 placeholder="Last Name"
-                placeholderTextColor={colors.textLight}
+                placeholderTextColor={colors.textsecoundary}
                 label="Last Name"
                 value={nomineeData.lastName}
                 onChangeText={(value) => handleInputChange("lastName", value)}
@@ -185,7 +185,7 @@ export default function ManageNominee() {
               />
               <TextInput
                 placeholder="Biography"
-                placeholderTextColor={colors.textLight}
+                placeholderTextColor={colors.textsecoundary}
                 label="Biography"
                 value={nomineeData.biography}
                 onChangeText={(value) => handleInputChange("biography", value)}
@@ -283,7 +283,7 @@ const styles = StyleSheet.create({
   container: {
     padding: 16,
     flex: 1,
-    backgroundColor: colors.background,
+    backgroundColor: colors.backgroundPrimary,
   },
   header: {
     flexDirection: "row",
@@ -305,7 +305,7 @@ const styles = StyleSheet.create({
   card: {
     width: "100%",
     marginBottom: 12,
-    backgroundColor: colors.backgroundAccent,
+    backgroundColor: colors.backgroundSecoundary,
     maxWidth: 400,
     margin: 4,
   },
@@ -316,10 +316,10 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "900",
     margin: 4,
-    color: colors.text,
+    color: colors.textPrimary,
   },
   biography: {
-    color: colors.textLight,
+    color: colors.textsecoundary,
     margin: 4,
   },
   buttonContainer: {
@@ -332,12 +332,12 @@ const styles = StyleSheet.create({
 
     borderRadius: 7,
     padding: 12,
-    color: colors.text,
+    color: colors.textPrimary,
   },
   btntxt: {
     fontSize: 15,
     fontWeight: "900",
-    color: colors.text,
+    color: colors.textPrimary,
   },
   errorButton: {
     backgroundColor: colors.secoundary,
@@ -346,11 +346,11 @@ const styles = StyleSheet.create({
     fontWeight: "900",
     borderRadius: 7,
     padding: 12,
-    color: colors.text,
+    color: colors.textPrimary,
   },
   dialogContainer: {
     padding: 16,
-    backgroundColor: colors.backgroundAccent,
+    backgroundColor: colors.backgroundSecoundary,
     borderRadius: 8,
     marginTop: 16,
   },
@@ -358,15 +358,15 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     marginBottom: 16,
-    color: colors.text,
+    color: colors.textPrimary,
   },
   input: {
-    backgroundColor: colors.backgroundAccent,
+    backgroundColor: colors.backgroundSecoundary,
     width: "100%",
     borderRadius: 8,
     paddingVertical: 12,
     paddingHorizontal: 16,
-    color: colors.text,
+    color: colors.textPrimary,
     margin: 4,
   },
 });

@@ -92,14 +92,14 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: colors.background,
+    backgroundColor: colors.backgroundPrimary,
     paddingVertical: 16,
     paddingHorizontal: 16,
   },
   title: {
     fontSize: 24,
     fontWeight: "bold",
-    color: colors.text,
+    color: colors.textPrimary,
     marginBottom: 16,
   },
   inputContainer: {
@@ -115,12 +115,12 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   input: {
-    backgroundColor: colors.backgroundAccent,
+    backgroundColor: colors.backgroundSecoundary,
     width: "100%",
     borderRadius: 8,
     paddingVertical: 12,
     paddingHorizontal: 16,
-    color: colors.text,
+    color: colors.textPrimary,
   },
   signInButton: {
     backgroundColor: colors.primaryAccent,
@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   buttonText: {
-    color: colors.text,
+    color: colors.textPrimary,
     fontSize: 16,
     fontWeight: "bold",
     textAlign: "center",

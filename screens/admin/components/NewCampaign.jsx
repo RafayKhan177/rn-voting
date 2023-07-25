@@ -149,7 +149,7 @@ export default function NewCampaign() {
         <Text style={styles.label}>Start Date:</Text>
         <TouchableWithoutFeedback onPress={() => setShowStartDatePicker(true)}>
           <View style={styles.dateInput}>
-            <Text style={{ color: colors.textLight }}>
+            <Text style={{ color: colors.textsecoundary }}>
               {startDate
                 ? startDate.toLocaleDateString("en-GB")
                 : "Select start date"}
@@ -169,7 +169,7 @@ export default function NewCampaign() {
         <Text style={styles.label}>End Date:</Text>
         <TouchableWithoutFeedback onPress={() => setShowEndDatePicker(true)}>
           <View style={styles.dateInput}>
-            <Text style={{ color: colors.textLight }}>
+            <Text style={{ color: colors.textsecoundary }}>
               {endDate
                 ? endDate.toLocaleDateString("en-GB")
                 : "Select end date"}
@@ -212,7 +212,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   card: {
-    backgroundColor: colors.backgroundAccent,
+    backgroundColor: colors.backgroundSecoundary,
     borderRadius: 8,
     padding: 30,
     elevation: 5,
@@ -220,18 +220,18 @@ const styles = StyleSheet.create({
     marginLeft: "3%",
   },
   input: {
-    backgroundColor: colors.backgroundAccent,
+    backgroundColor: colors.backgroundSecoundary,
     borderRadius: 5,
     paddingHorizontal: 10,
     paddingVertical: 8,
     fontSize: 16,
-    color: colors.text,
+    color: colors.textPrimary,
   },
   label: {
     fontSize: 18,
     fontWeight: "bold",
     marginTop: 10,
-    color: colors.text,
+    color: colors.textPrimary,
   },
   nomineeOption: {
     flexDirection: "row",
@@ -244,7 +244,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     paddingHorizontal: 10,
     justifyContent: "center",
-    color: colors.text,
+    color: colors.textPrimary,
   },
   buttonContainer: {
     marginTop: 20,
@@ -252,7 +252,7 @@ const styles = StyleSheet.create({
   dateTimePickerContainer: {
     marginBottom: 10,
     borderRadius: 8,
-    backgroundColor: colors.backgroundAccent,
+    backgroundColor: colors.backgroundSecoundary,
   },
   dateTimePicker: {
     color: "#fff",
@@ -261,19 +261,19 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   nomineeText: {
-    color: colors.text,
+    color: colors.textPrimary,
   },
   button: {
     backgroundColor: colors.primaryAccent,
     margin: 3,
     borderRadius: 7,
     padding: 12,
-    color: colors.text,
+    color: colors.textPrimary,
   },
   btntxt: {
     fontSize: 15,
     fontWeight: "900",
-    color: colors.text,
+    color: colors.textPrimary,
   },
   errorButton: {
     backgroundColor: colors.secoundary,
@@ -282,6 +282,6 @@ const styles = StyleSheet.create({
     fontWeight: "900",
     borderRadius: 7,
     padding: 12,
-    color: colors.text,
+    color: colors.textPrimary,
   },
 });

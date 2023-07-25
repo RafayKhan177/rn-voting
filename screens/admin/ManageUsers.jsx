@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: colors.background,
+    backgroundColor: colors.backgroundPrimary,
   },
   flatListContent: {
     paddingTop: 8,
@@ -85,10 +85,10 @@ const styles = StyleSheet.create({
   userContainer: {
     marginBottom: 16,
     borderWidth: 1,
-    borderColor: colors.backgroundAccent,
+    borderColor: colors.backgroundSecoundary,
     borderRadius: 8,
     padding: 16,
-    backgroundColor: colors.backgroundAccent,
+    backgroundColor: colors.backgroundSecoundary,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
@@ -97,17 +97,17 @@ const styles = StyleSheet.create({
   userName: {
     fontSize: 18,
     fontWeight: "bold",
-    color: colors.text,
+    color: colors.textPrimary,
     marginBottom: 8,
   },
   email: {
     fontSize: 16,
-    color: colors.textLight,
+    color: colors.textsecoundary,
   },
   searchBar: {
     marginTop: 8,
     marginBottom: 16,
-    backgroundColor: colors.backgroundAccent,
+    backgroundColor: colors.backgroundSecoundary,
   },
 });
 

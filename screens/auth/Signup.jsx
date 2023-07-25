@@ -58,7 +58,7 @@ export default function Signup({ navigation }) {
         <View style={styles.textInput}>
           {/* <Text style={styles.textInputText}>First Name</Text> */}
           <TextInput
-            placeholderTextColor={colors.text}
+            placeholderTextColor={colors.textPrimary}
             placeholder="First Name"
             style={styles.input}
             onChangeText={(text) => setValue("firstName", text)}
@@ -68,7 +68,7 @@ export default function Signup({ navigation }) {
         <View style={styles.textInput}>
           {/* <Text style={styles.textInputText}>Last Name</Text> */}
           <TextInput
-            placeholderTextColor={colors.text}
+            placeholderTextColor={colors.textPrimary}
             placeholder="Last Name"
             style={styles.input}
             onChangeText={(text) => setValue("lastName", text)}
@@ -81,7 +81,7 @@ export default function Signup({ navigation }) {
         <View style={styles.textInput}>
           {/* <Text style={styles.textInputText}>House Color</Text> */}
           <TextInput
-            placeholderTextColor={colors.text}
+            placeholderTextColor={colors.textPrimary}
             placeholder="House Color"
             style={styles.input}
             onChangeText={(text) => setValue("houseColor", text)}
@@ -92,7 +92,7 @@ export default function Signup({ navigation }) {
         <View style={styles.textInput}>
           {/* <Text style={styles.textInputText}>Class</Text> */}
           <TextInput
-            placeholderTextColor={colors.text}
+            placeholderTextColor={colors.textPrimary}
             placeholder="Class"
             style={styles.input}
             onChangeText={(text) => setValue("class", text)}
@@ -105,7 +105,7 @@ export default function Signup({ navigation }) {
         <View style={styles.textInput}>
           {/* <Text style={styles.textInputText}>Email Address</Text> */}
           <TextInput
-            placeholderTextColor={colors.text}
+            placeholderTextColor={colors.textPrimary}
             placeholder="Email Address"
             style={styles.input}
             onChangeText={(text) => setValue("email", text)}
@@ -118,7 +118,7 @@ export default function Signup({ navigation }) {
         <View style={styles.textInput}>
           {/* <Text style={styles.textInputText}>Password</Text> */}
           <TextInput
-            placeholderTextColor={colors.text}
+            placeholderTextColor={colors.textPrimary}
             placeholder="Password"
             style={styles.input}
             onChangeText={(text) => setValue("password", text)}
@@ -130,7 +130,7 @@ export default function Signup({ navigation }) {
         <View style={styles.textInput}>
           {/* <Text style={styles.textInputText}>Confirm Password</Text> */}
           <TextInput
-            placeholderTextColor={colors.text}
+            placeholderTextColor={colors.textPrimary}
             placeholder="Confirm Password"
             style={styles.input}
             onChangeText={(text) => setValue("confirmPassword", text)}
@@ -160,14 +160,14 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: colors.background,
+    backgroundColor: colors.backgroundPrimary,
     paddingVertical: 16,
     paddingHorizontal: 16,
   },
   title: {
     fontSize: 24,
     fontWeight: "bold",
-    color: colors.text,
+    color: colors.textPrimary,
     marginBottom: 16,
   },
   inputContainer: {
@@ -185,18 +185,18 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   textInputText: {
-    color: colors.textLight,
+    color: colors.textsecoundary,
     marginBottom: 5,
     marginLeft: 5,
     fontWeight: "900",
   },
   input: {
-    backgroundColor: colors.backgroundAccent,
+    backgroundColor: colors.backgroundSecoundary,
     width: "100%",
     borderRadius: 8,
     paddingVertical: 12,
     paddingHorizontal: 16,
-    color: colors.text,
+    color: colors.textPrimary,
   },
   signUpButton: {
     backgroundColor: colors.primaryAccent,
@@ -208,7 +208,7 @@ const styles = StyleSheet.create({
     width: 700,
   },
   buttonText: {
-    color: colors.text,
+    color: colors.textPrimary,
     fontSize: 16,
     fontWeight: "bold",
     textAlign: "center",

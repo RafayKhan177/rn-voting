@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { Card } from "react-native-paper";
 import { ScreenHading } from "../../components";
-import { colors, userPicture } from "../../constants";
+import { colors } from "../../constants";
 import firebase from "../../firebase";
 
 export default function ManageNominee() {
@@ -245,9 +245,11 @@ export default function ManageNominee() {
           {nominees.map((nominee) => (
             <Card key={nominee.id} style={styles.card}>
               <Card.Cover
-                source={{
-                  uri: nominee.picture || userPicture,
-                }}
+                source={
+                  nomineeWithMostVotes
+                    ? { uri: nomineeWithMostVotes }
+                    : require("../../assets/businessman-character-avatar.jpg")
+                }
                 style={styles.image}
               />
               <Card.Content>

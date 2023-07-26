@@ -135,7 +135,7 @@ export default function Voting() {
       );
 
       if (nomineeId) {
-        const pictureUrl = nomineeData.picture || userPicture;
+        const pictureUrl = nomineeData.picture;
         return pictureUrl;
       }
     }

@@ -59,6 +59,7 @@ const ManageUsers = ({ navigation }) => {
         value={searchQuery}
         onChangeText={(query) => setSearchQuery(query)}
         style={styles.searchBar}
+        color={colors.textsecoundary}
       />
       <FlatList
         data={filteredUsers}

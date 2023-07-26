@@ -246,8 +246,8 @@ export default function ManageNominee() {
             <Card key={nominee.id} style={styles.card}>
               <Card.Cover
                 source={
-                  nomineeWithMostVotes
-                    ? { uri: nomineeWithMostVotes }
+                  nominee.picture
+                    ? { uri: nominee.picture }
                     : require("../../assets/businessman-character-avatar.jpg")
                 }
                 style={styles.image}

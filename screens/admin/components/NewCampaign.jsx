@@ -203,13 +203,11 @@ export default function NewCampaign() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  subtitle: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 20,
-    color: "#333",
-    flex: 1,
+    alignSelf: "center",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
   },
   card: {
     backgroundColor: colors.backgroundSecoundary,
@@ -217,7 +215,6 @@ const styles = StyleSheet.create({
     padding: 30,
     elevation: 5,
     width: "90%",
-    marginLeft: "3%",
   },
   input: {
     backgroundColor: colors.backgroundSecoundary,

@@ -24,8 +24,6 @@ export default function Voting() {
           campaign.id = doc.id;
           return campaign;
         });
-
-        // Filter campaigns based on the end date
         const currentDate = new Date();
         const filteredCampaigns = campaignsData.filter(
           (campaign) =>
@@ -73,7 +71,7 @@ export default function Voting() {
         const nomineeNames = Object.assign({}, ...nomineeNamesResults);
         const positionNames = Object.assign({}, ...positionNamesResults);
 
-        setCampaigns(filteredCampaigns); // Update to use 'filteredCampaigns' instead of 'campaignsData'
+        setCampaigns(filteredCampaigns);
         setNomineeNames(nomineeNames);
         setPositionNames(positionNames);
         setLoading(false);

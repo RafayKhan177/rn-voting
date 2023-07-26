@@ -17,14 +17,13 @@ export default function AuthNavigation() {
         }
       } catch (error) {
         console.log("Error retrieving user data:", error);
+        // Handle the error here (e.g., show an error message)
       } finally {
         setLoading(false);
       }
     };
 
     getUserData();
-
-    return () => {};
   }, []);
 
   if (loading) {

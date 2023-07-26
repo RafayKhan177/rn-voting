@@ -17,7 +17,7 @@ export default function Signin({ navigation }) {
   const [password, setPassword] = useState("");
 
   const handleSubmit = async () => {
-    const trimmedEmail = email.trim().toLowerCase(); // Remove extra spaces and convert to lowercase
+    const trimmedEmail = email.trim().toLowerCase();
     console.log(password);
     if (trimmedEmail && password) {
       try {

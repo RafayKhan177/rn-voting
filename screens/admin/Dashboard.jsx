@@ -47,7 +47,7 @@ export default function Dashboard() {
         <ScreenHading txt={"Dashboard"} />
         <View style={styles.cardContainer}>
           <View style={styles.card}>
-            <View style={styles.cardInfo}>
+            <View>
               <Text style={styles.statTitle}>Total Campaigns</Text>
               <Text style={styles.statValue}>{totalCampaigns}</Text>
             </View>
@@ -60,7 +60,7 @@ export default function Dashboard() {
           </View>
 
           <View style={styles.card}>
-            <View style={styles.cardInfo}>
+            <View>
               <Text style={styles.statTitle}>Total Nominees</Text>
               <Text style={styles.statValue}>{totalNominees}</Text>
             </View>
@@ -73,7 +73,7 @@ export default function Dashboard() {
           </View>
 
           <View style={styles.card}>
-            <View style={styles.cardInfo}>
+            <View>
               <Text style={styles.statTitle}>Total Positions/Offices</Text>
               <Text style={styles.statValue}>{totalPositions}</Text>
             </View>
@@ -86,7 +86,7 @@ export default function Dashboard() {
           </View>
 
           <View style={styles.card}>
-            <View style={styles.cardInfo}>
+            <View>
               <Text style={styles.statTitle}>Total Users</Text>
               <Text style={styles.statValue}>{totalUsers}</Text>
             </View>
@@ -122,7 +122,6 @@ export default function Dashboard() {
 }
 const styles = {
   container: {
-    // flex: 1,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: colors.backgroundPrimary,
@@ -150,8 +149,6 @@ const styles = {
     flexDirection: "row",
     justifyContent: "space-between",
   },
-  // cardInfo: {},
-  // cardIcon: {},
   title: {
     fontSize: 24,
     fontWeight: "bold",

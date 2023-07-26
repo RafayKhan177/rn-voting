@@ -3,7 +3,7 @@
 
 const colors = {
   primary: "#ef233c",
-  primaryAccent: "#1d3557",
+  primaryAccent: "#2a9d8f",
   secoundary: "#d80032",
   secoundaryAccent: "#FFC857",
   backgroundPrimary: "#000",
@@ -43,7 +43,6 @@ const AuthScreens = [
 ];
 
 export {
-  // avatar,
   colors,
   AdminScreens,
   UserScreens,

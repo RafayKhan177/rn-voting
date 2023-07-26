@@ -73,13 +73,13 @@ export default function MyAccount() {
 
       if (!snapshot.empty) {
         snapshot.forEach((doc) => {
-          const docId = doc.id; // Get the document ID
-          const docRef = db.collection("users").doc(docId); // Reference the document using the ID
-          docRef.update(editedData); // Update the document
+          const docId = doc.id;
+          const docRef = db.collection("users").doc(docId);
+          docRef.update(editedData);
         });
       }
 
-      await AsyncStorage.setItem("userData", JSON.stringify(editedData)); // Update AsyncStorage
+      await AsyncStorage.setItem("userData", JSON.stringify(editedData));
       setUserData(editedData);
       setEditMode(false);
     } catch (error) {

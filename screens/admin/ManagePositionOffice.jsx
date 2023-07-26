@@ -44,7 +44,6 @@ export default function ManagePositionOffice() {
 
   const addPosition = async () => {
     if (!newPosition.name || !newPosition.description) {
-      // If either the name or description is empty, don't save the data
       console.warn("Both name and description must be filled.");
       return;
     }

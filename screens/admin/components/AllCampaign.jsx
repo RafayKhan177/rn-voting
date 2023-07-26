@@ -15,7 +15,6 @@ import { colors } from "../../../constants";
 import firebase from "../../../firebase";
 
 export default function AllCampaign() {
-  // const [isLoading, setIsLoading] = useState(true);
   const [campaigns, setCampaigns] = useState([]);
   const [nominees, setNominees] = useState([]);
   const [nomineeNames, setNomineeNames] = useState({});
@@ -95,7 +94,6 @@ export default function AllCampaign() {
     }
 
     setPositionNames(positionsData);
-    // setIsLoading(false);
   };
 
   useEffect(() => {
@@ -122,7 +120,6 @@ export default function AllCampaign() {
     }
 
     setNomineeNames(namesData);
-    // setIsLoading(false);
   };
 
   useEffect(() => {
@@ -143,8 +140,6 @@ export default function AllCampaign() {
 
   const handleUpdateCampaign = async () => {
     const { startDate, endDate } = editCampaign;
-
-    // Validate date format (dd/mm/yyyy)
     const dateFormatRegex = /^\d{2}\/\d{2}\/\d{4}$/;
     if (!startDate.match(dateFormatRegex) || !endDate.match(dateFormatRegex)) {
       console.error("Invalid date format. Please use dd/mm/yyyy format.");
@@ -316,11 +311,11 @@ const styles = StyleSheet.create({
   },
   card: {
     borderRadius: 8,
-    padding: 25,
+    padding: 35,
     marginBottom: 20,
     backgroundColor: colors.backgroundSecoundary,
     margin: 10,
-    width: 300,
+    minWidth: "90%",
   },
   subheading: {
     fontSize: 18,
@@ -390,7 +385,7 @@ const styles = StyleSheet.create({
     borderRadius: 3,
     padding: 12,
     color: colors.textPrimary,
-    minWidth: 140,
+    minWidth: "45%",
   },
   btntxt: {
     fontSize: 15,
@@ -403,7 +398,7 @@ const styles = StyleSheet.create({
     borderRadius: 3,
     padding: 12,
     color: colors.textPrimary,
-    width: 110,
+    minWidth: "45%",
     marginLeft: 8,
   },
 });

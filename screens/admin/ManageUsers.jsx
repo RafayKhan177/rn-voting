@@ -6,14 +6,14 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
-import { Searchbar } from "react-native-paper"; // Import the Searchbar from React Native Paper
+import { Searchbar } from "react-native-paper";
 import firebase from "../../firebase";
 import { colors } from "../../constants";
 import ScreenHeading from "../../components/ScreenHading";
 
 const ManageUsers = ({ navigation }) => {
   const [users, setUsers] = useState([]);
-  const [searchQuery, setSearchQuery] = useState(""); // State for search query
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     const usersCollection = firebase.firestore().collection("users");
@@ -44,7 +44,6 @@ const ManageUsers = ({ navigation }) => {
     </TouchableOpacity>
   );
 
-  // Filter users based on search query
   const filteredUsers = users.filter(
     (user) =>
       user.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -62,11 +61,11 @@ const ManageUsers = ({ navigation }) => {
         style={styles.searchBar}
       />
       <FlatList
-        data={filteredUsers} // Use the filteredUsers instead of the original users array
+        data={filteredUsers}
         keyExtractor={(item) => item.id}
         renderItem={renderUserItem}
         contentContainerStyle={styles.flatListContent}
-        showsVerticalScrollIndicator={false} // Remove the scrollbar
+        showsVerticalScrollIndicator={false}
       />
     </View>
   );

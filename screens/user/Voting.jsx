@@ -90,8 +90,6 @@ export default function Voting() {
       if (campaignDoc.exists) {
         const campaignData = campaignDoc.data();
         const votes = campaignData.votes || {};
-
-        // Check if the user with this email has already voted for this campaign
         if (!votes[userEmail]) {
           votes[userEmail] = nomineeId;
           await campaignRef.update({ votes });
@@ -166,7 +164,6 @@ export default function Voting() {
           ) : (
             campaigns.map((campaign, index) => {
               const nomineeWithMostVotes = nomineePictures[index];
-              // console.log(nomineeWithMostVotes);
               return (
                 <Card key={campaign.id} style={styles.card}>
                   <Card.Cover

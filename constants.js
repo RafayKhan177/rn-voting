@@ -13,33 +13,33 @@ const colors = {
 };
 
 const AdminScreens = [
-  { name: "Dashboard", screen: "DashboardScreen", icon: "dashboard" },
-  { name: "Manage Nominee", screen: "ManageNomineeScreen", icon: "users" },
+  { name: "Dashboard", screen: "Dashboard", icon: "dashboard" },
+  { name: "Manage Nominee", screen: "ManageNominee", icon: "users" },
   {
     name: "Manage Campaigns",
-    screen: "ManageCampaignsScreen",
+    screen: "ManageCampaigns",
     icon: "list",
   },
   {
     name: "Manage Position & Office",
-    screen: "ManagePositionOfficeScreen",
+    screen: "ManagePositionOffice",
     icon: "briefcase",
   },
-  { name: "Manage Users", screen: "ManageUsersScreen", icon: "check-square-o" },
-  { name: "Voting", screen: "VotingScreen", icon: "check-square-o" },
-  { name: "Campaigns Result", screen: "ResultScreen", icon: "address-card" },
-  { name: "My Account", screen: "MyAccountScreen", icon: "address-card" },
+  { name: "Manage Users", screen: "ManageUsers", icon: "check-square-o" },
+  { name: "Voting", screen: "Voting", icon: "check-square-o" },
+  { name: "Campaigns Result", screen: "Result", icon: "address-card" },
+  { name: "My Account", screen: "MyAccount", icon: "address-card" },
 ];
 
 const UserScreens = [
-  { name: "Voting", screen: "VotingScreen", icon: "check-square-o" },
-  { name: "My Account", screen: "MyAccountScreen", icon: "address-card" },
-  { name: "Campaigns Result", screen: "ResultScreen", icon: "address-card" },
+  { name: "Voting", screen: "Voting", icon: "check-square-o" },
+  { name: "My Account", screen: "MyAccount", icon: "address-card" },
+  { name: "Campaigns Result", screen: "Result", icon: "address-card" },
 ];
 
 const AuthScreens = [
-  { name: "Sign In", screen: "SignupScreen" },
-  { name: "Sign Up", screen: "SigninScreen" },
+  { name: "Sign In", screen: "Signup" },
+  { name: "Sign Up", screen: "Signin" },
 ];
 
 export {

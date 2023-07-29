@@ -30,18 +30,18 @@ const UserStack = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="VotingScreen"
+        initialRouteName="Voting"
         screenOptions={userOptions}
       >
         <Stack.Screen
-          name="VotingScreen"
+          name="Voting"
           component={Voting}
           options={{
             headerShown: true,
           }}
         />
-        <Stack.Screen name="ResultScreen" component={Result} />
-        <Stack.Screen name="MyAccountScreen" component={MyAccount} />
+        <Stack.Screen name="Result" component={Result} />
+        <Stack.Screen name="MyAccount" component={MyAccount} />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -51,27 +51,27 @@ const AdminStack = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="DashboardScreen"
+        initialRouteName="Dashboard"
         screenOptions={adminOptions}
       >
-        <Stack.Screen name="VotingScreen" component={Voting} />
+        <Stack.Screen name="Voting" component={Voting} />
         <Stack.Screen
-          name="ManageUsersDetailsScreen"
+          name="ManageUsersDetails"
           component={ManageUsersDetails}
         />
-        <Stack.Screen name="DashboardScreen" component={Dashboard} />
+        <Stack.Screen name="Dashboard" component={Dashboard} />
         <Stack.Screen
-          name="ManageCampaignsScreen"
+          name="ManageCampaigns"
           component={ManageCampaigns}
         />
-        <Stack.Screen name="ManageNomineeScreen" component={ManageNominee} />
+        <Stack.Screen name="ManageNominee" component={ManageNominee} />
         <Stack.Screen
-          name="ManagePositionOfficeScreen"
+          name="ManagePositionOffice"
           component={ManagePositionOffice}
         />
-        <Stack.Screen name="MyAccountScreen" component={MyAccount} />
-        <Stack.Screen name="ResultScreen" component={Result} />
-        <Stack.Screen name="ManageUsersScreen" component={ManageUsers} />
+        <Stack.Screen name="MyAccount" component={MyAccount} />
+        <Stack.Screen name="Result" component={Result} />
+        <Stack.Screen name="ManageUsers" component={ManageUsers} />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -81,11 +81,11 @@ const AuthStack = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="SigninScreen"
+        initialRouteName="Signin"
         screenOptions={authOptions}
       >
-        <Stack.Screen name="SignupScreen" component={Signup} />
-        <Stack.Screen name="SigninScreen" component={Signin} />
+        <Stack.Screen name="Signup" component={Signup} />
+        <Stack.Screen name="Signin" component={Signin} />
       </Stack.Navigator>
     </NavigationContainer>
   );

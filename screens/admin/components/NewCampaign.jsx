@@ -2,9 +2,12 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { Picker } from "@react-native-picker/picker";
 import { useEffect, useState } from "react";
 import {
+  Alert,
+  Platform,
   StyleSheet,
   Switch,
   Text,
+  TextInput,
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
@@ -12,10 +15,14 @@ import {
 import { colors } from "../../../constants";
 import firebase from "../../../firebase";
 import ScreenHeading from "../../../components/ScreenHading";
+import { format } from "date-fns";
 
 export default function NewCampaign() {
+  const crrDate = new Date().toISOString().slice(0, 10).replace(/-/g, "/");
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
+  const [startDateWeb, setStartDateWeb] = useState("2022/01/01");
+  const [endDateWeb, setEndDateWeb] = useState("2022/01/01");
   const [nominees, setNominees] = useState([]);
   const [positions, setPositions] = useState([]);
   const [newCampaign, setNewCampaign] = useState({
@@ -71,16 +78,29 @@ export default function NewCampaign() {
     setShowEndDatePicker(false);
   };
 
-  const handleAddCampaign = async () => {
-    const db = firebase.firestore();
-    const campaignsCollection = db.collection("campaigns");
+  const db = firebase.firestore();
+  const campaignsCollection = db.collection("campaigns");
+  const handleAddCampaignPhone = async () => {
+    if (
+      !newCampaign.position ||
+      newCampaign.nominees.length === 0 ||
+      !startDate ||
+      !endDate
+    ) {
+      Alert.alert("Please fill in all required fields.");
+      return;
+    }
+
+    // Convert dates to the "yyyy/mm/dd" format using date-fns
+    const startDateFormatted = format(startDate, "yyyy/MM/dd");
+    const endDateFormatted = format(endDate, "yyyy/MM/dd");
 
     try {
       const campaignData = {
         position: newCampaign.position,
         nominees: newCampaign.nominees,
-        startDate: startDate.toLocaleDateString("en-GB"),
-        endDate: endDate.toLocaleDateString("en-GB"),
+        startDate: startDateFormatted,
+        endDate: endDateFormatted,
       };
 
       await campaignsCollection.add(campaignData);
@@ -91,8 +111,74 @@ export default function NewCampaign() {
       });
       setStartDate(null);
       setEndDate(null);
+      Alert.alert("Campaign added successfully!");
     } catch (error) {
       console.error("Error adding campaign: ", error);
+      Alert.alert(
+        "An error occurred while adding the campaign. Please try again."
+      );
+    }
+  };
+
+  // Function to check if the date is in the format yyyy/mm/dd
+  const isValidDateFormat = (dateString) => {
+    const dateRegex = /^\d{4}\/\d{2}\/\d{2}$/;
+    return dateRegex.test(dateString);
+  };
+
+  const handleAddCampaignWeb = async () => {
+    console.log(
+      newCampaign.position,
+      newCampaign.nominees,
+      startDateWeb,
+      endDateWeb
+    );
+
+    if (
+      !newCampaign.position ||
+      newCampaign.nominees.length === 0 ||
+      !startDateWeb ||
+      !endDateWeb
+    ) {
+      console.log("Please fill in all required fields.");
+      Alert.alert("Please fill in all required fields.");
+      return;
+    }
+
+    if (!isValidDateFormat(startDateWeb) || !isValidDateFormat(endDateWeb)) {
+      console.log("Invalid date format. Please use yyyy/mm/dd format.");
+      Alert.alert("Invalid date format. Please use yyyy/mm/dd format.");
+      return;
+    }
+
+    try {
+      const campaignData = {
+        position: newCampaign.position,
+        nominees: newCampaign.nominees,
+        startDate: startDateWeb,
+        endDate: endDateWeb,
+      };
+
+      console.log("Adding campaign data: ", campaignData);
+      await campaignsCollection.add(campaignData);
+      console.log("Campaign added successfully!");
+
+      setNewCampaign({
+        nominees: [],
+        position: newCampaign.position,
+      });
+
+      setStartDateWeb("yyyy/mm/dd");
+      setEndDateWeb("yyyy/mm/dd");
+
+      console.log("Reset newCampaign, startDate, and endDate");
+
+      Alert.alert("Campaign added successfully!");
+    } catch (error) {
+      console.error("Error adding campaign: ", error);
+      Alert.alert(
+        "An error occurred while adding the campaign. Please try again."
+      );
     }
   };
 
@@ -146,55 +232,94 @@ export default function NewCampaign() {
           </View>
         ))}
 
-        <Text style={styles.label}>Start Date:</Text>
-        <TouchableWithoutFeedback onPress={() => setShowStartDatePicker(true)}>
-          <View style={styles.dateInput}>
-            <Text style={{ color: colors.textsecoundary }}>
-              {startDate
-                ? startDate.toLocaleDateString("en-GB")
-                : "Select start date"}
-            </Text>
-          </View>
-        </TouchableWithoutFeedback>
-        {showStartDatePicker && (
-          <DateTimePicker
-            value={startDate || new Date()}
-            mode="date"
-            display="default"
-            onChange={handleStartDateConfirm}
-            style={styles.dateTimePicker}
-          />
-        )}
+        {Platform.OS === "web" ? (
+          <>
+            <View style={styles.textInputContianer}>
+              <View style={styles.textInput}>
+                <Text style={styles.label}>Start Date</Text>
+                <TextInput
+                  value={startDateWeb}
+                  style={styles.input}
+                  placeholder="dd/mm/yyyy"
+                  onChangeText={(date) => setStartDateWeb(date)}
+                  placeholderTextColor={colors.backgroundSecoundary}
+                />
+              </View>
+              <View style={styles.textInput}>
+                <Text style={styles.label}>End Date</Text>
+                <TextInput
+                  value={endDateWeb}
+                  style={styles.input}
+                  placeholder="dd/mm/yyyy"
+                  onChangeText={(date) => setEndDateWeb(date)}
+                  placeholderTextColor={colors.backgroundSecoundary}
+                />
+              </View>
+            </View>
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={styles.errorButton}
+                onPress={handleAddCampaignWeb}
+              >
+                <Text style={styles.btntxt}>Add Campaign</Text>
+              </TouchableOpacity>
+            </View>
+          </>
+        ) : (
+          <>
+            <TouchableWithoutFeedback
+              onPress={() => setShowStartDatePicker(true)}
+            >
+              <View style={styles.dateInput}>
+                <Text style={{ color: colors.textsecoundary }}>
+                  {startDate
+                    ? startDate.toLocaleDateString("en-GB")
+                    : "Select start date"}
+                </Text>
+              </View>
+            </TouchableWithoutFeedback>
+            {showStartDatePicker && (
+              <DateTimePicker
+                value={startDate || new Date()}
+                mode="date"
+                display="default"
+                onChange={handleStartDateConfirm}
+                style={styles.dateTimePicker}
+              />
+            )}
 
-        <Text style={styles.label}>End Date:</Text>
-        <TouchableWithoutFeedback onPress={() => setShowEndDatePicker(true)}>
-          <View style={styles.dateInput}>
-            <Text style={{ color: colors.textsecoundary }}>
-              {endDate
-                ? endDate.toLocaleDateString("en-GB")
-                : "Select end date"}
-            </Text>
-          </View>
-        </TouchableWithoutFeedback>
-        {showEndDatePicker && (
-          <DateTimePicker
-            value={endDate || new Date()}
-            plh
-            mode="date"
-            display="default"
-            onChange={handleEndDateConfirm}
-            style={styles.dateTimePicker}
-          />
+            <Text style={styles.label}>End Date:</Text>
+            <TouchableWithoutFeedback
+              onPress={() => setShowEndDatePicker(true)}
+            >
+              <View style={styles.dateInput}>
+                <Text style={{ color: colors.textsecoundary }}>
+                  {endDate
+                    ? endDate.toLocaleDateString("en-GB")
+                    : "Select end date"}
+                </Text>
+              </View>
+            </TouchableWithoutFeedback>
+            {showEndDatePicker && (
+              <DateTimePicker
+                value={endDate || new Date()}
+                plh
+                mode="date"
+                display="default"
+                onChange={handleEndDateConfirm}
+                style={styles.dateTimePicker}
+              />
+            )}
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={styles.errorButton}
+                onPress={handleAddCampaignPhone}
+              >
+                <Text style={styles.btntxt}>Add Campaign</Text>
+              </TouchableOpacity>
+            </View>
+          </>
         )}
-
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            style={styles.errorButton}
-            onPress={handleAddCampaign}
-          >
-            <Text style={styles.btntxt}>Add Campaign</Text>
-          </TouchableOpacity>
-        </View>
       </View>
     </View>
   );
@@ -259,6 +384,16 @@ const styles = StyleSheet.create({
   },
   nomineeText: {
     color: colors.textPrimary,
+  },
+  textInputContianer: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "row",
+  },
+  textInput: {
+    width: "40%",
+    marginHorizontal: 3,
   },
   button: {
     backgroundColor: colors.primaryAccent,

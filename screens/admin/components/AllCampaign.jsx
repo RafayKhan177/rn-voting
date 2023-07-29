@@ -1,6 +1,7 @@
 import { Picker } from "@react-native-picker/picker";
 import { useEffect, useState } from "react";
 import {
+  Alert,
   FlatList,
   Modal,
   StyleSheet,
@@ -141,8 +142,14 @@ export default function AllCampaign() {
   const handleUpdateCampaign = async () => {
     const { startDate, endDate } = editCampaign;
     const dateFormatRegex = /^\d{2}\/\d{2}\/\d{4}$/;
+
     if (!startDate.match(dateFormatRegex) || !endDate.match(dateFormatRegex)) {
-      console.error("Invalid date format. Please use dd/mm/yyyy format.");
+      Alert.alert("Invalid date format. Please use dd/mm/yyyy format.");
+      return;
+    }
+
+    if (!startDate || !endDate) {
+      Alert.alert("Start date and end date cannot be empty.");
       return;
     }
 
@@ -152,7 +159,7 @@ export default function AllCampaign() {
       await campaignRef.update(editCampaign);
       setIsModalOpen(false);
     } catch (error) {
-      console.error("Error updating campaign: ", error);
+      Alert.alert("Something Went Wrong");
     }
   };
 

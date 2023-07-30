@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "rn-voting",
+    "name": "C.H.S.",
     "slug": "rn-voting",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -9,7 +9,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#fff"
+      "backgroundColor": "#f5f5f7"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -21,7 +21,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#fff"
+        "backgroundColor": "#f5f5f7"
       },
       "package": "com.rafaykhan177.rnvoting"
     },

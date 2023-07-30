@@ -168,8 +168,8 @@ export default function NewCampaign() {
         position: newCampaign.position,
       });
 
-      setStartDateWeb("yyyy/mm/dd");
-      setEndDateWeb("yyyy/mm/dd");
+      setStartDateWeb(crrDate);
+      setEndDateWeb(crrDate);
 
       console.log("Reset newCampaign, startDate, and endDate");
 

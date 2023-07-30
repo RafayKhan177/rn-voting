@@ -78,7 +78,7 @@ export default function Signin({ navigation }) {
           <TouchableOpacity>
             <Text style={styles.linkText}>Forgot password?</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.push("SignupScreen")}>
+          <TouchableOpacity onPress={() => navigation.push("Signup")}>
             <Text style={styles.linkText}>Don't have an account? Sign Up</Text>
           </TouchableOpacity>
         </View>

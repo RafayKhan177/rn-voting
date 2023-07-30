@@ -30,7 +30,7 @@ const ManageUsers = ({ navigation }) => {
   }, []);
 
   const handleUserPress = (user) => {
-    navigation.navigate("ManageUsersDetailsScreen", { user });
+    navigation.navigate("ManageUsersDetails", { user });
   };
 
   const renderUserItem = ({ item }) => (

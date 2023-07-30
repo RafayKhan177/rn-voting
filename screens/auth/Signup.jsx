@@ -37,7 +37,7 @@ export default function Signup({ navigation }) {
           firstPassword: data.password,
         });
         console.log("Account data stored successfully");
-        navigation.push("SigninScreen");
+        navigation.push("Signin");
         console.log("Account created successfully");
       } catch (error) {
         console.error("Error creating user:", error.message);
@@ -147,7 +147,7 @@ export default function Signup({ navigation }) {
       >
         <Text style={styles.buttonText}>Sign Up</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.push("SigninScreen")}>
+      <TouchableOpacity onPress={() => navigation.push("Signin")}>
         <Text style={styles.linkText}>Already have an account? Sign in</Text>
       </TouchableOpacity>
     </View>

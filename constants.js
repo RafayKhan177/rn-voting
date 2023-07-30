@@ -1,6 +1,3 @@
-// import avatar from './assets/businessman-character-avatar.jpg'
-// const avatar =require( './assets/businessman-character-avatar.jpg')
-
 const colors = {
   primary: "#ef233c",
   primaryAccent: "#2a9d8f",

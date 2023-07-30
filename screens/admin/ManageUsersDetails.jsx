@@ -27,7 +27,7 @@ const UserDetails = ({ route, navigation }) => {
       const usersCollection = firebase.firestore().collection("users");
       await usersCollection.doc(user.id).update(editedUser);
       setIsEditing(false);
-      navigation.push("ManageUsersScreen");
+      navigation.push("ManageUsers");
     } catch (error) {
       console.error("Error updating user data:", error);
     }

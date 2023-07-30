@@ -21,8 +21,8 @@ export default function NewCampaign() {
   const crrDate = new Date().toISOString().slice(0, 10).replace(/-/g, "/");
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
-  const [startDateWeb, setStartDateWeb] = useState("2022/01/01");
-  const [endDateWeb, setEndDateWeb] = useState("2022/01/01");
+  const [startDateWeb, setStartDateWeb] = useState(crrDate);
+  const [endDateWeb, setEndDateWeb] = useState(crrDate);
   const [nominees, setNominees] = useState([]);
   const [positions, setPositions] = useState([]);
   const [newCampaign, setNewCampaign] = useState({

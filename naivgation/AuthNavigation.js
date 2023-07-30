@@ -1,7 +1,7 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useState } from "react";
 import { ScreenLoading } from "../components";
 import { AdminStack, AuthStack, UserStack } from "./navigation";
+import AsyncStorage from "@react-native-community/async-storage";
 
 export default function AuthNavigation() {
   const [userData, setUserData] = useState(null);

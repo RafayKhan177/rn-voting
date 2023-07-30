@@ -1,4 +1,3 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Updates from "expo-updates";
 import { useState } from "react";
 import {
@@ -11,6 +10,7 @@ import {
 } from "react-native";
 import { colors } from "../../constants";
 import firebase from "../../firebase";
+import AsyncStorage from "@react-native-community/async-storage";
 
 export default function Signin({ navigation }) {
   const [email, setEmail] = useState("");

@@ -8,6 +8,7 @@ import {
   StyleSheet,
   ActivityIndicator,
   TextInput,
+  Platform,
 } from "react-native";
 import { colors } from "../../constants";
 import firebase from "../../firebase";
@@ -90,89 +91,97 @@ export default function Verify({ navigation }) {
 
   return (
     <View style={styles.container}>
-      {loading ? (
-        <ActivityIndicator size="large" color={colors.secoundary} />
-      ) : null}
-      <View>
-        <Text style={styles.title}> Verify</Text>
-      </View>
-      <View>
-        <Text style={styles.title}> Email</Text>
-        <Controller
-          control={control}
-          rules={{ required: "Email is required" }}
-          render={({ field: { onChange, onBlur, value } }) => (
+      {Platform.OS !== "web" ? (
+        <Text style={styles.title}>
+          This Page Must Be Access From Web Browser
+        </Text>
+      ) : (
+        <>
+          {loading ? (
+            <ActivityIndicator size="large" color={colors.secoundary} />
+          ) : null}
+          <View>
+            <Text style={styles.title}> Verify</Text>
+          </View>
+          <View>
+            <Text style={styles.title}> Email</Text>
+            <Controller
+              control={control}
+              rules={{ required: "Email is required" }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput
+                  color={colors.textPrimary}
+                  style={styles.input}
+                  value={value}
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                />
+              )}
+              name="email"
+            />
+            {errors.email && (
+              <Text style={styles.errText}> {errors.email.message}</Text>
+            )}
+          </View>
+          <View>
+            <Text style={styles.title}> Password</Text>
+            <Controller
+              control={control}
+              rules={{ required: "Password is required" }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput
+                  color={colors.textPrimary}
+                  style={styles.input}
+                  value={value}
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  secureTextEntry
+                />
+              )}
+              name="password"
+            />
+            {errors.password && (
+              <Text style={styles.errText}> {errors.password.message}</Text>
+            )}
+          </View>
+          <View>
+            <Text style={styles.title}> Phone Number</Text>
+            <Controller
+              control={control}
+              rules={{ required: "Phone Number is required" }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput
+                  color={colors.textPrimary}
+                  style={styles.input}
+                  value={value}
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                />
+              )}
+              name="phone"
+            />
+            {errors.phone && (
+              <Text style={styles.errText}> {errors.phone.message}</Text>
+            )}
+          </View>
+          <View>
+            <Button style={styles.btn} title="Send OTP" onPress={sendOtp} />
+            <Text style={styles.title}> Verification Code</Text>
             <TextInput
               color={colors.textPrimary}
               style={styles.input}
-              value={value}
-              onBlur={onBlur}
-              onChangeText={onChange}
+              value={verificationCode}
+              onChangeText={(text) => setVerificationCode(text)}
             />
-          )}
-          name="email"
-        />
-        {errors.email && (
-          <Text style={styles.errText}> {errors.email.message}</Text>
-        )}
-      </View>
-      <View>
-        <Text style={styles.title}> Password</Text>
-        <Controller
-          control={control}
-          rules={{ required: "Password is required" }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <TextInput
-              color={colors.textPrimary}
-              style={styles.input}
-              value={value}
-              onBlur={onBlur}
-              onChangeText={onChange}
-              secureTextEntry
-            />
-          )}
-          name="password"
-        />
-        {errors.password && (
-          <Text style={styles.errText}> {errors.password.message}</Text>
-        )}
-      </View>
-      <View>
-        <Text style={styles.title}> Phone Number</Text>
-        <Controller
-          control={control}
-          rules={{ required: "Phone Number is required" }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <TextInput
-              color={colors.textPrimary}
-              style={styles.input}
-              value={value}
-              onBlur={onBlur}
-              onChangeText={onChange}
-            />
-          )}
-          name="phone"
-        />
-        {errors.phone && (
-          <Text style={styles.errText}> {errors.phone.message}</Text>
-        )}
-      </View>
-      <View>
-        <Button style={styles.btn} title="Send OTP" onPress={sendOtp} />
-        <Text style={styles.title}> Verification Code</Text>
-        <TextInput
-          color={colors.textPrimary}
-          style={styles.input}
-          value={verificationCode}
-          onChangeText={(text) => setVerificationCode(text)}
-        />
-      </View>
-      <View id="recaptcha-container"></View>
-      <Button
-        style={styles.btn}
-        title="Verify"
-        onPress={handleSubmit(onSubmit)}
-      />
+          </View>
+          <View id="recaptcha-container"></View>
+          <Button
+            style={styles.btn}
+            title="Verify"
+            onPress={handleSubmit(onSubmit)}
+          />
+        </>
+      )}
     </View>
   );
 }

@@ -1,36 +1,36 @@
 import React, { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { parsePhoneNumberFromString } from "libphonenumber-js";
-import { ScreenLoading } from "../../components";
 import {
   Text,
-  TextInput,
   View,
   Button,
   StyleSheet,
   ActivityIndicator,
+  TextInput,
 } from "react-native";
 import { colors } from "../../constants";
 import firebase from "../../firebase";
 
-export default function Verify() {
+export default function Verify({ navigation }) {
   const [verificationId, setVerificationId] = useState("");
   const [verificationCode, setVerificationCode] = useState("");
-  const [phone, setPhone] = useState("+92");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [confirmationResult, setConfirmationResult] = useState(null);
 
   const {
-    register,
+    control,
     handleSubmit,
     formState: { errors },
+    getValues,
   } = useForm();
 
   const sendOtp = async () => {
     setLoading(true);
     try {
-      const phoneNumber = `${phone}`;
+      const { phone } = getValues();
+      console.log(phone);
+      const phoneNumber = phone;
       const parsedPhoneNumber = parsePhoneNumberFromString(phoneNumber);
 
       if (!parsedPhoneNumber || !parsedPhoneNumber.isValid()) {
@@ -48,7 +48,7 @@ export default function Verify() {
         .auth()
         .signInWithPhoneNumber(phoneNumber, appVerifier);
 
-      window.confirmationResult = confirmationResult;
+      setConfirmationResult(confirmationResult);
       setVerificationId(confirmationResult.verificationId);
       console.log("Phone verification code sent:", confirmationResult);
       setLoading(false);
@@ -59,6 +59,8 @@ export default function Verify() {
   };
 
   const onSubmit = async () => {
+    const { email, password } = getValues();
+    console.log(email, password);
     setLoading(true);
 
     try {
@@ -66,6 +68,10 @@ export default function Verify() {
         .auth()
         .signInWithEmailAndPassword(email, password);
       const user = userCredential.user;
+
+      if (!confirmationResult) {
+        throw new Error("Please send OTP first");
+      }
 
       const phoneCredential = firebase.auth.PhoneAuthProvider.credential(
         verificationId,
@@ -75,6 +81,7 @@ export default function Verify() {
 
       console.log("Phone number linked successfully to user:", user);
       setLoading(false);
+      navigation.push("Signin");
     } catch (error) {
       console.error("Error linking phone number to user:", error);
       setLoading(false);
@@ -84,76 +91,88 @@ export default function Verify() {
   return (
     <View style={styles.container}>
       {loading ? (
-        <ActivityIndicator size="large" color={colors.primary} />
+        <ActivityIndicator size="large" color={colors.secoundary} />
       ) : null}
       <View>
-        <View>
-          <Text style={styles.title}> Verify</Text>
-        </View>
-        <View>
-          <Text style={styles.title}> Email</Text>
-          <TextInput
-            style={styles.input}
-            {...register("email", {
-              required: "Email is required",
-            })}
-            value={email}
-            onChangeText={(text) => setEmail(text)}
-          />
-          {errors.email && (
-            <Text style={styles.errText}> {errors.email.message}</Text>
-          )}
-        </View>
-        <View>
-          <Text style={styles.title}> Password</Text>
-          <TextInput
-            style={styles.input}
-            {...register("password", {
-              required: "Password is required",
-            })}
-            secureTextEntry
-            value={password}
-            onChangeText={(text) => setPassword(text)}
-          />
-          {errors.password && (
-            <Text style={styles.errText}> {errors.password.message}</Text>
-          )}
-        </View>
-        <View>
-          <Text style={styles.title}> Phone Number</Text>
-          <TextInput
-            style={styles.input}
-            {...register("phone", {
-              required: "Phone Number is required",
-            })}
-            value={phone}
-            onChangeText={(text) => setPhone(text)}
-          />
-          {errors.phone && (
-            <Text style={styles.errText}> {errors.phone.message}</Text>
-          )}
-        </View>
-        <View>
-          <Button title="Send OTP" onPress={sendOtp} />
-          <Text style={styles.title}> Verification Code</Text>
-          <TextInput
-            style={styles.input}
-            {...register("verificationCode", {
-              required: "Verification Code is required",
-            })}
-            value={verificationCode}
-            onChangeText={(text) => setVerificationCode(text)}
-          />
-          {errors.verificationCode && (
-            <Text style={styles.errText}>
-              {" "}
-              {errors.verificationCode.message}
-            </Text>
-          )}
-        </View>
-        <View id="recaptcha-container"></View>
-        <Button title="Verify" onPress={handleSubmit(onSubmit)} />
+        <Text style={styles.title}> Verify</Text>
       </View>
+      <View>
+        <Text style={styles.title}> Email</Text>
+        <Controller
+          control={control}
+          rules={{ required: "Email is required" }}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextInput
+              color={colors.textPrimary}
+              style={styles.input}
+              value={value}
+              onBlur={onBlur}
+              onChangeText={onChange}
+            />
+          )}
+          name="email"
+        />
+        {errors.email && (
+          <Text style={styles.errText}> {errors.email.message}</Text>
+        )}
+      </View>
+      <View>
+        <Text style={styles.title}> Password</Text>
+        <Controller
+          control={control}
+          rules={{ required: "Password is required" }}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextInput
+              color={colors.textPrimary}
+              style={styles.input}
+              value={value}
+              onBlur={onBlur}
+              onChangeText={onChange}
+              secureTextEntry
+            />
+          )}
+          name="password"
+        />
+        {errors.password && (
+          <Text style={styles.errText}> {errors.password.message}</Text>
+        )}
+      </View>
+      <View>
+        <Text style={styles.title}> Phone Number</Text>
+        <Controller
+          control={control}
+          rules={{ required: "Phone Number is required" }}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextInput
+              color={colors.textPrimary}
+              style={styles.input}
+              value={value}
+              onBlur={onBlur}
+              onChangeText={onChange}
+            />
+          )}
+          name="phone"
+        />
+        {errors.phone && (
+          <Text style={styles.errText}> {errors.phone.message}</Text>
+        )}
+      </View>
+      <View>
+        <Button style={styles.btn} title="Send OTP" onPress={sendOtp} />
+        <Text style={styles.title}> Verification Code</Text>
+        <TextInput
+          color={colors.textPrimary}
+          style={styles.input}
+          value={verificationCode}
+          onChangeText={(text) => setVerificationCode(text)}
+        />
+      </View>
+      <View id="recaptcha-container"></View>
+      <Button
+        style={styles.btn}
+        title="Verify"
+        onPress={handleSubmit(onSubmit)}
+      />
     </View>
   );
 }
@@ -163,35 +182,15 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: colors.backgroundPrimary,
     paddingVertical: 16,
     paddingHorizontal: 16,
+    backgroundColor: colors.backgroundPrimary,
   },
   title: {
-    fontSize: 24,
+    fontSize: 18,
     fontWeight: "bold",
+    marginHorizontal: 5,
     color: colors.textPrimary,
-    marginBottom: 16,
-  },
-  inputContainer: {
-    width: "100%",
-    maxWidth: 700,
-    justifyContent: "center",
-    alignItems: "center",
-    flexDirection: "row",
-    flexWrap: "wrap",
-  },
-  textInput: {
-    margin: 4,
-    maxWidth: 300,
-    width: 700,
-    padding: 5,
-  },
-  textInputText: {
-    color: colors.textsecoundary,
-    marginBottom: 5,
-    marginLeft: 5,
-    fontWeight: "900",
   },
   input: {
     backgroundColor: colors.backgroundSecoundary,
@@ -200,24 +199,16 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 16,
     color: colors.textPrimary,
-  },
-  signUpButton: {
-    backgroundColor: colors.primaryAccent,
-    borderRadius: 8,
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    marginBottom: 16,
-    maxWidth: 300,
-    width: 700,
-  },
-  buttonText: {
-    color: colors.textPrimary,
-    fontSize: 16,
-    fontWeight: "bold",
-    textAlign: "center",
+    marginBottom: 10,
+    width: "100%",
+    maxWidth: 500,
+    minWidth: 250,
   },
   errText: {
-    color: colors.primary,
+    color: colors.secoundary,
     fontSize: 14,
+  },
+  btn: {
+    margin: 10,
   },
 });

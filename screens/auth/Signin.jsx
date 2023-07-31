@@ -95,7 +95,7 @@ export default function Signin({ navigation }) {
       </TouchableOpacity>
       {loading && <ActivityIndicator size="large" color={colors.primary} />}
       {verifybtn ? (
-        <VerifyRD />
+        <VerifyRD navigation={navigation} />
       ) : (
         <View style={styles.inputContainer}>
           <Text style={styles.title}>Sign in</Text>

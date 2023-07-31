@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   View,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import { colors } from "../../constants";
 import firebase from "../../firebase";
@@ -15,38 +16,72 @@ import AsyncStorage from "@react-native-community/async-storage";
 export default function Signin({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async () => {
     const trimmedEmail = email.trim().toLowerCase();
     console.log(password);
+
     if (trimmedEmail && password) {
       try {
-        await firebase
+        setLoading(true);
+        const signInResult = await firebase
           .auth()
           .signInWithEmailAndPassword(trimmedEmail, password);
-        const usersCollection = firebase.firestore().collection("users");
-        const userQuery = usersCollection.where("email", "==", trimmedEmail);
-        const userSnapshot = await userQuery.get();
 
-        if (userSnapshot.empty) {
-          Alert.alert("User not found");
-          return;
+        if (signInResult) {
+          // User is signed in successfully, check for phone number link
+          const usersCollection = firebase.firestore().collection("users");
+          const userQuery = usersCollection.where("email", "==", trimmedEmail);
+          const userSnapshot = await userQuery.get();
+
+          if (userSnapshot.empty) {
+            Alert.alert("User not found");
+            return;
+          }
+
+          const userData = userSnapshot.docs[0].data();
+          console.log(signInResult);
+
+          // Check if the user has a linked phone number
+          if (signInResult.user.phoneNumber !== null) {
+            // Corrected access to phoneNumber
+            // Show error message
+            Alert.alert(
+              "Error",
+              "Email is not linked with a phone number. Please sign in with a linked account."
+            );
+
+            // Set loading to false
+            setLoading(false);
+
+            // Don't store data in AsyncStorage if email is not linked to a phone number
+            await AsyncStorage.setItem("userData", JSON.stringify(userData));
+
+            // Perform app reload
+            Updates.reloadAsync();
+
+            return;
+          }
+
+          setLoading(false);
         }
-
-        const userData = userSnapshot.docs[0].data();
-        await AsyncStorage.setItem("userData", JSON.stringify(userData));
-        Updates.reloadAsync();
       } catch (error) {
+        setLoading(false);
         console.error("Error signing in:", error);
         Alert.alert("Error signing in. Please try again later.", error.message);
       }
     } else {
-      console.log("Don't leave any field empty");
+      Alert.alert("Incomplete fields", "Don't leave any field empty");
     }
   };
 
   return (
     <View style={styles.container}>
+      {loading ? (
+        <ActivityIndicator size="large" color={colors.primary} />
+      ) : null}
+
       <View style={styles.inputContainer}>
         <Text style={styles.title}>Sign in</Text>
         <View style={styles.textInput}>

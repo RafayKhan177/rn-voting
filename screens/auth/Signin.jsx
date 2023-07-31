@@ -1,5 +1,5 @@
 import * as Updates from "expo-updates";
-import { useState } from "react";
+import React, { useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -12,15 +12,16 @@ import {
 import { colors } from "../../constants";
 import firebase from "../../firebase";
 import AsyncStorage from "@react-native-community/async-storage";
+import VerifyRD from "./VerifyRD";
 
 export default function Signin({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [verifybtn, setVerifybtn] = useState(false);
 
-  const handleSubmit = async () => {
+  const handleSignIn = async () => {
     const trimmedEmail = email.trim().toLowerCase();
-    console.log(password);
 
     if (trimmedEmail && password) {
       try {
@@ -30,94 +31,111 @@ export default function Signin({ navigation }) {
           .signInWithEmailAndPassword(trimmedEmail, password);
 
         if (signInResult) {
-          // User is signed in successfully, check for phone number link
-          const usersCollection = firebase.firestore().collection("users");
-          const userQuery = usersCollection.where("email", "==", trimmedEmail);
-          const userSnapshot = await userQuery.get();
+          const userData = await getUserDataByEmail(trimmedEmail);
 
-          if (userSnapshot.empty) {
-            Alert.alert("User not found");
-            return;
+          if (userData) {
+            if (signInResult.user.phoneNumber !== null) {
+              setLoading(false);
+              await AsyncStorage.setItem("userData", JSON.stringify(userData));
+              Updates.reloadAsync();
+            } else {
+              setLoading(false);
+              showErrorAlert(
+                "Email isn't verified",
+                "Please email before login!"
+              );
+              setVerifybtn(true);
+            }
+          } else {
+            showErrorAlert("User not found", "User not found. Please sign up.");
           }
-
-          const userData = userSnapshot.docs[0].data();
-          console.log(signInResult);
-
-          // Check if the user has a linked phone number
-          if (signInResult.user.phoneNumber !== null) {
-            // Corrected access to phoneNumber
-            // Show error message
-            Alert.alert(
-              "Error",
-              "Email is not linked with a phone number. Please sign in with a linked account."
-            );
-
-            // Set loading to false
-            setLoading(false);
-
-            // Don't store data in AsyncStorage if email is not linked to a phone number
-            await AsyncStorage.setItem("userData", JSON.stringify(userData));
-
-            // Perform app reload
-            Updates.reloadAsync();
-
-            return;
-          }
-
-          setLoading(false);
         }
       } catch (error) {
         setLoading(false);
         console.error("Error signing in:", error);
-        Alert.alert("Error signing in. Please try again later.", error.message);
+        showErrorAlert("Error signing in", "Please try again later.");
       }
     } else {
-      Alert.alert("Incomplete fields", "Don't leave any field empty");
+      showErrorAlert("Incomplete fields", "Please fill in all the fields.");
     }
+  };
+
+  const getUserDataByEmail = async (email) => {
+    const usersCollection = firebase.firestore().collection("users");
+    const userQuery = usersCollection.where("email", "==", email);
+    const userSnapshot = await userQuery.get();
+
+    if (!userSnapshot.empty) {
+      return userSnapshot.docs[0].data();
+    }
+
+    return null;
+  };
+
+  const showErrorAlert = (title, message) => {
+    Alert.alert(title, message);
   };
 
   return (
     <View style={styles.container}>
-      {loading ? (
-        <ActivityIndicator size="large" color={colors.primary} />
-      ) : null}
+      <TouchableOpacity
+        style={styles.verifyBtn}
+        onPress={() => setVerifybtn(!verifybtn)}
+      >
+        <Text
+          style={{
+            fontSize: 20,
+            fontWeight: "900",
+            color: colors.backgroundPrimary,
+            textAlign: "center",
+          }}
+        >
+          Go to {verifybtn ? "Sign In" : "Verification"}
+        </Text>
+      </TouchableOpacity>
+      {loading && <ActivityIndicator size="large" color={colors.primary} />}
+      {verifybtn ? (
+        <VerifyRD />
+      ) : (
+        <View style={styles.inputContainer}>
+          <Text style={styles.title}>Sign in</Text>
+          <View style={styles.textInput}>
+            <TextInput
+              style={styles.input}
+              placeholder="Email"
+              autoCompleteType="email"
+              autoFocus
+              onChangeText={(text) => setEmail(text)}
+              placeholderTextColor={colors.textsecoundary}
+            />
+          </View>
 
-      <View style={styles.inputContainer}>
-        <Text style={styles.title}>Sign in</Text>
-        <View style={styles.textInput}>
-          <TextInput
-            style={styles.input}
-            placeholder="Email"
-            autoCompleteType="email"
-            autoFocus
-            onChangeText={(text) => setEmail(text)}
-            placeholderTextColor="#999999"
-          />
-        </View>
+          <View style={styles.textInput}>
+            <TextInput
+              style={styles.input}
+              placeholder="Password"
+              secureTextEntry
+              autoCompleteType="password"
+              onChangeText={(text) => setPassword(text)}
+              placeholderTextColor={colors.textsecoundary}
+            />
+          </View>
 
-        <View style={styles.textInput}>
-          <TextInput
-            style={styles.input}
-            placeholder="Password"
-            secureTextEntry
-            autoCompleteType="password"
-            onChangeText={(text) => setPassword(text)}
-            placeholderTextColor="#999999"
-          />
-        </View>
-
-        <TouchableOpacity style={styles.signInButton} onPress={handleSubmit}>
-          <Text style={styles.buttonText}>Sign In</Text>
-        </TouchableOpacity>
-        <View style={styles.linkContainer}>
-          <TouchableOpacity>
-            <Text style={styles.linkText}>Forgot password?</Text>
+          <TouchableOpacity style={styles.signInButton} onPress={handleSignIn}>
+            <Text style={styles.buttonText}>Sign In</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.push("Signup")}>
-            <Text style={styles.linkText}>Don't have an account? Sign Up</Text>
-          </TouchableOpacity>
+          <View style={styles.linkContainer}>
+            <TouchableOpacity>
+              <Text style={styles.linkText}>Forgot password?</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.push("Signup")}>
+              <Text style={styles.linkText}>
+                Don't have an account? Sign Up
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
+      )}
     </View>
   );
 }
@@ -177,5 +195,16 @@ const styles = StyleSheet.create({
     color: colors.primary,
     fontSize: 14,
     marginRight: 8,
+  },
+  verifyBtn: {
+    width: "80%",
+    maxWidth: 600,
+    backgroundColor: colors.secoundaryAccent,
+    borderRadius: 8,
+    paddingVertical: 20,
+    paddingHorizontal: 24,
+    marginBottom: 8,
+    position: "absolute",
+    top: 30,
   },
 });

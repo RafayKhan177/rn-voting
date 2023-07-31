@@ -52,8 +52,7 @@ export default function Signin({ navigation }) {
         }
       } catch (error) {
         setLoading(false);
-        console.error("Error signing in:", error);
-        showErrorAlert("Error signing in", "Please try again later.");
+        showErrorAlert("Error signing in", error.message);
       }
     } else {
       showErrorAlert("Incomplete fields", "Please fill in all the fields.");
@@ -74,6 +73,7 @@ export default function Signin({ navigation }) {
 
   const showErrorAlert = (title, message) => {
     Alert.alert(title, message);
+    console.log(title, message);
   };
 
   return (
@@ -125,9 +125,6 @@ export default function Signin({ navigation }) {
             <Text style={styles.buttonText}>Sign In</Text>
           </TouchableOpacity>
           <View style={styles.linkContainer}>
-            <TouchableOpacity>
-              <Text style={styles.linkText}>Forgot password?</Text>
-            </TouchableOpacity>
             <TouchableOpacity onPress={() => navigation.push("Signup")}>
               <Text style={styles.linkText}>
                 Don't have an account? Sign Up
@@ -192,7 +189,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   linkText: {
-    color: colors.primary,
+    color: colors.primaryAccent,
     fontSize: 14,
     marginRight: 8,
   },

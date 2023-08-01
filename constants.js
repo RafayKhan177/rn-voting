@@ -11,21 +11,21 @@ const colors = {
 
 const AdminScreens = [
   { name: "Dashboard", screen: "Dashboard", icon: "dashboard" },
-  { name: "Manage Nominee", screen: "ManageNominee", icon: "users" },
   {
-    name: "Manage Campaigns",
-    screen: "ManageCampaigns",
-    icon: "list",
-  },
-  {
-    name: "Manage Position & Office",
+    name: "Position/Offices",
     screen: "ManagePositionOffice",
     icon: "briefcase",
   },
-  { name: "Manage Users", screen: "ManageUsers", icon: "check-square-o" },
+  { name: "Nominees", screen: "ManageNominee", icon: "users" },
+  {
+    name: "Campaigns",
+    screen: "ManageCampaigns",
+    icon: "list",
+  },
+  { name: "Account", screen: "MyAccount", icon: "address-card" },
+  { name: "Vote Result", screen: "Result", icon: "address-card" },
   { name: "Voting", screen: "Voting", icon: "check-square-o" },
-  { name: "Campaigns Result", screen: "Result", icon: "address-card" },
-  { name: "My Account", screen: "MyAccount", icon: "address-card" },
+  { name: "Users", screen: "ManageUsers", icon: "check-square-o" },
 ];
 
 const UserScreens = [
@@ -37,6 +37,7 @@ const UserScreens = [
 const AuthScreens = [
   { name: "Sign In", screen: "Signup" },
   { name: "Sign Up", screen: "Signin" },
+  { name: "Verify", screen: "verify" },
 ];
 
 export {

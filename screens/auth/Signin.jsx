@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   View,
   Alert,
+  Image,
 } from "react-native";
 import { colors } from "../../constants";
 import firebase from "../../firebase";
@@ -48,6 +49,11 @@ export default function Signin({ navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.inputContainer}>
+        <Image
+          source={require("../../assets/icon.png")}
+          style={styles.image}
+          resizeMode="contain"
+        />
         <Text style={styles.title}>Sign in</Text>
         <View style={styles.textInput}>
           <TextInput
@@ -75,9 +81,9 @@ export default function Signin({ navigation }) {
           <Text style={styles.buttonText}>Sign In</Text>
         </TouchableOpacity>
         <View style={styles.linkContainer}>
-          <TouchableOpacity>
+          {/* <TouchableOpacity>
             <Text style={styles.linkText}>Forgot password?</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           <TouchableOpacity onPress={() => navigation.push("Signup")}>
             <Text style={styles.linkText}>Don't have an account? Sign Up</Text>
           </TouchableOpacity>
@@ -142,5 +148,11 @@ const styles = StyleSheet.create({
     color: colors.primary,
     fontSize: 14,
     marginRight: 8,
+  },
+  image: {
+    width: 140,
+    height: 140,
+    borderRadius: 20,
+    marginBottom: 100,
   },
 });

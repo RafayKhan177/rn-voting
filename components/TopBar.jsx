@@ -90,7 +90,11 @@ export default function TopBar({ screens }) {
                   style={styles.menuItem}
                 >
                   <Icon
-                    style={{ textAlign: "center", paddingHorizontal: 10 }}
+                    style={{
+                      textAlign: "center",
+                      alignSelf: "center",
+                      marginRight: 10,
+                    }}
                     name={screen.icon}
                     size={20}
                     color={colors.textsecoundary}
@@ -114,7 +118,10 @@ export default function TopBar({ screens }) {
         <Text style={styles.title}>VOTING</Text>
       </View>
       {navigation.canGoBack() && (
-        <TouchableOpacity onPress={handleGoBack} style={styles.backButton}>
+        <TouchableOpacity
+          onPress={handleGoBack}
+          style={{ alignSelf: "center" }}
+        >
           <Ionicons name="arrow-back" size={24} color="white" />
         </TouchableOpacity>
       )}
@@ -131,14 +138,17 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
     paddingHorizontal: 16,
     paddingBottom: 10,
+    padding: 5,
   },
   menuButton: {
     marginRight: 8,
+    alignSelf: "center",
   },
   title: {
     color: colors.textPrimary,
     fontSize: 18,
     fontWeight: "bold",
+    alignSelf: "center",
   },
   popupMenuOverlay: {
     flex: 1,
@@ -177,5 +187,6 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: colors.textPrimary,
     fontWeight: "bold",
+    width: "90%",
   },
 });

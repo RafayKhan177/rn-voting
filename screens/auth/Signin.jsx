@@ -8,6 +8,8 @@ import {
   View,
   Alert,
   ActivityIndicator,
+  Image,
+  ScrollView,
 } from "react-native";
 import { colors } from "../../constants";
 import firebase from "../../firebase";
@@ -77,62 +79,74 @@ export default function Signin({ navigation }) {
   };
 
   return (
-    <View style={styles.container}>
-      <TouchableOpacity
-        style={styles.verifyBtn}
-        onPress={() => setVerifybtn(!verifybtn)}
-      >
-        <Text
-          style={{
-            fontSize: 20,
-            fontWeight: "900",
-            color: colors.backgroundPrimary,
-            textAlign: "center",
-          }}
-        >
-          Go to {verifybtn ? "Sign In" : "Verification"}
-        </Text>
-      </TouchableOpacity>
-      {loading && <ActivityIndicator size="large" color={colors.primary} />}
-      {verifybtn ? (
-        <VerifyRD navigation={navigation} />
-      ) : (
-        <View style={styles.inputContainer}>
-          <Text style={styles.title}>Sign in</Text>
-          <View style={styles.textInput}>
-            <TextInput
-              style={styles.input}
-              placeholder="Email"
-              autoCompleteType="email"
-              autoFocus
-              onChangeText={(text) => setEmail(text)}
-              placeholderTextColor={colors.textsecoundary}
-            />
-          </View>
-
-          <View style={styles.textInput}>
-            <TextInput
-              style={styles.input}
-              placeholder="Password"
-              secureTextEntry
-              autoCompleteType="password"
-              onChangeText={(text) => setPassword(text)}
-              placeholderTextColor={colors.textsecoundary}
-            />
-          </View>
-
-          <TouchableOpacity style={styles.signInButton} onPress={handleSignIn}>
-            <Text style={styles.buttonText}>Sign In</Text>
+    <View style={{ flex: 1, backgroundColor: colors.backgroundPrimary }}>
+      <ScrollView>
+        <View style={styles.container}>
+          <TouchableOpacity
+            style={styles.verifyBtn}
+            onPress={() => setVerifybtn(!verifybtn)}
+          >
+            <Text
+              style={{
+                fontSize: 20,
+                fontWeight: "900",
+                color: colors.backgroundPrimary,
+                textAlign: "center",
+              }}
+            >
+              Go to {verifybtn ? "Sign In" : "Verification"}
+            </Text>
           </TouchableOpacity>
-          <View style={styles.linkContainer}>
-            <TouchableOpacity onPress={() => navigation.push("Signup")}>
-              <Text style={styles.linkText}>
-                Don't have an account? Sign Up
-              </Text>
-            </TouchableOpacity>
-          </View>
+          {loading && <ActivityIndicator size="large" color={colors.primary} />}
+          {verifybtn ? (
+            <VerifyRD navigation={navigation} />
+          ) : (
+            <View style={styles.inputContainer}>
+              <Image
+                source={require("../../assets/icon.png")}
+                style={styles.image}
+                resizeMode="contain"
+              />
+              <Text style={styles.title}>Sign in</Text>
+              <View style={styles.textInput}>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Email"
+                  autoCompleteType="email"
+                  autoFocus
+                  onChangeText={(text) => setEmail(text)}
+                  placeholderTextColor={colors.textsecoundary}
+                />
+              </View>
+
+              <View style={styles.textInput}>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Password"
+                  secureTextEntry
+                  autoCompleteType="password"
+                  onChangeText={(text) => setPassword(text)}
+                  placeholderTextColor={colors.textsecoundary}
+                />
+              </View>
+
+              <TouchableOpacity
+                style={styles.signInButton}
+                onPress={handleSignIn}
+              >
+                <Text style={styles.buttonText}>Sign In</Text>
+              </TouchableOpacity>
+              <View style={styles.linkContainer}>
+                <TouchableOpacity onPress={() => navigation.push("Signup")}>
+                  <Text style={styles.linkText}>
+                    Don't have an account? Sign Up
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          )}
         </View>
-      )}
+      </ScrollView>
     </View>
   );
 }
@@ -203,5 +217,11 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     position: "absolute",
     top: 30,
+  },
+  image: {
+    width: 140,
+    height: 140,
+    borderRadius: 20,
+    marginTop: 100,
   },
 });

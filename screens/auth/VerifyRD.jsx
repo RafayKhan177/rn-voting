@@ -21,8 +21,13 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+    height: 600,
   },
   button: {
-    marginVertical: 10,
+    marginTop: 500,
+    width: "100%",
+    maxWidth: 700,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

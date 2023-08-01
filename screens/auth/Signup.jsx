@@ -1,6 +1,8 @@
 import { useForm } from "react-hook-form";
 import {
   Alert,
+  Image,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -50,107 +52,114 @@ export default function Signup({ navigation }) {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Sign up</Text>
+    <ScrollView>
+      <View style={styles.container}>
+        <Image
+          source={require("../../assets/icon.png")}
+          style={styles.image}
+          resizeMode="contain"
+        />
+        <Text style={styles.title}>Sign up</Text>
 
-      <View style={styles.inputContainer}>
-        <View style={styles.textInput}>
-          {/* <Text style={styles.textInputText}>First Name</Text> */}
-          <TextInput
-            placeholderTextColor={colors.textPrimary}
-            placeholder="First Name"
-            style={styles.input}
-            onChangeText={(text) => setValue("firstName", text)}
-          />
-          {errors.firstName && <Text>{errors.firstName.message}</Text>}
+        <View style={styles.inputContainer}>
+          <View style={styles.textInput}>
+            {/* <Text style={styles.textInputText}>First Name</Text> */}
+            <TextInput
+              placeholderTextColor={colors.textPrimary}
+              placeholder="First Name"
+              style={styles.input}
+              onChangeText={(text) => setValue("firstName", text)}
+            />
+            {errors.firstName && <Text>{errors.firstName.message}</Text>}
+          </View>
+          <View style={styles.textInput}>
+            {/* <Text style={styles.textInputText}>Last Name</Text> */}
+            <TextInput
+              placeholderTextColor={colors.textPrimary}
+              placeholder="Last Name"
+              style={styles.input}
+              onChangeText={(text) => setValue("lastName", text)}
+            />
+            {errors.lastName && <Text>{errors.lastName.message}</Text>}
+          </View>
         </View>
-        <View style={styles.textInput}>
-          {/* <Text style={styles.textInputText}>Last Name</Text> */}
-          <TextInput
-            placeholderTextColor={colors.textPrimary}
-            placeholder="Last Name"
-            style={styles.input}
-            onChangeText={(text) => setValue("lastName", text)}
-          />
-          {errors.lastName && <Text>{errors.lastName.message}</Text>}
+
+        <View style={styles.inputContainer}>
+          <View style={styles.textInput}>
+            {/* <Text style={styles.textInputText}>House Color</Text> */}
+            <TextInput
+              placeholderTextColor={colors.textPrimary}
+              placeholder="House Color"
+              style={styles.input}
+              onChangeText={(text) => setValue("houseColor", text)}
+            />
+            {errors.houseColor && <Text>{errors.houseColor.message}</Text>}
+          </View>
+
+          <View style={styles.textInput}>
+            {/* <Text style={styles.textInputText}>Class</Text> */}
+            <TextInput
+              placeholderTextColor={colors.textPrimary}
+              placeholder="Class"
+              style={styles.input}
+              onChangeText={(text) => setValue("class", text)}
+            />
+            {errors.class && <Text>{errors.class.message}</Text>}
+          </View>
         </View>
+
+        <View style={styles.inputContainer}>
+          <View style={styles.textInput}>
+            {/* <Text style={styles.textInputText}>Email Address</Text> */}
+            <TextInput
+              placeholderTextColor={colors.textPrimary}
+              placeholder="Email Address"
+              style={styles.input}
+              onChangeText={(text) => setValue("email", text)}
+            />
+            {errors.email && <Text>{errors.email.message}</Text>}
+          </View>
+        </View>
+
+        <View style={styles.inputContainer}>
+          <View style={styles.textInput}>
+            {/* <Text style={styles.textInputText}>Password</Text> */}
+            <TextInput
+              placeholderTextColor={colors.textPrimary}
+              placeholder="Password"
+              style={styles.input}
+              onChangeText={(text) => setValue("password", text)}
+              secureTextEntry
+            />
+            {errors.password && <Text>{errors.password.message}</Text>}
+          </View>
+
+          <View style={styles.textInput}>
+            {/* <Text style={styles.textInputText}>Confirm Password</Text> */}
+            <TextInput
+              placeholderTextColor={colors.textPrimary}
+              placeholder="Confirm Password"
+              style={styles.input}
+              onChangeText={(text) => setValue("confirmPassword", text)}
+              secureTextEntry
+            />
+            {errors.confirmPassword && (
+              <Text>{errors.confirmPassword.message}</Text>
+            )}
+          </View>
+        </View>
+
+        <TouchableOpacity
+          style={styles.signUpButton}
+          onPress={handleSubmit(onSubmit)}
+        >
+          <Text style={styles.buttonText}>Sign Up</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.push("Signin")}>
+          <Text style={styles.linkText}>Already have an account? Sign in</Text>
+        </TouchableOpacity>
       </View>
-
-      <View style={styles.inputContainer}>
-        <View style={styles.textInput}>
-          {/* <Text style={styles.textInputText}>House Color</Text> */}
-          <TextInput
-            placeholderTextColor={colors.textPrimary}
-            placeholder="House Color"
-            style={styles.input}
-            onChangeText={(text) => setValue("houseColor", text)}
-          />
-          {errors.houseColor && <Text>{errors.houseColor.message}</Text>}
-        </View>
-
-        <View style={styles.textInput}>
-          {/* <Text style={styles.textInputText}>Class</Text> */}
-          <TextInput
-            placeholderTextColor={colors.textPrimary}
-            placeholder="Class"
-            style={styles.input}
-            onChangeText={(text) => setValue("class", text)}
-          />
-          {errors.class && <Text>{errors.class.message}</Text>}
-        </View>
-      </View>
-
-      <View style={styles.inputContainer}>
-        <View style={styles.textInput}>
-          {/* <Text style={styles.textInputText}>Email Address</Text> */}
-          <TextInput
-            placeholderTextColor={colors.textPrimary}
-            placeholder="Email Address"
-            style={styles.input}
-            onChangeText={(text) => setValue("email", text)}
-          />
-          {errors.email && <Text>{errors.email.message}</Text>}
-        </View>
-      </View>
-
-      <View style={styles.inputContainer}>
-        <View style={styles.textInput}>
-          {/* <Text style={styles.textInputText}>Password</Text> */}
-          <TextInput
-            placeholderTextColor={colors.textPrimary}
-            placeholder="Password"
-            style={styles.input}
-            onChangeText={(text) => setValue("password", text)}
-            secureTextEntry
-          />
-          {errors.password && <Text>{errors.password.message}</Text>}
-        </View>
-
-        <View style={styles.textInput}>
-          {/* <Text style={styles.textInputText}>Confirm Password</Text> */}
-          <TextInput
-            placeholderTextColor={colors.textPrimary}
-            placeholder="Confirm Password"
-            style={styles.input}
-            onChangeText={(text) => setValue("confirmPassword", text)}
-            secureTextEntry
-          />
-          {errors.confirmPassword && (
-            <Text>{errors.confirmPassword.message}</Text>
-          )}
-        </View>
-      </View>
-
-      <TouchableOpacity
-        style={styles.signUpButton}
-        onPress={handleSubmit(onSubmit)}
-      >
-        <Text style={styles.buttonText}>Sign Up</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.push("Signin")}>
-        <Text style={styles.linkText}>Already have an account? Sign in</Text>
-      </TouchableOpacity>
-    </View>
+    </ScrollView>
   );
 }
 
@@ -215,5 +224,11 @@ const styles = StyleSheet.create({
   linkText: {
     color: colors.primary,
     fontSize: 14,
+  },
+  image: {
+    width: 140,
+    height: 140,
+    borderRadius: 20,
+    marginBottom: 100,
   },
 });

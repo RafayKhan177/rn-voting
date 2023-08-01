@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.js": "/static/js/main.e0c21acb.js",
+    "static/js/74.ba45c3e8.js": "/static/js/74.ba45c3e8.js",
+    "static/media/MaterialCommunityIcons.ttf": "/static/media/MaterialCommunityIcons.5d42b4e60858731e7b65.ttf",
+    "static/media/icon.png": "/static/media/icon.5ebd70273645a5fff32c.png",
+    "static/media/Ionicons.ttf": "/static/media/Ionicons.3517aeaa34b2f8cd8eef.ttf",
+    "static/media/FontAwesome.ttf": "/static/media/FontAwesome.1e59d2330b4c6deb84b3.ttf",
+    "static/media/businessman-character-avatar.jpg": "/static/media/businessman-character-avatar.7d24b5f68e5cf0d32546.jpg",
+    "favicon.ico": "/favicon.ico",
+    "index.html": "/index.html",
+    "favicon-32.png": "/favicon-32.png",
+    "favicon-16.png": "/favicon-16.png",
+    "manifest.json": "/manifest.json",
+    "serve.json": "/serve.json",
+    "main.e0c21acb.js.map": "/static/js/main.e0c21acb.js.map",
+    "74.ba45c3e8.js.map": "/static/js/74.ba45c3e8.js.map"
+  },
+  "entrypoints": [
+    "static/js/74.ba45c3e8.js",
+    "static/js/main.e0c21acb.js"
+  ]
+}

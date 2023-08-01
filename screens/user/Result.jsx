@@ -24,11 +24,12 @@ export default function Voting() {
           campaign.id = doc.id;
           return campaign;
         });
-        const currentDate = new Date();
+        const crrDate = new Date()
+          .toISOString()
+          .slice(0, 10)
+          .replace(/-/g, "/");
         const filteredCampaigns = campaignsData.filter(
-          (campaign) =>
-            new Date(campaign.endDate.split("/").reverse().join("-")) <
-            currentDate
+          (campaign) => campaign.endDate < crrDate
         );
 
         const nomineeIds = filteredCampaigns.flatMap((campaign) =>

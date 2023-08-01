@@ -12,6 +12,7 @@ export default function Voting() {
   const [nomineePictures, setNomineePictures] = useState([]);
   const [positionNames, setPositionNames] = useState({});
   const [loading, setLoading] = useState(true);
+  const crrDate = new Date().toISOString().slice(0, 10).replace(/-/g, "/");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -19,7 +20,9 @@ export default function Voting() {
       const campaignsCollection = db.collection("campaigns");
 
       try {
-        const campaignsSnapshot = await campaignsCollection.get();
+        const campaignsSnapshot = await campaignsCollection
+          .where("endDate", ">", crrDate)
+          .get();
         const campaignsData = campaignsSnapshot.docs.map((doc) => {
           const campaign = doc.data();
           campaign.id = doc.id;
@@ -34,6 +37,7 @@ export default function Voting() {
         const nomineeNamesPromises = nomineeIds.map(async (nomineeId) => {
           const nomineeDoc = await db
             .collection("nominees")
+
             .doc(nomineeId)
             .get();
           if (nomineeDoc.exists) {
@@ -102,8 +106,6 @@ export default function Voting() {
       console.error("Error recording vote:", error);
     }
   };
-
-  const currentDateTime = new Date();
 
   const getNomineeWithMostVotes = async (campaign) => {
     const db = firebase.firestore();
@@ -186,41 +188,17 @@ export default function Voting() {
                             mode="contained"
                             onPress={() => handleVote(campaign.id, nomineeId)}
                             disabled={
-                              currentDateTime <
-                                new Date(
-                                  campaign.startDate
-                                    .split("/")
-                                    .reverse()
-                                    .join("-")
-                                ) ||
-                              currentDateTime >
-                                new Date(
-                                  campaign.endDate
-                                    .split("/")
-                                    .reverse()
-                                    .join("-")
-                                )
+                              crrDate < campaign.startDate ||
+                              crrDate > campaign.endDate
                             }
                             style={[
                               styles.voteButton,
                               {
-                                opacity:
-                                  currentDateTime <
-                                    new Date(
-                                      campaign.startDate
-                                        .split("/")
-                                        .reverse()
-                                        .join("-")
-                                    ) ||
-                                  currentDateTime >
-                                    new Date(
-                                      campaign.endDate
-                                        .split("/")
-                                        .reverse()
-                                        .join("-")
-                                    )
-                                    ? 0.5
-                                    : 1,
+                                backgroundColor:
+                                  crrDate < campaign.startDate ||
+                                  crrDate > campaign.endDate
+                                    ? colors.primaryAccent
+                                    : colors.primary,
                               },
                             ]}
                           >
@@ -279,7 +257,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   voteButton: {
-    backgroundColor: colors.primary,
     borderRadius: 4,
     paddingVertical: 8,
     paddingHorizontal: 12,

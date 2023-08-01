@@ -12,6 +12,7 @@ import {
 import { Signin, Signup } from "../screens/auth";
 import { MyAccount, Result, Voting } from "../screens/user";
 import ManageUsersDetails from "../screens/admin/ManageUsersDetails";
+import Verify from "../screens/auth/Verify";
 
 const Stack = createStackNavigator();
 
@@ -86,6 +87,7 @@ const AuthStack = () => {
       >
         <Stack.Screen name="Signup" component={Signup} />
         <Stack.Screen name="Signin" component={Signin} />
+        <Stack.Screen name="Verify" component={Verify} />
       </Stack.Navigator>
     </NavigationContainer>
   );

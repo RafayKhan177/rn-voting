@@ -107,8 +107,6 @@ export default function Voting() {
     }
   };
 
-  const currentDateTime = new Date();
-
   const getNomineeWithMostVotes = async (campaign) => {
     const db = firebase.firestore();
     const votes = campaign.votes || {};
@@ -199,8 +197,13 @@ export default function Voting() {
                                 backgroundColor:
                                   crrDate < campaign.startDate ||
                                   crrDate > campaign.endDate
+<<<<<<< HEAD
                                     ? colors.primary
                                     : colors.primaryAccent,
+=======
+                                    ? colors.primaryAccent
+                                    : colors.primary,
+>>>>>>> development
                               },
                             ]}
                           >

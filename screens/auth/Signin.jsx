@@ -7,13 +7,9 @@ import {
   TouchableOpacity,
   View,
   Alert,
-<<<<<<< HEAD
-  Image,
-=======
   ActivityIndicator,
   Image,
   ScrollView,
->>>>>>> development
 } from "react-native";
 import { colors } from "../../constants";
 import firebase from "../../firebase";
@@ -83,47 +79,6 @@ export default function Signin({ navigation }) {
   };
 
   return (
-<<<<<<< HEAD
-    <View style={styles.container}>
-      <View style={styles.inputContainer}>
-        <Image
-          source={require("../../assets/icon.png")}
-          style={styles.image}
-          resizeMode="contain"
-        />
-        <Text style={styles.title}>Sign in</Text>
-        <View style={styles.textInput}>
-          <TextInput
-            style={styles.input}
-            placeholder="Email"
-            autoCompleteType="email"
-            autoFocus
-            onChangeText={(text) => setEmail(text)}
-            placeholderTextColor="#999999"
-          />
-        </View>
-
-        <View style={styles.textInput}>
-          <TextInput
-            style={styles.input}
-            placeholder="Password"
-            secureTextEntry
-            autoCompleteType="password"
-            onChangeText={(text) => setPassword(text)}
-            placeholderTextColor="#999999"
-          />
-        </View>
-
-        <TouchableOpacity style={styles.signInButton} onPress={handleSubmit}>
-          <Text style={styles.buttonText}>Sign In</Text>
-        </TouchableOpacity>
-        <View style={styles.linkContainer}>
-          {/* <TouchableOpacity>
-            <Text style={styles.linkText}>Forgot password?</Text>
-          </TouchableOpacity> */}
-          <TouchableOpacity onPress={() => navigation.push("Signup")}>
-            <Text style={styles.linkText}>Don't have an account? Sign Up</Text>
-=======
     <View style={{ flex: 1, backgroundColor: colors.backgroundPrimary }}>
       <ScrollView>
         <View style={styles.container}>
@@ -141,7 +96,6 @@ export default function Signin({ navigation }) {
             >
               Go to {verifybtn ? "Sign In" : "Verification"}
             </Text>
->>>>>>> development
           </TouchableOpacity>
           {loading && <ActivityIndicator size="large" color={colors.primary} />}
           {verifybtn ? (
@@ -253,8 +207,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginRight: 8,
   },
-<<<<<<< HEAD
-=======
   verifyBtn: {
     width: "80%",
     maxWidth: 600,
@@ -267,15 +219,10 @@ const styles = StyleSheet.create({
     top: 30,
     zIndex: 99,
   },
->>>>>>> development
   image: {
     width: 140,
     height: 140,
     borderRadius: 20,
-<<<<<<< HEAD
-    marginBottom: 100,
-=======
     marginTop: 100,
->>>>>>> development
   },
 });

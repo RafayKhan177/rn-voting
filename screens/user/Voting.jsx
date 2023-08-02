@@ -197,13 +197,8 @@ export default function Voting() {
                                 backgroundColor:
                                   crrDate < campaign.startDate ||
                                   crrDate > campaign.endDate
-<<<<<<< HEAD
-                                    ? colors.primary
-                                    : colors.primaryAccent,
-=======
                                     ? colors.primaryAccent
                                     : colors.primary,
->>>>>>> development
                               },
                             ]}
                           >

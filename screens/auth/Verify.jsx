@@ -151,6 +151,7 @@ export default function Verify({ navigation }) {
               rules={{ required: "Phone Number is required" }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <TextInput
+                  defaultValue="+44"
                   color={colors.textPrimary}
                   style={styles.input}
                   value={value}

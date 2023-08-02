@@ -37,9 +37,5 @@ export const UserScreens = [
 export const AuthScreens = [
   { name: "Sign In", screen: "Signup" },
   { name: "Sign Up", screen: "Signin" },
-<<<<<<< HEAD
-  { name: "Verify", screen: "verify" },
-=======
   { name: "Verify", screen: "Verify" },
->>>>>>> development
 ];

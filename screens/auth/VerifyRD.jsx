@@ -1,4 +1,4 @@
-import { Button, View, StyleSheet, Platform } from "react-native";
+import { Button, View, StyleSheet, Platform, Text } from "react-native";
 import * as WebBrowser from "expo-web-browser";
 
 export default function VerifyRD({ navigation }) {
@@ -7,11 +7,24 @@ export default function VerifyRD({ navigation }) {
   }
   return (
     <View style={styles.container}>
-      <Button
-        title="Verify Email"
-        onPress={() => WebBrowser.openBrowserAsync("https://expo.dev")}
-        style={styles.button}
-      />
+      {Platform.OS !== "web" ? (
+        <View style={styles.container}>
+          <Text style={styles.txt}>
+            Please press the "Verify" button to proceed to the verification
+            page. Before proceeding with the sign-in process, kindly verify your
+            email address.
+          </Text>
+          <Button
+            title="Verify Email"
+            onPress={() =>
+              WebBrowser.openBrowserAsync(
+                "https://rn-voting-rafaykhan177.vercel.app/"
+              )
+            }
+            style={styles.button}
+          />
+        </View>
+      ) : null}
     </View>
   );
 }
@@ -29,5 +42,8 @@ const styles = StyleSheet.create({
     maxWidth: 700,
     justifyContent: "center",
     alignItems: "center",
+  },
+  txt: {
+    fontWeight: "900",
   },
 });

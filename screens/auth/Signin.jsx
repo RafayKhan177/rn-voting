@@ -265,6 +265,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     position: "absolute",
     top: 30,
+    zIndex: 99,
   },
 >>>>>>> development
   image: {

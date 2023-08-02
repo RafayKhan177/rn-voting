@@ -1,4 +1,4 @@
-const colors = {
+export const colors = {
   primary: "#ef233c",
   primaryAccent: "#2a9d8f",
   secoundary: "#d80032",
@@ -9,7 +9,7 @@ const colors = {
   textsecoundary: "#e5e5e5",
 };
 
-const AdminScreens = [
+export const AdminScreens = [
   { name: "Dashboard", screen: "Dashboard", icon: "dashboard" },
   {
     name: "Position/Offices",
@@ -28,13 +28,13 @@ const AdminScreens = [
   { name: "Users", screen: "ManageUsers", icon: "check-square-o" },
 ];
 
-const UserScreens = [
+export const UserScreens = [
   { name: "Voting", screen: "Voting", icon: "check-square-o" },
   { name: "My Account", screen: "MyAccount", icon: "address-card" },
   { name: "Campaigns Result", screen: "Result", icon: "address-card" },
 ];
 
-const AuthScreens = [
+export const AuthScreens = [
   { name: "Sign In", screen: "Signup" },
   { name: "Sign Up", screen: "Signin" },
 <<<<<<< HEAD
@@ -43,10 +43,3 @@ const AuthScreens = [
   { name: "Verify", screen: "Verify" },
 >>>>>>> development
 ];
-
-export {
-  colors,
-  AdminScreens,
-  UserScreens,
-  AuthScreens,
-}

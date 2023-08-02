@@ -1,5 +1,6 @@
 import { Button, View, StyleSheet, Platform, Text } from "react-native";
 import * as WebBrowser from "expo-web-browser";
+import { colors } from "../../constants";
 
 export default function VerifyRD({ navigation }) {
   if (Platform.OS === "web") {
@@ -45,5 +46,7 @@ const styles = StyleSheet.create({
   },
   txt: {
     fontWeight: "900",
+    color: colors.textsecoundary,
+    marginVertical: 20,
   },
 });

@@ -39,7 +39,7 @@ export default function AllCampaign() {
         }));
         setNominees(nomineesData);
       } catch (error) {
-        console.error("Error fetching nominees: ", error);
+        showErrorAlert("Error fetching nominees: ", error);
       }
 
       try {
@@ -50,7 +50,7 @@ export default function AllCampaign() {
         }));
         setPositions(positionsData);
       } catch (error) {
-        console.error("Error fetching positions: ", error);
+        showErrorAlert("Error fetching positions: ", error);
       }
     };
 
@@ -81,7 +81,7 @@ export default function AllCampaign() {
         return positionSnap.data().name;
       }
     } catch (error) {
-      console.error("Error fetching position name:", error);
+      showErrorAlert("Error fetching position name:", error);
     }
     return "";
   };
@@ -117,7 +117,7 @@ export default function AllCampaign() {
         }
       }
     } catch (error) {
-      console.error("Error fetching nominee names:", error);
+      showErrorAlert("Error fetching nominee names:", error);
     }
 
     setNomineeNames(namesData);
@@ -141,15 +141,15 @@ export default function AllCampaign() {
 
   const handleUpdateCampaign = async () => {
     const { startDate, endDate } = editCampaign;
-    const dateFormatRegex = /^\d{2}\/\d{2}\/\d{4}$/;
+    const dateFormatRegex = /^\d{4}\/\d{2}\/\d{2}$/;
 
     if (!startDate.match(dateFormatRegex) || !endDate.match(dateFormatRegex)) {
-      Alert.alert("Invalid date format. Please use dd/mm/yyyy format.");
+      showErrorAlert("Invalid date format. Please use yyyy/mm/dd format.");
       return;
     }
 
     if (!startDate || !endDate) {
-      Alert.alert("Start date and end date cannot be empty.");
+      showErrorAlert("Start date and end date cannot be empty.");
       return;
     }
 
@@ -159,7 +159,7 @@ export default function AllCampaign() {
       await campaignRef.update(editCampaign);
       setIsModalOpen(false);
     } catch (error) {
-      Alert.alert("Something Went Wrong");
+      showErrorAlert("Something Went Wrong");
     }
   };
 
@@ -169,7 +169,7 @@ export default function AllCampaign() {
     try {
       await campaignRef.delete();
     } catch (error) {
-      console.error("Error deleting campaign: ", error);
+      showErrorAlert("Error deleting campaign: ", error);
     }
   };
 
@@ -181,6 +181,10 @@ export default function AllCampaign() {
   const handleCloseEditModal = () => {
     setEditCampaign(null);
     setIsModalOpen(false);
+  };
+
+  const showErrorAlert = (title, message) => {
+    alert(title, message);
   };
 
   return (

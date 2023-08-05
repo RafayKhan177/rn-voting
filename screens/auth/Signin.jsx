@@ -74,8 +74,8 @@ export default function Signin({ navigation }) {
   };
 
   const showErrorAlert = (title, message) => {
-    Alert.alert(title, message);
-    console.log(title, message);
+    alert(title, message);
+    // console.log(title, message);
   };
 
   return (

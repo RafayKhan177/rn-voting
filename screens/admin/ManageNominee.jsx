@@ -60,64 +60,81 @@ export default function ManageNominee() {
     }
   };
 
-  const handleSaveNominee = async () => {
+  async function handleSaveNominee() {
     try {
       let nomineeDataWithPicture = { ...nomineeData };
       if (selectedFile) {
-        const response = await fetch(selectedFile);
-        const blob = await response.blob();
-
         const uniqueName = Date.now().toString();
         const storageRef = firebase.storage().ref();
         const fileRef = storageRef.child(`nomineePictures/${uniqueName}`);
 
-        await fileRef.put(blob);
-        const downloadURL = await fileRef.getDownloadURL();
+        // Convert the local file URI to a Blob using XMLHttpRequest
+        const xhr = new XMLHttpRequest();
+        xhr.open("GET", selectedFile, true);
+        xhr.responseType = "blob";
+        xhr.onload = async () => {
+          const blob = xhr.response;
 
-        nomineeDataWithPicture = {
-          ...nomineeDataWithPicture,
-          picture: downloadURL || "",
+          await fileRef.put(blob);
+          const downloadURL = await fileRef.getDownloadURL();
+
+          nomineeDataWithPicture = {
+            ...nomineeDataWithPicture,
+            picture: downloadURL || "",
+          };
         };
+        xhr.send();
       }
+
       await db.collection("nominees").add(nomineeDataWithPicture);
       handleDialogClose();
     } catch (error) {
       console.error("Error saving nominee: ", error);
+    }
+  }
+
+  const handleUpdateNominee = async () => {
+    try {
+      let nomineeDataWithPicture = { ...nomineeData };
+      if (selectedFile) {
+        const uniqueName = Date.now().toString();
+        const storageRef = firebase.storage().ref();
+        const fileRef = storageRef.child(`nomineePictures/${uniqueName}`);
+
+        // Convert the local file URI to a Blob
+        const xhr = new XMLHttpRequest();
+        xhr.open("GET", selectedFile, true);
+        xhr.responseType = "blob";
+        xhr.onload = async () => {
+          const blob = xhr.response;
+
+          await fileRef.put(blob);
+          const downloadURL = await fileRef.getDownloadURL();
+
+          nomineeDataWithPicture = {
+            ...nomineeDataWithPicture,
+            picture: downloadURL || "",
+          };
+
+          await db
+            .collection("nominees")
+            .doc(nomineeData.id)
+            .update(nomineeDataWithPicture);
+          handleDialogClose();
+        };
+        xhr.send();
+      } else {
+        await db.collection("nominees").doc(nomineeData.id).update(nomineeData);
+        handleDialogClose();
+      }
+    } catch (error) {
+      console.error("Error updating nominee: ", error);
     }
   };
 
   const handleEditNominee = (nominee) => {
     setNomineeData(nominee);
     handleDialogOpen();
-  };
-
-  const handleUpdateNominee = async () => {
-    try {
-      let nomineeDataWithPicture = { ...nomineeData };
-      if (selectedFile) {
-        const response = await fetch(selectedFile);
-        const blob = await response.blob();
-
-        const uniqueName = Date.now().toString();
-        const storageRef = firebase.storage().ref();
-        const fileRef = storageRef.child(`nomineePictures/${uniqueName}`);
-
-        await fileRef.put(blob);
-        const downloadURL = await fileRef.getDownloadURL();
-
-        nomineeDataWithPicture = {
-          ...nomineeDataWithPicture,
-          picture: downloadURL || "",
-        };
-      }
-      await db
-        .collection("nominees")
-        .doc(nomineeData.id)
-        .update(nomineeDataWithPicture);
-      handleDialogClose();
-    } catch (error) {
-      console.error("Error updating nominee: ", error);
-    }
   };
 
   const handleDeleteNominee = async (nominee) => {

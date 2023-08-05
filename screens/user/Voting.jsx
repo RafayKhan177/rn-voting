@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { Alert, Image, ScrollView, StyleSheet, Text, View } from "react-native";
 import { Button, Card } from "react-native-paper";
 import ScreenHading from "../../components/ScreenHading";
 import { colors } from "../../constants";
@@ -9,7 +9,6 @@ import AsyncStorage from "@react-native-community/async-storage";
 export default function Voting() {
   const [campaigns, setCampaigns] = useState([]);
   const [nomineeNames, setNomineeNames] = useState({});
-  const [nomineePictures, setNomineePictures] = useState([]);
   const [positionNames, setPositionNames] = useState({});
   const [loading, setLoading] = useState(true);
   const crrDate = new Date().toISOString().slice(0, 10).replace(/-/g, "/");
@@ -37,13 +36,15 @@ export default function Voting() {
         const nomineeNamesPromises = nomineeIds.map(async (nomineeId) => {
           const nomineeDoc = await db
             .collection("nominees")
-
             .doc(nomineeId)
             .get();
           if (nomineeDoc.exists) {
             const nomineeData = nomineeDoc.data();
             return {
-              [nomineeId]: nomineeData.firstName + " " + nomineeData.lastName,
+              id: nomineeId,
+              name: nomineeData.firstName + " " + nomineeData.lastName,
+              picture: nomineeData.picture, // Assuming 'picture' is the field for nominee picture URL
+              bio: nomineeData.biography, // Assuming 'bio' is the field for nominee bio
             };
           }
         });
@@ -62,18 +63,22 @@ export default function Voting() {
           }
         });
 
-        const nomineeNamesResults = await Promise.all(nomineeNamesPromises);
+        const nomineeDataResults = await Promise.all(nomineeNamesPromises);
+        const nomineeDataMap = nomineeDataResults.reduce((map, nominee) => {
+          if (nominee) map[nominee.id] = nominee;
+          return map;
+        }, {});
+
         const positionNamesResults = await Promise.all(positionNamesPromises);
 
-        const nomineeNames = Object.assign({}, ...nomineeNamesResults);
         const positionNames = Object.assign({}, ...positionNamesResults);
 
         setCampaigns(campaignsData);
-        setNomineeNames(nomineeNames);
+        setNomineeNames(nomineeDataMap);
         setPositionNames(positionNames);
         setLoading(false);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        showErrorAlert("Error fetching data:", error);
         setLoading(false);
       }
     };
@@ -97,64 +102,20 @@ export default function Voting() {
         if (!votes[userEmail]) {
           votes[userEmail] = nomineeId;
           await campaignRef.update({ votes });
-          alert(`Vote recorded for selected nominee`);
+          showErrorAlert(`Vote recorded for selected nominee`);
         } else {
-          alert("You have already voted for this position.");
+          showErrorAlert("You have already voted for this position.");
         }
       }
     } catch (error) {
-      console.error("Error recording vote:", error);
+      showErrorAlert("Error recording vote:", error);
     }
   };
 
-  const getNomineeWithMostVotes = async (campaign) => {
-    const db = firebase.firestore();
-    const votes = campaign.votes || {};
-    const voteCounts = {};
-
-    Object.values(votes).forEach((nomineeId) => {
-      voteCounts[nomineeId] = (voteCounts[nomineeId] || 0) + 1;
-    });
-
-    if (Object.keys(voteCounts).length === 0) {
-      return null;
-    }
-
-    const nomineeIds = Object.keys(voteCounts);
-    const nomineeWithMostVotes = nomineeIds.reduce((a, b) =>
-      voteCounts[a] > voteCounts[b] ? a : b
-    );
-
-    const nomineeDoc = await db
-      .collection("nominees")
-      .doc(nomineeWithMostVotes)
-      .get();
-
-    if (nomineeDoc.exists) {
-      const nomineeData = nomineeDoc.data();
-      const nomineeId = Object.keys(campaign.nominees).find(
-        (key) => campaign.nominees[key] === nomineeWithMostVotes
-      );
-
-      if (nomineeId) {
-        const pictureUrl = nomineeData.picture;
-        return pictureUrl;
-      }
-    }
-
-    return null;
+  const showErrorAlert = (title, message) => {
+    // Alert.alert(title, message);
+    alert(title, message);
   };
-
-  useEffect(() => {
-    const fetchNomineePictures = async () => {
-      const pictures = await Promise.all(
-        campaigns.map((campaign) => getNomineeWithMostVotes(campaign))
-      );
-      setNomineePictures(pictures);
-    };
-
-    fetchNomineePictures();
-  }, [campaigns]);
 
   return (
     <View style={styles.container}>
@@ -165,25 +126,36 @@ export default function Voting() {
             <Text>Loading...</Text>
           ) : (
             campaigns.map((campaign, index) => {
-              const nomineeWithMostVotes = nomineePictures[index];
               return (
-                <Card key={campaign.id} style={styles.card}>
-                  <Card.Cover
-                    source={
-                      nomineeWithMostVotes
-                        ? { uri: nomineeWithMostVotes }
-                        : require("../../assets/businessman-character-avatar.jpg")
-                    }
-                    style={styles.cardMedia}
-                  />
-
-                  <Card.Content>
+                <View key={campaign.id} style={{ marginVertical: 20 }}>
+                  <View style={styles.cardContainer}>
                     <Text style={styles.positionText}>
                       {positionNames[campaign.position] || "Position"}
                     </Text>
                     {Object.values(campaign.nominees).map(
                       (nomineeId, index) => (
                         <View key={index}>
+                          {nomineeNames[nomineeId] && (
+                            <View style={styles.card}>
+                              <Image
+                                style={styles.cardImage}
+                                source={
+                                  nomineeNames[nomineeId].picture
+                                    ? { uri: nomineeNames[nomineeId].picture }
+                                    : require("../../assets/businessman-character-avatar.jpg")
+                                }
+                              />
+                              <View>
+                                <Text style={styles.cardNominee}>
+                                  {nomineeNames[nomineeId].name || "Nominee"}
+                                </Text>
+                                <Text style={styles.cardBio}>
+                                  {nomineeNames[nomineeId].bio ||
+                                    "No bio available"}
+                                </Text>
+                              </View>
+                            </View>
+                          )}
                           <Button
                             mode="contained"
                             onPress={() => handleVote(campaign.id, nomineeId)}
@@ -202,15 +174,15 @@ export default function Voting() {
                               },
                             ]}
                           >
-                            <Text style={styles.nomineeText}>
-                              Vote: {nomineeNames[nomineeId] || "Nominee"}
+                            <Text style={styles.voteButtonText}>
+                              Vote: {nomineeNames[nomineeId]?.name || "Nominee"}
                             </Text>
                           </Button>
                         </View>
                       )
                     )}
-                  </Card.Content>
-                </Card>
+                  </View>
+                </View>
               );
             })
           )}
@@ -231,17 +203,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "center",
-  },
-  card: {
     width: "100%",
-    marginBottom: 12,
-    backgroundColor: colors.backgroundSecoundary,
-    maxWidth: 400,
-    margin: 4,
   },
-  cardMedia: {
-    height: 200,
-  },
+
   positionText: {
     fontSize: 20,
     fontWeight: "900",
@@ -250,16 +214,40 @@ const styles = StyleSheet.create({
     marginHorizontal: "auto",
     marginVertical: 10,
   },
-  nomineeText: {
-    fontSize: 12,
-    marginVertical: 4,
-    color: colors.textsecoundary,
-    fontWeight: "bold",
-  },
   voteButton: {
     borderRadius: 4,
     paddingVertical: 8,
     paddingHorizontal: 12,
     marginTop: 8,
+  },
+  cardContainer: {
+    backgroundColor: colors.backgroundSecoundary,
+    padding: 10,
+    borderRadius: 10,
+    width: 300,
+  },
+  card: {
+    display: "flex",
+    flexDirection: "row",
+  },
+  cardImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 10,
+    marginTop: 5,
+  },
+  cardNominee: {
+    fontSize: 12,
+    marginVertical: 4,
+    color: colors.textPrimary,
+    fontWeight: "bold",
+    marginLeft: 10,
+  },
+  cardBio: {
+    fontSize: 12,
+    marginVertical: 4,
+    color: colors.textsecoundary,
+    fontWeight: "bold",
+    marginLeft: 10,
   },
 });

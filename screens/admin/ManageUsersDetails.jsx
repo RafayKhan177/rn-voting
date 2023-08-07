@@ -8,7 +8,7 @@ import {
   TextInput,
   Button,
 } from "react-native";
-import firebase from "../../firebase";
+import firebase from "../../firebase/config";
 import { colors } from "../../constants";
 import ScreenHeading from "../../components/ScreenHading";
 

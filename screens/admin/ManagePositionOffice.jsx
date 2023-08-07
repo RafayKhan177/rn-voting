@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import ScreenHading from "../../components/ScreenHading";
 import { colors } from "../../constants";
-import firebase from "../../firebase";
+import firebase from "../../firebase/config";
 
 export default function ManagePositionOffice() {
   const [positions, setPositions] = useState([]);

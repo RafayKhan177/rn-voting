@@ -3,7 +3,7 @@ import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { Button, Card } from "react-native-paper";
 import ScreenHading from "../../components/ScreenHading";
 import { colors } from "../../constants";
-import firebase from "../../firebase";
+import firebase from "../../firebase/config";
 
 export default function Voting() {
   const [campaigns, setCampaigns] = useState([]);

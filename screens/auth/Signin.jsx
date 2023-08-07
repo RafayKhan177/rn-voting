@@ -12,7 +12,7 @@ import {
   ScrollView,
 } from "react-native";
 import { colors } from "../../constants";
-import firebase from "../../firebase";
+import firebase from "../../firebase/config";
 import AsyncStorage from "@react-native-community/async-storage";
 import VerifyRD from "./VerifyRD";
 

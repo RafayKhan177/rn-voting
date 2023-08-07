@@ -7,7 +7,7 @@ import {
   StyleSheet,
 } from "react-native";
 import { Searchbar } from "react-native-paper";
-import firebase from "../../firebase";
+import firebase from "../../firebase/config";
 import { colors } from "../../constants";
 import ScreenHeading from "../../components/ScreenHading";
 

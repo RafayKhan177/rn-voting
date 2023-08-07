@@ -11,7 +11,7 @@ import {
 import { Card } from "react-native-paper";
 import { ScreenHading } from "../../components";
 import { colors } from "../../constants";
-import firebase from "../../firebase";
+import firebase from "../../firebase/config";
 
 export default function ManageNominee() {
   const [dialogOpen, setDialogOpen] = useState(false);

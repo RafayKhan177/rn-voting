@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Button, StyleSheet, Text, TextInput, View } from "react-native";
 import ScreenHading from "../../components/ScreenHading";
 import { colors } from "../../constants";
-import firebase from "../../firebase";
+import firebase from "../../firebase/config";
 import AsyncStorage from "@react-native-community/async-storage";
 
 export default function MyAccount() {

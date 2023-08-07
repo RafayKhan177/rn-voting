@@ -10,7 +10,7 @@ import {
   View,
 } from "react-native";
 import { colors } from "../../constants";
-import firebase from "../../firebase";
+import firebase from "../../firebase/config";
 
 export default function Signup({ navigation }) {
   const {

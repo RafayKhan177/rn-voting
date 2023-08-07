@@ -4,7 +4,7 @@ import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { ScreenHading } from "../../components";
 import { AdminScreens, colors } from "../../constants";
-import firebase from "../../firebase";
+import firebase from "../../firebase/config";
 
 export default function Dashboard() {
   const [totalCampaigns, setTotalCampaigns] = useState(0);

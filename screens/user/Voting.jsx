@@ -128,6 +128,9 @@ export default function Voting() {
             campaigns.map((campaign, index) => {
               return (
                 <View key={campaign.id} style={{ marginVertical: 20 }}>
+                  <Text style={styles.cardBio}>
+                    Campaign {campaign.startDate} from {campaign.endDate}
+                  </Text>
                   <View style={styles.cardContainer}>
                     <Text style={styles.positionText}>
                       {positionNames[campaign.position] || "Position"}
@@ -225,6 +228,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 10,
     width: 300,
+    marginHorizontal: 10,
   },
   card: {
     display: "flex",

@@ -115,7 +115,10 @@ export default function Voting() {
 
       if (nomineeId) {
         const pictureUrl = nomineeData.picture;
-        return pictureUrl;
+        const name =
+          nomineeData.firstName + " " + nomineeData.lastName ||
+          "something went wrong";
+        return { name, pictureUrl };
       }
     }
 
@@ -143,12 +146,14 @@ export default function Voting() {
           ) : (
             campaigns.map((campaign, index) => {
               const nomineeWithMostVotes = nomineePictures[index];
+
+              console.log(nomineeWithMostVotes);
               return (
                 <Card key={campaign.id} style={styles.card}>
                   <Card.Cover
                     source={
-                      nomineeWithMostVotes
-                        ? { uri: nomineeWithMostVotes }
+                      nomineeWithMostVotes && nomineeWithMostVotes.pictureUrl
+                        ? { uri: nomineeWithMostVotes.pictureUrl }
                         : require("../../assets/businessman-character-avatar.jpg")
                     }
                     style={styles.cardMedia}
@@ -168,13 +173,17 @@ export default function Voting() {
                         style={{
                           fontWeight: "900",
                           color: colors.textsecoundary,
+                          fontSize: 17,
                         }}
                       >
                         WINNER
+                        {nomineeWithMostVotes && nomineeWithMostVotes.name
+                          ? `: ${nomineeWithMostVotes.name}`
+                          : ": something went wrong"}
                       </Text>
                     </View>
                     <Text style={styles.positionText}>
-                      {positionNames[campaign.position] || "Position"}{" "}
+                      Position: {positionNames[campaign.position] || "Position"}
                     </Text>
                     {Object.values(campaign.nominees).map(
                       (nomineeId, index) => {
@@ -186,17 +195,13 @@ export default function Voting() {
 
                         return (
                           <View key={index}>
-                            <Button
-                              mode="contained"
-                              disabled={true}
-                              style={[styles.voteButton]}
-                            >
+                            <View style={[styles.voteButton]}>
                               <Text style={styles.nomineeText}>
-                                {`${
+                                {`(${voteCount} vote) ${
                                   nomineeNames[nomineeId] || "Nominee"
-                                } (${voteCount} votes)`}
+                                } `}
                               </Text>
-                            </Button>
+                            </View>
                           </View>
                         );
                       }

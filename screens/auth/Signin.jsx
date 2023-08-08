@@ -14,13 +14,26 @@ import {
 import { colors } from "../../constants";
 import firebase from "../../firebase/config";
 import AsyncStorage from "@react-native-community/async-storage";
-import VerifyRD from "./VerifyRD";
+// import VerifyRD from "./VerifyRD";
 
 export default function Signin({ navigation }) {
   const [email, setEmail] = useState("");
+  const [user, setUser] = useState(null);
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [verifybtn, setVerifybtn] = useState(false);
+
+  const sendVerificationEmail = async (email) => {
+    try {
+      user.sendEmailVerification();
+      showErrorAlert("Verification email sent successfully");
+      setVerifybtn(false);
+      return true;
+    } catch (error) {
+      showErrorAlert("Error sending verification email:", error.message);
+      return false;
+    }
+  };
 
   const handleSignIn = async () => {
     const trimmedEmail = email.trim().toLowerCase();
@@ -34,9 +47,10 @@ export default function Signin({ navigation }) {
 
         if (signInResult) {
           const userData = await getUserDataByEmail(trimmedEmail);
-
+          setUser(signInResult.user);
           if (userData) {
-            if (signInResult.user.phoneNumber !== null) {
+            if (signInResult.user.emailVerified) {
+              // Check if email is verified
               setLoading(false);
               await AsyncStorage.setItem("userData", JSON.stringify(userData));
               Updates.reloadAsync();
@@ -44,7 +58,7 @@ export default function Signin({ navigation }) {
               setLoading(false);
               showErrorAlert(
                 "Email isn't verified",
-                "Please email before login!"
+                "Please verify your email before logging in!"
               );
               setVerifybtn(true);
             }
@@ -75,14 +89,14 @@ export default function Signin({ navigation }) {
 
   const showErrorAlert = (title, message) => {
     alert(title, message);
-    // console.log(title, message);
+    // showErrorAlert(title, message);
   };
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.backgroundPrimary }}>
       <ScrollView>
         <View style={styles.container}>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={styles.verifyBtn}
             onPress={() => setVerifybtn(!verifybtn)}
           >
@@ -96,55 +110,65 @@ export default function Signin({ navigation }) {
             >
               Go to {verifybtn ? "Sign In" : "Verification"}
             </Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           {loading && <ActivityIndicator size="large" color={colors.primary} />}
-          {verifybtn ? (
+          {/* {verifybtn ? (
             <VerifyRD navigation={navigation} />
-          ) : (
-            <View style={styles.inputContainer}>
-              <Image
-                source={require("../../assets/icon.png")}
-                style={styles.image}
-                resizeMode="contain"
+          ) : ( */}
+          <View style={styles.inputContainer}>
+            <Image
+              source={require("../../assets/icon.png")}
+              style={styles.image}
+              resizeMode="contain"
+            />
+            <Text style={styles.title}>Sign in</Text>
+            <View style={styles.textInput}>
+              <TextInput
+                style={styles.input}
+                placeholder="Email"
+                autoCompleteType="email"
+                autoFocus
+                onChangeText={(text) => setEmail(text)}
+                placeholderTextColor={colors.textsecoundary}
               />
-              <Text style={styles.title}>Sign in</Text>
-              <View style={styles.textInput}>
-                <TextInput
-                  style={styles.input}
-                  placeholder="Email"
-                  autoCompleteType="email"
-                  autoFocus
-                  onChangeText={(text) => setEmail(text)}
-                  placeholderTextColor={colors.textsecoundary}
-                />
-              </View>
-
-              <View style={styles.textInput}>
-                <TextInput
-                  style={styles.input}
-                  placeholder="Password"
-                  secureTextEntry
-                  autoCompleteType="password"
-                  onChangeText={(text) => setPassword(text)}
-                  placeholderTextColor={colors.textsecoundary}
-                />
-              </View>
-
-              <TouchableOpacity
-                style={styles.signInButton}
-                onPress={handleSignIn}
-              >
-                <Text style={styles.buttonText}>Sign In</Text>
-              </TouchableOpacity>
-              <View style={styles.linkContainer}>
-                <TouchableOpacity onPress={() => navigation.push("Signup")}>
-                  <Text style={styles.linkText}>
-                    Don't have an account? Sign Up
-                  </Text>
-                </TouchableOpacity>
-              </View>
             </View>
-          )}
+
+            <View style={styles.textInput}>
+              <TextInput
+                style={styles.input}
+                placeholder="Password"
+                secureTextEntry
+                autoCompleteType="password"
+                onChangeText={(text) => setPassword(text)}
+                placeholderTextColor={colors.textsecoundary}
+              />
+            </View>
+
+            <TouchableOpacity
+              style={styles.signInButton}
+              onPress={handleSignIn}
+            >
+              <Text style={styles.buttonText}>Sign In</Text>
+            </TouchableOpacity>
+            <View style={styles.linkContainer}>
+              <TouchableOpacity onPress={() => navigation.push("Signup")}>
+                <Text style={styles.linkText}>
+                  Don't have an account? Sign Up
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+          {/* )} */}
+          {verifybtn ? (
+            <>
+              <TouchableOpacity
+                style={styles.verifyBtn}
+                onPress={sendVerificationEmail}
+              >
+                <Text style={styles.buttonText}>Verify Email</Text>
+              </TouchableOpacity>
+            </>
+          ) : null}
         </View>
       </ScrollView>
     </View>

@@ -26,7 +26,7 @@ export default function Signup({ navigation }) {
           .auth()
           .createUserWithEmailAndPassword(data.email, data.password);
         const user = userCredential.user;
-
+        await user.sendEmailVerification();
         const db = firebase.firestore();
         const userRef = db.collection("users").doc();
         await userRef.set({
@@ -38,17 +38,25 @@ export default function Signup({ navigation }) {
           email: data.email,
           firstPassword: data.password,
         });
-        console.log("Account data stored successfully");
+        showErrorAlert(
+          "Account data stored successfully & Email verification sent to your email"
+        );
         navigation.push("Signin");
-        console.log("Account created successfully");
       } catch (error) {
-        console.error("Error creating user:", error.message);
-        Alert.alert("Error creating user. Please try again later.");
+        showErrorAlert("Error creating user:", error.message);
       }
     } else {
-      Alert.alert("Don't leave any field empty and make sure passwords match.");
-      console.log("Don't leave any field empty and make sure passwords match.");
+      showErrorAlert(
+        "Don't leave any field empty and make sure passwords match."
+      );
+      showErrorAlert(
+        "Don't leave any field empty and make sure passwords match."
+      );
     }
+  };
+
+  const showErrorAlert = (title, message) => {
+    alert(title, " ", message);
   };
 
   return (

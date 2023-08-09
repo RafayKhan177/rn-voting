@@ -20,7 +20,7 @@ export default function Voting() {
 
       try {
         const campaignsSnapshot = await campaignsCollection
-          .where("endDate", ">", crrDate)
+          .where("endDate", ">=", crrDate)
           .get();
         const campaignsData = campaignsSnapshot.docs.map((doc) => {
           const campaign = doc.data();

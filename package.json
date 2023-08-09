@@ -1,6 +1,7 @@
 {
   "name": "rn-voting",
   "version": "1.0.1",
+  "versionCode": 2,
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "start": "expo start",

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Alert, Image, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
 import { Button, Card } from "react-native-paper";
 import ScreenHading from "../../components/ScreenHading";
 import { colors } from "../../constants";
@@ -86,7 +86,7 @@ export default function Voting() {
     fetchData();
   }, []);
 
-  const handleVote = async (campaignId, nomineeId) => {
+  const handleVote = async (campaignId, nomineeId, position, nominee) => {
     const user = await AsyncStorage.getItem("userData");
     const userData = JSON.parse(user);
     const userEmail = userData.email;
@@ -102,9 +102,13 @@ export default function Voting() {
         if (!votes[userEmail]) {
           votes[userEmail] = nomineeId;
           await campaignRef.update({ votes });
-          showErrorAlert(`Vote recorded for selected nominee`);
+          showErrorAlert(
+            `“Thank You” “Your Vote for ${nominee} as ${position} is now recorded”`
+          );
         } else {
-          showErrorAlert("You have already voted for this position.");
+          showErrorAlert(
+            `“Too Late to change your mind” “You already voted for ${nominee} as ${position}”`
+          );
         }
       }
     } catch (error) {
@@ -127,8 +131,15 @@ export default function Voting() {
           ) : (
             campaigns.map((campaign, index) => {
               return (
-                <View key={campaign.id} style={{ marginVertical: 20 }}>
-                  <Text style={styles.cardBio}>
+                <Card
+                  key={index}
+                  style={{
+                    marginVertical: 20,
+                    marginHorizontal: 10,
+                    backgroundColor: colors.backgroundSecoundary,
+                  }}
+                >
+                  <Text style={styles.cardDate}>
                     Campaign {campaign.startDate} from {campaign.endDate}
                   </Text>
                   <View style={styles.cardContainer}>
@@ -149,19 +160,55 @@ export default function Voting() {
                                 }
                               />
                               <View>
-                                <Text style={styles.cardNominee}>
-                                  {nomineeNames[nomineeId].name || "Nominee"}
+                                <Text
+                                  style={styles.cardNominee}
+                                  onPress={() =>
+                                    alert(
+                                      nomineeNames[nomineeId].name || "loading"
+                                    )
+                                  }
+                                >
+                                  {((text, maxChars) =>
+                                    text.length > maxChars
+                                      ? text.substring(0, maxChars) + "..."
+                                      : text)(
+                                    nomineeNames[nomineeId].name || "loading",
+                                    20
+                                  )}
                                 </Text>
-                                <Text style={styles.cardBio}>
-                                  {nomineeNames[nomineeId].bio ||
-                                    "No bio available"}
+                                <Text
+                                  style={styles.cardBio}
+                                  onPress={() =>
+                                    alert(
+                                      nomineeNames[nomineeId].bio ||
+                                        "No bio available"
+                                    )
+                                  }
+                                >
+                                  <Text style={styles.cardBio}>
+                                    {((text, maxChars) =>
+                                      text.length > maxChars
+                                        ? text.substring(0, maxChars) + "..."
+                                        : text)(
+                                      nomineeNames[nomineeId].bio ||
+                                        "No bio available",
+                                      70
+                                    )}
+                                  </Text>
                                 </Text>
                               </View>
                             </View>
                           )}
                           <Button
                             mode="contained"
-                            onPress={() => handleVote(campaign.id, nomineeId)}
+                            onPress={() =>
+                              handleVote(
+                                campaign.id,
+                                nomineeId,
+                                positionNames[campaign.position],
+                                nomineeNames[nomineeId].name
+                              )
+                            }
                             disabled={
                               crrDate < campaign.startDate ||
                               crrDate > campaign.endDate
@@ -185,7 +232,7 @@ export default function Voting() {
                       )
                     )}
                   </View>
-                </View>
+                </Card>
               );
             })
           )}
@@ -248,6 +295,14 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   cardBio: {
+    fontSize: 12,
+    marginVertical: 4,
+    color: colors.textsecoundary,
+    fontWeight: "bold",
+    marginLeft: 10,
+    width: 130,
+  },
+  cardDate: {
     fontSize: 12,
     marginVertical: 4,
     color: colors.textsecoundary,

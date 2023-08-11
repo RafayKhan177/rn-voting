@@ -220,16 +220,29 @@ export default function NewCampaign() {
 
         <Text style={styles.label}>Select Nominees:</Text>
         {nominees.map((nominee) => (
-          <View key={nominee.id} style={styles.nomineeOption}>
-            <Switch
-              value={newCampaign.nominees.includes(nominee.id)}
-              onValueChange={() => handleNomineeSelection(nominee.id)}
-              style={styles.switch}
-            />
-            <Text style={styles.nomineeText}>
-              {`${nominee.firstName} ${nominee.lastName}, Bio: ${nominee.biography}`}
-            </Text>
-          </View>
+          <>
+            <View key={nominee.id} style={styles.nomineeOption}>
+              <Switch
+                value={newCampaign.nominees.includes(nominee.id)}
+                onValueChange={() => handleNomineeSelection(nominee.id)}
+                style={styles.switch}
+              />
+              <View style={{ display: "flex", flexDirection: "column" }}>
+                <Text style={styles.nomineeText}>
+                  {`${nominee.firstName} ${nominee.lastName}`}
+                </Text>
+                <Text
+                  style={styles.nomineeText}
+                  onPress={() =>
+                    alert(nominee.biography || "User have no biography")
+                  }
+                >
+                  {nominee.biography ? "View Biography" : "No Biography"}
+                </Text>
+              </View>
+            </View>
+            <View style={styles.line} />
+          </>
         ))}
 
         {Platform.OS === "web" ? (
@@ -415,5 +428,10 @@ const styles = StyleSheet.create({
     borderRadius: 7,
     padding: 12,
     color: colors.textPrimary,
+  },
+  line: {
+    borderBottomColor: colors.primary,
+    borderBottomWidth: 1,
+    marginVertical: 10, // Adjust as needed
   },
 });

@@ -273,7 +273,16 @@ export default function ManageNominee() {
                 <Text style={styles.name}>
                   {nominee.firstName} {nominee.lastName}
                 </Text>
-                <Text style={styles.biography}>{nominee.biography}</Text>
+                <Text
+                  style={styles.biography}
+                  onPress={() => alert(nominee.biography || "No bio available")}
+                >
+                  {((text, maxChars) =>
+                    text.length > maxChars
+                      ? text.substring(0, maxChars) + "..."
+                      : text)(nominee.biography || "No bio available", 85)}
+                </Text>
+
                 <View style={styles.buttonContainer}>
                   <TouchableOpacity
                     onPress={() => handleEditNominee(nominee)}

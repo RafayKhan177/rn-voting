@@ -99,12 +99,45 @@ export default function Voting() {
       if (campaignDoc.exists) {
         const campaignData = campaignDoc.data();
         const votes = campaignData.votes || {};
+
         if (!votes[userEmail]) {
-          votes[userEmail] = nomineeId;
-          await campaignRef.update({ votes });
-          showErrorAlert(
-            `“Thank You” “Your Vote for ${nominee} as ${position} is now recorded”`
-          );
+          if (typeof window !== "undefined" && window.confirm) {
+            // Check for web platform
+            if (
+              window.confirm(
+                `Are you sure you want to vote for ${nominee} as ${position}?`
+              )
+            ) {
+              votes[userEmail] = nomineeId;
+              await campaignRef.update({ votes });
+              showErrorAlert(
+                `“Thank You” “Your Vote for ${nominee} as ${position} is now recorded”`
+              );
+            }
+          } else {
+            // Mobile platform
+            Alert.alert(
+              "Confirm Vote",
+              `Are you sure you want to vote for ${nominee} as ${position}?`,
+              [
+                {
+                  text: "Cancel",
+                  style: "cancel",
+                },
+                {
+                  text: "Vote",
+                  onPress: async () => {
+                    votes[userEmail] = nomineeId;
+                    await campaignRef.update({ votes });
+                    showErrorAlert(
+                      `“Thank You” “Your Vote for ${nominee} as ${position} is now recorded”`
+                    );
+                  },
+                },
+              ],
+              { cancelable: true }
+            );
+          }
         } else {
           showErrorAlert(
             `“Too Late to change your mind” “You already voted for ${nominee} as ${position}”`

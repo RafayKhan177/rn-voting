@@ -56,6 +56,8 @@ const UserDetails = ({ route, navigation }) => {
       // Delete the current user's Firebase authentication account.
       await userCredential.user.delete();
       console.log("User account deleted successfully.");
+      firebase.auth().signOut();
+      navigation.push("ManageUsers");
     } catch (error) {
       console.error("Error deleting user:", error);
     }

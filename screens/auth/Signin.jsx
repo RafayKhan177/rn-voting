@@ -68,7 +68,7 @@ export default function Signin({ navigation }) {
         }
       } catch (error) {
         setLoading(false);
-        showErrorAlert("Error signing in", error.message);
+        showErrorAlert(error.message);
       }
     } else {
       showErrorAlert("Incomplete fields", "Please fill in all the fields.");

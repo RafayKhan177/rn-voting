@@ -39,7 +39,7 @@ export default function Signup({ navigation }) {
           firstPassword: data.password,
         });
         showErrorAlert(
-          "Account data stored successfully & Email verification sent to your email"
+          "Account Created successfully & Email verification sent to your email"
         );
         navigation.push("Signin");
       } catch (error) {

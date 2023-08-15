@@ -1,11 +1,83 @@
 import { useEffect, useState } from "react";
-import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
-import { Button, Card } from "react-native-paper";
+import {
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { Button, Card, Snackbar } from "react-native-paper";
 import ScreenHading from "../../components/ScreenHading";
 import { colors } from "../../constants";
 import firebase from "../../firebase/config";
 import AsyncStorage from "@react-native-community/async-storage";
 import UserDataUpdate from "../../components/userDataUpdate";
+
+// const HandleVoteModal = ({ campaignId, nomineeId, position, nominee }) => {
+//   const handleVoteF = async () => {
+//     const user = await AsyncStorage.getItem("userData");
+//     const userData = JSON.parse(user);
+//     const userEmail = userData.email;
+
+//     const db = firebase.firestore();
+//     const campaignRef = db.collection("campaigns").doc(campaignId);
+
+//     try {
+//       const campaignDoc = await campaignRef.get();
+//       if (campaignDoc.exists) {
+//         const campaignData = campaignDoc.data();
+//         const votes = campaignData.votes || {};
+//         if (!votes[userEmail]) {
+//           votes[userEmail] = nomineeId;
+//           await campaignRef.update({ votes });
+//           showErrorAlert(
+//             `"Thank You" "Your Vote for ${nominee} as ${position} is now recorded"`
+//           );
+//         } else {
+//           showErrorAlert(
+//             `"Too Late to change your mind" "You already voted for ${nominee} as ${position}"`
+//           );
+//         }
+//       }
+//     } catch (error) {
+//       showErrorAlert("Error recording vote:", error);
+//     }
+//   };
+
+//   const showErrorAlert = (title, message) => {
+//     alert(title, message);
+//   };
+
+//   const [snackbarVisible, setSnackbarVisible] = useState(t);
+
+//   const handleVoteWithConfirmation = () => {
+//     setSnackbarVisible(true);
+//   };
+
+//   const handleSnackbarDismiss = () => {
+//     setSnackbarVisible(false);
+//   };
+
+//   return (
+//     <View style={{ marginTop: 300, backgroundColor: colors.primary }}>
+
+//       <Snackbar
+//         visible={snackbarVisible}
+//         onDismiss={handleSnackbarDismiss}
+//         action={{
+//           label: "Vote",
+//           onPress: () => {
+//             handleVoteF();
+//             setSnackbarVisible(false);
+//           },
+//         }}
+//       >
+//         <Text>Are you sure you want to vote for this nominee?</Text>
+//       </Snackbar>
+//     </View>
+//   );
+// };
 
 export default function Voting() {
   const [campaigns, setCampaigns] = useState([]);
@@ -87,61 +159,35 @@ export default function Voting() {
     fetchData();
   }, []);
 
-  const handleVote = async (campaignId, nomineeId, position, nominee) => {
+  const [voteInfo, setVoteInfo] = useState({
+    campaignId: "",
+    nomineeId: "",
+    position: "",
+    nominee: "",
+  });
+
+  const handleVoteF = async () => {
     const user = await AsyncStorage.getItem("userData");
     const userData = JSON.parse(user);
     const userEmail = userData.email;
 
     const db = firebase.firestore();
-    const campaignRef = db.collection("campaigns").doc(campaignId);
+    const campaignRef = db.collection("campaigns").doc(voteInfo.campaignId);
 
     try {
       const campaignDoc = await campaignRef.get();
       if (campaignDoc.exists) {
         const campaignData = campaignDoc.data();
         const votes = campaignData.votes || {};
-
         if (!votes[userEmail]) {
-          if (typeof window !== "undefined" && window.confirm) {
-            // Check for web platform
-            if (
-              window.confirm(
-                `Are you sure you want to vote for ${nominee} as ${position}?`
-              )
-            ) {
-              votes[userEmail] = nomineeId;
-              await campaignRef.update({ votes });
-              showErrorAlert(
-                `“Thank You” “Your Vote for ${nominee} as ${position} is now recorded”`
-              );
-            }
-          } else {
-            // Mobile platform
-            Alert.alert(
-              "Confirm Vote",
-              `Are you sure you want to vote for ${nominee} as ${position}?`,
-              [
-                {
-                  text: "Cancel",
-                  style: "cancel",
-                },
-                {
-                  text: "Vote",
-                  onPress: async () => {
-                    votes[userEmail] = nomineeId;
-                    await campaignRef.update({ votes });
-                    showErrorAlert(
-                      `“Thank You” “Your Vote for ${nominee} as ${position} is now recorded”`
-                    );
-                  },
-                },
-              ],
-              { cancelable: true }
-            );
-          }
+          votes[userEmail] = voteInfo.nomineeId;
+          await campaignRef.update({ votes });
+          showErrorAlert(
+            `"Thank You" "Your Vote for ${voteInfo.nominee} as ${voteInfo.position} is now recorded"`
+          );
         } else {
           showErrorAlert(
-            `“Too Late to change your mind” “You already voted for ${nominee} as ${position}”`
+            `"Too Late to change your mind" "You already voted for ${voteInfo.nominee} as ${voteInfo.position}"`
           );
         }
       }
@@ -151,15 +197,40 @@ export default function Voting() {
   };
 
   const showErrorAlert = (title, message) => {
-    // Alert.alert(title, message);
     alert(title, message);
+  };
+
+  const [snackbarVisible, setSnackbarVisible] = useState();
+
+  const handleVoteWithConfirmation = () => {
+    setSnackbarVisible(true);
+  };
+
+  const handleSnackbarDismiss = () => {
+    setSnackbarVisible(false);
   };
 
   return (
     <View style={styles.container}>
+      <UserDataUpdate />
+      <ScreenHading txt={"All Campaigns"} />
+
+      <View>
+        <Snackbar
+          visible={snackbarVisible}
+          onDismiss={handleSnackbarDismiss}
+          action={{
+            label: "Vote",
+            onPress: () => {
+              handleVoteF();
+              setSnackbarVisible(false);
+            },
+          }}
+        >
+          <Text>Are you sure you want to vote for {voteInfo.nominee}?</Text>
+        </Snackbar>
+      </View>
       <ScrollView>
-        <UserDataUpdate />
-        <ScreenHading txt={"All Campaigns"} />
         <View style={styles.gridContainer}>
           {loading ? (
             <Text>Loading...</Text>
@@ -236,14 +307,17 @@ export default function Voting() {
                           )}
                           <Button
                             mode="contained"
-                            onPress={() =>
-                              handleVote(
-                                campaign.id,
-                                nomineeId,
-                                positionNames[campaign.position],
-                                nomineeNames[nomineeId].name
-                              )
-                            }
+                            onPress={() => {
+                              const newVoteInfo = {
+                                campaignId: campaign.id,
+                                nomineeId: nomineeId,
+                                position: positionNames[campaign.position],
+                                nominee:
+                                  nomineeNames[nomineeId]?.name || "Nominee",
+                              };
+                              setVoteInfo(newVoteInfo);
+                              handleVoteWithConfirmation();
+                            }}
                             disabled={
                               crrDate < campaign.startDate ||
                               crrDate > campaign.endDate

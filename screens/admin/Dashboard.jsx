@@ -5,6 +5,7 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import { ScreenHading } from "../../components";
 import { AdminScreens, colors } from "../../constants";
 import firebase from "../../firebase/config";
+import UserDataUpdate from "../../components/userDataUpdate";
 
 export default function Dashboard() {
   const [totalCampaigns, setTotalCampaigns] = useState(0);
@@ -43,6 +44,7 @@ export default function Dashboard() {
 
   return (
     <ScrollView>
+      <UserDataUpdate />
       <View style={styles.container}>
         <ScreenHading txt={"Dashboard"} />
         <View style={styles.cardContainer}>

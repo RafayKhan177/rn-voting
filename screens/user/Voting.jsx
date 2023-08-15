@@ -5,6 +5,7 @@ import ScreenHading from "../../components/ScreenHading";
 import { colors } from "../../constants";
 import firebase from "../../firebase/config";
 import AsyncStorage from "@react-native-community/async-storage";
+import UserDataUpdate from "../../components/userDataUpdate";
 
 export default function Voting() {
   const [campaigns, setCampaigns] = useState([]);
@@ -157,6 +158,7 @@ export default function Voting() {
   return (
     <View style={styles.container}>
       <ScrollView>
+        <UserDataUpdate />
         <ScreenHading txt={"All Campaigns"} />
         <View style={styles.gridContainer}>
           {loading ? (

@@ -174,6 +174,20 @@ export default function MyAccount() {
           </Text>
         )}
 
+        <Text style={styles.txt}>known Name:</Text>
+        {editMode ? (
+          <TextInput
+            style={styles.input}
+            value={editedData.knownName}
+            onChangeText={(text) => handleInputChange("knownName", text)}
+            editable={isOnline}
+          />
+        ) : (
+          <Text style={styles.txt}>
+            {userData.knownName || storedUserData.knownName}
+          </Text>
+        )}
+
         {editMode ? (
           <Button title="Save" onPress={handleSave} disabled={!isOnline} />
         ) : (
@@ -181,10 +195,6 @@ export default function MyAccount() {
         )}
 
         <Button title="Sign Out" onPress={handleSignOut} />
-        {/* <Button
-          title="deleteUserAcc"
-          onPress={() => deleteUserAcc(userData.email, userData.firstPassword)}
-        /> */}
       </View>
     </View>
   );

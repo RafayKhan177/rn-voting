@@ -37,6 +37,7 @@ export default function Signup({ navigation }) {
           class: data.class,
           email: data.email,
           firstPassword: data.password,
+          knownName: data.knownName,
         });
         showErrorAlert(
           "Account Created successfully & Email verification sent to your email"
@@ -94,7 +95,6 @@ export default function Signup({ navigation }) {
 
         <View style={styles.inputContainer}>
           <View style={styles.textInput}>
-            {/* <Text style={styles.textInputText}>House Color</Text> */}
             <TextInput
               placeholderTextColor={colors.textPrimary}
               placeholder="House Color"
@@ -105,7 +105,6 @@ export default function Signup({ navigation }) {
           </View>
 
           <View style={styles.textInput}>
-            {/* <Text style={styles.textInputText}>Class</Text> */}
             <TextInput
               placeholderTextColor={colors.textPrimary}
               placeholder="Class"
@@ -118,7 +117,15 @@ export default function Signup({ navigation }) {
 
         <View style={styles.inputContainer}>
           <View style={styles.textInput}>
-            {/* <Text style={styles.textInputText}>Email Address</Text> */}
+            <TextInput
+              placeholderTextColor={colors.textPrimary}
+              placeholder="Known Name"
+              style={styles.input}
+              onChangeText={(text) => setValue("knownName", text)}
+            />
+          </View>
+          <View style={styles.textInput}>
+            {errors.class && <Text>{errors.knownName.message}</Text>}
             <TextInput
               placeholderTextColor={colors.textPrimary}
               placeholder="Email Address"
@@ -131,7 +138,6 @@ export default function Signup({ navigation }) {
 
         <View style={styles.inputContainer}>
           <View style={styles.textInput}>
-            {/* <Text style={styles.textInputText}>Password</Text> */}
             <TextInput
               placeholderTextColor={colors.textPrimary}
               placeholder="Password"
@@ -143,7 +149,6 @@ export default function Signup({ navigation }) {
           </View>
 
           <View style={styles.textInput}>
-            {/* <Text style={styles.textInputText}>Confirm Password</Text> */}
             <TextInput
               placeholderTextColor={colors.textPrimary}
               placeholder="Confirm Password"

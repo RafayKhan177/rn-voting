@@ -22,6 +22,45 @@ const UserDetails = ({ route, navigation }) => {
     setIsEditing(true);
   };
 
+  const deleteUserAcc = async (email, pass) => {
+    try {
+      // Initialize Firebase (make sure you've already initialized it elsewhere)
+      // firebase.initializeApp(yourConfig);
+
+      // Sign in the user with the email and password provided.
+      const userCredential = await firebase
+        .auth()
+        .signInWithEmailAndPassword(email, pass);
+
+      // Get the user ID of the signed-in user.
+      const userID = userCredential.user.uid;
+
+      // Get the reference to the users collection.
+      const usersRef = firebase.firestore().collection("users");
+
+      // Query the documents with the provided email.
+      const querySnapshot = await usersRef.where("email", "==", email).get();
+
+      if (querySnapshot.size === 0) {
+        console.log("No matching user documents found.");
+        return;
+      }
+
+      // Delete each matching document.
+      const deletePromises = querySnapshot.docs.map(async (docSnapshot) => {
+        await docSnapshot.ref.delete();
+      });
+      await Promise.all(deletePromises);
+      console.log(`${querySnapshot.size} user documents deleted successfully.`);
+
+      // Delete the current user's Firebase authentication account.
+      await userCredential.user.delete();
+      console.log("User account deleted successfully.");
+    } catch (error) {
+      console.error("Error deleting user:", error);
+    }
+  };
+
   const handleUpdate = async () => {
     try {
       const usersCollection = firebase.firestore().collection("users");
@@ -66,6 +105,10 @@ const UserDetails = ({ route, navigation }) => {
           <Text style={styles.detailValue}>{user.firstPassword}</Text>
         </View>
       </View>
+      <Button
+        title="delete Account"
+        onPress={() => deleteUserAcc(user.email, user.firstPassword)}
+      />
 
       {!isEditing ? (
         <TouchableOpacity onPress={handleEditPress}>

@@ -19,6 +19,20 @@ export default function MyAccount() {
     checkInternetConnection();
   }, []);
 
+  const deleteUserAcc = async (email, pass) => {
+    const user = await firebase.auth().signInWithEmailAndPassword(email, pass);
+    // Get the reference to the users collection.
+    const usersRef = firebase.firestore().collection("users");
+
+    // Delete the user doc from the users collection.
+    await usersRef.doc(email).delete();
+    console.log(user.user.uid);
+    firebase.auth().currentUser?.delete();
+  };
+
+  // Delete the user account.
+  // await firebase.auth().delete(user.user.uid);
+
   const checkInternetConnection = () => {
     const unsubscribe = NetInfo.addEventListener((state) => {
       setIsOnline(state.isConnected);
@@ -167,6 +181,10 @@ export default function MyAccount() {
         )}
 
         <Button title="Sign Out" onPress={handleSignOut} />
+        {/* <Button
+          title="deleteUserAcc"
+          onPress={() => deleteUserAcc(userData.email, userData.firstPassword)}
+        /> */}
       </View>
     </View>
   );

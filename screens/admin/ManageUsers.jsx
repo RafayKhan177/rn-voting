@@ -27,7 +27,7 @@ const ManageUsers = ({ navigation }) => {
     return () => {
       unsubscribe();
     };
-  }, []);
+  }, [firebase]);
 
   const handleUserPress = (user) => {
     navigation.navigate("ManageUsersDetails", { user });

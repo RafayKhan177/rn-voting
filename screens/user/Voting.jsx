@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import {
   Image,
+  Modal,
   ScrollView,
   StyleSheet,
   Text,
@@ -13,78 +14,20 @@ import { colors } from "../../constants";
 import firebase from "../../firebase/config";
 import AsyncStorage from "@react-native-community/async-storage";
 import UserDataUpdate from "../../components/userDataUpdate";
-
-// const HandleVoteModal = ({ campaignId, nomineeId, position, nominee }) => {
-//   const handleVoteF = async () => {
-//     const user = await AsyncStorage.getItem("userData");
-//     const userData = JSON.parse(user);
-//     const userEmail = userData.email;
-
-//     const db = firebase.firestore();
-//     const campaignRef = db.collection("campaigns").doc(campaignId);
-
-//     try {
-//       const campaignDoc = await campaignRef.get();
-//       if (campaignDoc.exists) {
-//         const campaignData = campaignDoc.data();
-//         const votes = campaignData.votes || {};
-//         if (!votes[userEmail]) {
-//           votes[userEmail] = nomineeId;
-//           await campaignRef.update({ votes });
-//           showErrorAlert(
-//             `"Thank You" "Your Vote for ${nominee} as ${position} is now recorded"`
-//           );
-//         } else {
-//           showErrorAlert(
-//             `"Too Late to change your mind" "You already voted for ${nominee} as ${position}"`
-//           );
-//         }
-//       }
-//     } catch (error) {
-//       showErrorAlert("Error recording vote:", error);
-//     }
-//   };
-
-//   const showErrorAlert = (title, message) => {
-//     alert(title, message);
-//   };
-
-//   const [snackbarVisible, setSnackbarVisible] = useState(t);
-
-//   const handleVoteWithConfirmation = () => {
-//     setSnackbarVisible(true);
-//   };
-
-//   const handleSnackbarDismiss = () => {
-//     setSnackbarVisible(false);
-//   };
-
-//   return (
-//     <View style={{ marginTop: 300, backgroundColor: colors.primary }}>
-
-//       <Snackbar
-//         visible={snackbarVisible}
-//         onDismiss={handleSnackbarDismiss}
-//         action={{
-//           label: "Vote",
-//           onPress: () => {
-//             handleVoteF();
-//             setSnackbarVisible(false);
-//           },
-//         }}
-//       >
-//         <Text>Are you sure you want to vote for this nominee?</Text>
-//       </Snackbar>
-//     </View>
-//   );
-// };
+import { useToast } from "react-native-toast-notifications";
 
 export default function Voting() {
+  const [modalVisible, setModalVisible] = useState(false);
   const [campaigns, setCampaigns] = useState([]);
   const [nomineeNames, setNomineeNames] = useState({});
   const [positionNames, setPositionNames] = useState({});
   const [loading, setLoading] = useState(true);
   const crrDate = new Date().toISOString().slice(0, 10).replace(/-/g, "/");
+
+  const toast = useToast();
+  const notify = (message, type) => {
+    toast.show(message, { type: type || "normal" });
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -182,10 +125,12 @@ export default function Voting() {
         if (!votes[userEmail]) {
           votes[userEmail] = voteInfo.nomineeId;
           await campaignRef.update({ votes });
+          toggleModal();
           showErrorAlert(
             `"Thank You" "Your Vote for ${voteInfo.nominee} as ${voteInfo.position} is now recorded"`
           );
         } else {
+          toggleModal();
           showErrorAlert(
             `"Too Late to change your mind" "You already voted for ${voteInfo.nominee} as ${voteInfo.position}"`
           );
@@ -197,40 +142,71 @@ export default function Voting() {
   };
 
   const showErrorAlert = (title, message) => {
-    alert(title, message);
+    // alert(title, message);
+    notify(title, message);
   };
 
-  const [snackbarVisible, setSnackbarVisible] = useState();
-
-  const handleVoteWithConfirmation = () => {
-    setSnackbarVisible(true);
-  };
-
-  const handleSnackbarDismiss = () => {
-    setSnackbarVisible(false);
+  const toggleModal = () => {
+    setModalVisible(!modalVisible);
   };
 
   return (
     <View style={styles.container}>
       <UserDataUpdate />
-      <ScreenHading txt={"All Campaigns"} />
 
-      <View>
-        <Snackbar
-          visible={snackbarVisible}
-          onDismiss={handleSnackbarDismiss}
-          action={{
-            label: "Vote",
-            onPress: () => {
-              handleVoteF();
-              setSnackbarVisible(false);
-            },
-          }}
-        >
-          <Text>Are you sure you want to vote for {voteInfo.nominee}?</Text>
-        </Snackbar>
-      </View>
       <ScrollView>
+        <ScreenHading txt={"All Campaigns"} />
+        <View>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+          >
+            <View
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center",
+                backgroundColor: "rgba(0, 0, 0, 0.5)",
+              }}
+            >
+              <View
+                style={{
+                  backgroundColor: "#333", // Dark background color
+                  padding: 20,
+                  borderRadius: 10,
+                }}
+              >
+                <Text style={{ color: "white", marginBottom: 10 }}>
+                  You voting for {voteInfo.nominee} for {voteInfo.position}
+                </Text>
+                <TouchableOpacity
+                  style={{
+                    backgroundColor: "#007bff", // Blue button color
+                    padding: 10,
+                    borderRadius: 5,
+                    alignItems: "center",
+                    marginBottom: 10,
+                  }}
+                  onPress={handleVoteF}
+                >
+                  <Text style={{ color: "white" }}>Yes</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{
+                    backgroundColor: "#666", // Dark gray button color
+                    padding: 10,
+                    borderRadius: 5,
+                    alignItems: "center",
+                  }}
+                  onPress={() => toggleModal()}
+                >
+                  <Text style={{ color: "white" }}>No</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
+        </View>
         <View style={styles.gridContainer}>
           {loading ? (
             <Text>Loading...</Text>
@@ -316,7 +292,7 @@ export default function Voting() {
                                   nomineeNames[nomineeId]?.name || "Nominee",
                               };
                               setVoteInfo(newVoteInfo);
-                              handleVoteWithConfirmation();
+                              toggleModal();
                             }}
                             disabled={
                               crrDate < campaign.startDate ||

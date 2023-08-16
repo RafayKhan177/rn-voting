@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { Button, Card, Snackbar } from "react-native-paper";
+import { Button, Card } from "react-native-paper";
 import ScreenHading from "../../components/ScreenHading";
 import { colors } from "../../constants";
 import firebase from "../../firebase/config";
@@ -26,7 +26,11 @@ export default function Voting() {
 
   const toast = useToast();
   const notify = (message, type) => {
-    toast.show(message, { type: type || "normal" });
+    toast.show(message, {
+      type: type || "normal",
+      placement: "top",
+      duration: 4000,
+    });
   };
 
   useEffect(() => {
@@ -59,8 +63,8 @@ export default function Voting() {
             return {
               id: nomineeId,
               name: nomineeData.firstName + " " + nomineeData.lastName,
-              picture: nomineeData.picture, // Assuming 'picture' is the field for nominee picture URL
-              bio: nomineeData.biography, // Assuming 'bio' is the field for nominee bio
+              picture: nomineeData.picture,
+              bio: nomineeData.biography,
             };
           }
         });

@@ -22,20 +22,19 @@ export const AdminScreens = [
     screen: "ManageCampaigns",
     icon: "list",
   },
-  { name: "Account", screen: "MyAccount", icon: "address-card" },
-  { name: "Vote Result", screen: "Result", icon: "address-card" },
   { name: "Voting", screen: "Voting", icon: "check-square-o" },
+  { name: "Vote Result", screen: "Result", icon: "address-card" },
   { name: "Users", screen: "ManageUsers", icon: "check-square-o" },
+  { name: "Account", screen: "MyAccount", icon: "address-card" },
 ];
 
 export const UserScreens = [
   { name: "Voting", screen: "Voting", icon: "check-square-o" },
+  { name: "Result", screen: "Result", icon: "address-card" },
   { name: "My Account", screen: "MyAccount", icon: "address-card" },
-  { name: "Campaigns Result", screen: "Result", icon: "address-card" },
 ];
 
 export const AuthScreens = [
   { name: "Sign In", screen: "Signup" },
   { name: "Sign Up", screen: "Signin" },
-  { name: "Verify", screen: "Verify" },
 ];

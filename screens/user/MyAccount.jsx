@@ -80,6 +80,7 @@ export default function MyAccount() {
       await userCredential.user.delete();
       notify("Account deleted successfully");
       handleSignOut();
+      toggleModal();
     } catch (error) {
       notify("Something went wrong");
     }

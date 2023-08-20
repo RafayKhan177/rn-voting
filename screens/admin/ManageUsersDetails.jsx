@@ -55,6 +55,7 @@ const UserDetails = ({ route, navigation }) => {
       notify(`${querySnapshot.size} user documents deleted successfully.`);
       await userCredential.user.delete();
       notify("User account deleted successfully.");
+      toggleModal();
       navigation.push("ManageUsers");
     } catch (error) {
       notify("Error deleting user");

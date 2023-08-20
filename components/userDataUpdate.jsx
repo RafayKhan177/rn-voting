@@ -24,6 +24,9 @@ export default function UserDataUpdate() {
               JSON.stringify(userDataFromFirestore)
             );
             console.log("User data updated from Firestore");
+          } else {
+            await AsyncStorage.removeItem("userData");
+            console.log("User data removed from AsyncStorage");
           }
         }
       }

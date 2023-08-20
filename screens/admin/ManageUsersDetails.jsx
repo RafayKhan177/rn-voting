@@ -18,6 +18,11 @@ const UserDetails = ({ route, navigation }) => {
 
   const [isEditing, setIsEditing] = useState(false);
   const [editedUser, setEditedUser] = useState({ ...user });
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const toggleModal = () => {
+    setModalVisible(!modalVisible);
+  };
 
   const handleEditPress = () => {
     setIsEditing(true);
@@ -34,39 +39,22 @@ const UserDetails = ({ route, navigation }) => {
 
   const deleteUserAcc = async (email, pass) => {
     try {
-      // Initialize Firebase (make sure you've already initialized it elsewhere)
-      // firebase.initializeApp(yourConfig);
-
-      // Sign in the user with the email and password provided.
       const userCredential = await firebase
         .auth()
         .signInWithEmailAndPassword(email, pass);
-
-      // Get the user ID of the signed-in user.
-      const userID = userCredential.user.uid;
-
-      // Get the reference to the users collection.
       const usersRef = firebase.firestore().collection("users");
-
-      // Query the documents with the provided email.
       const querySnapshot = await usersRef.where("email", "==", email).get();
-
       if (querySnapshot.size === 0) {
         notify("No matching user documents found.");
         return;
       }
-
-      // Delete each matching document.
       const deletePromises = querySnapshot.docs.map(async (docSnapshot) => {
         await docSnapshot.ref.delete();
       });
       await Promise.all(deletePromises);
       notify(`${querySnapshot.size} user documents deleted successfully.`);
-
-      // Delete the current user's Firebase authentication account.
       await userCredential.user.delete();
       notify("User account deleted successfully.");
-      firebase.auth().signOut();
       navigation.push("ManageUsers");
     } catch (error) {
       notify("Error deleting user");
@@ -86,6 +74,51 @@ const UserDetails = ({ route, navigation }) => {
 
   return (
     <View style={styles.container}>
+      <Modal animationType="slide" transparent={true} visible={modalVisible}>
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+          }}
+        >
+          <View
+            style={{
+              backgroundColor: "#333", // Dark background color
+              padding: 20,
+              borderRadius: 10,
+            }}
+          >
+            <Text style={{ color: "white", marginBottom: 10 }}>
+              Are you sure you want to permanently delete your account?
+            </Text>
+            <TouchableOpacity
+              style={{
+                backgroundColor: "#007bff", // Blue button color
+                padding: 10,
+                borderRadius: 5,
+                alignItems: "center",
+                marginBottom: 10,
+              }}
+              onPress={() => deleteUserAcc(user.email, user.firstPassword)}
+            >
+              <Text style={{ color: "white" }}>Yes</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{
+                backgroundColor: "#666", // Dark gray button color
+                padding: 10,
+                borderRadius: 5,
+                alignItems: "center",
+              }}
+              onPress={toggleModal}
+            >
+              <Text style={{ color: "white" }}>No</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
       <ScreenHeading txt="User Details" />
       <View style={styles.detailsContainer}>
         <View style={styles.detailItem}>
@@ -117,10 +150,7 @@ const UserDetails = ({ route, navigation }) => {
           <Text style={styles.detailValue}>{user.firstPassword}</Text>
         </View>
       </View>
-      <Button
-        title="delete Account"
-        onPress={() => deleteUserAcc(user.email, user.firstPassword)}
-      />
+      <Button title="delete Account" onPress={toggleModal} />
 
       <TouchableOpacity
         onPress={() =>

@@ -1,7 +1,15 @@
 import NetInfo from "@react-native-community/netinfo";
 import * as Updates from "expo-updates";
 import { useEffect, useState } from "react";
-import { Button, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  Button,
+  Modal,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import ScreenHading from "../../components/ScreenHading";
 import { colors } from "../../constants";
 import firebase from "../../firebase/config";
@@ -14,6 +22,11 @@ export default function MyAccount() {
   const [editedData, setEditedData] = useState({});
   const [isOnline, setIsOnline] = useState(true);
   const [storedUserData, setStoredUserData] = useState({});
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const toggleModal = () => {
+    setModalVisible(!modalVisible);
+  };
 
   const toast = useToast();
   const notify = (message, type) => {
@@ -151,6 +164,51 @@ export default function MyAccount() {
 
   return (
     <View style={styles.container}>
+      <Modal animationType="slide" transparent={true} visible={modalVisible}>
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+          }}
+        >
+          <View
+            style={{
+              backgroundColor: "#333", // Dark background color
+              padding: 20,
+              borderRadius: 10,
+            }}
+          >
+            <Text style={{ color: "white", marginBottom: 10 }}>
+              Are you sure you want to permanently delete your account?
+            </Text>
+            <TouchableOpacity
+              style={{
+                backgroundColor: "#007bff", // Blue button color
+                padding: 10,
+                borderRadius: 5,
+                alignItems: "center",
+                marginBottom: 10,
+              }}
+              onPress={deleteUserAcc}
+            >
+              <Text style={{ color: "white" }}>Yes</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{
+                backgroundColor: "#666", // Dark gray button color
+                padding: 10,
+                borderRadius: 5,
+                alignItems: "center",
+              }}
+              onPress={() => toggleModal()}
+            >
+              <Text style={{ color: "white" }}>No</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
       <ScreenHading
         txt={`${userData.email || storedUserData.email}`}
         size={12}
@@ -235,7 +293,7 @@ export default function MyAccount() {
         <Button title="Sign Out" onPress={handleSignOut} />
         <Button title="Reset Password" onPress={resetPassword} />
       </View>
-      <Button title="Delete My Account Permanently" onPress={deleteUserAcc} />
+      <Button title="Delete My Account Permanently" onPress={toggleModal} />
     </View>
   );
 }

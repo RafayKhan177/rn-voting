@@ -29,6 +29,21 @@ export default function MyAccount() {
     checkInternetConnection();
   }, []);
 
+  const resetPassword = async () => {
+    try {
+      const email = userData.email || storedUserData.email;
+      if (!email) {
+        notify("Something went wrong.");
+        return;
+      }
+
+      await firebase.auth().sendPasswordResetEmail(email);
+      notify("Password reset email sent. Check your inbox.");
+    } catch (error) {
+      notify("Error sending password reset email.");
+    }
+  };
+
   const deleteUserAcc = async () => {
     try {
       const data = await AsyncStorage.getItem("userData");
@@ -218,6 +233,7 @@ export default function MyAccount() {
         )}
 
         <Button title="Sign Out" onPress={handleSignOut} />
+        <Button title="Reset Password" onPress={resetPassword} />
       </View>
       <Button title="Delete My Account Permanently" onPress={deleteUserAcc} />
     </View>

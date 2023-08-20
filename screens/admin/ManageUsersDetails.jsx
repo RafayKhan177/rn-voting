@@ -122,6 +122,15 @@ const UserDetails = ({ route, navigation }) => {
         onPress={() => deleteUserAcc(user.email, user.firstPassword)}
       />
 
+      <TouchableOpacity
+        onPress={() =>
+          navigation.push("ResetPassword", { passEmail: user.email })
+        }
+        style={styles.cancelButton}
+      >
+        <Text style={styles.buttonText}>Send Reset Password Link</Text>
+      </TouchableOpacity>
+
       {!isEditing ? (
         <TouchableOpacity onPress={handleEditPress}>
           <View style={styles.editButton}>

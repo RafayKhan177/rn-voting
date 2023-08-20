@@ -9,7 +9,7 @@ import {
   ManagePositionOffice,
   ManageUsers,
 } from "../screens/admin";
-import { Signin, Signup } from "../screens/auth";
+import { Signin, Signup,ResetPassword } from "../screens/auth";
 import { MyAccount, Result, Voting } from "../screens/user";
 import ManageUsersDetails from "../screens/admin/ManageUsersDetails";
 
@@ -54,6 +54,7 @@ const AdminStack = () => {
         initialRouteName="Dashboard"
         screenOptions={adminOptions}
       >
+        <Stack.Screen name="ResetPassword" component={ResetPassword} />
         <Stack.Screen name="Voting" component={Voting} />
         <Stack.Screen
           name="ManageUsersDetails"
@@ -86,6 +87,7 @@ const AuthStack = () => {
       >
         <Stack.Screen name="Signup" component={Signup} />
         <Stack.Screen name="Signin" component={Signin} />
+        <Stack.Screen name="ResetPassword" component={ResetPassword} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -59,8 +59,9 @@ export default function Signin({ navigation }) {
           if (userData) {
             if (signInResult.user.emailVerified) {
               // Check if email is verified
-              setLoading(false);
+              await saveUserPass(trimmedEmail, password);
               await AsyncStorage.setItem("userData", JSON.stringify(userData));
+              setLoading(false);
               Updates.reloadAsync();
             } else {
               setLoading(false);
@@ -79,6 +80,28 @@ export default function Signin({ navigation }) {
       }
     } else {
       notify("Incomplete fields", "Please fill in all the fields.");
+    }
+  };
+
+  const saveUserPass = async (email, pass) => {
+    try {
+      const userRef = firebase
+        .firestore()
+        .collection("users")
+        .where("email", "==", email);
+      const snapshot = await userRef.get();
+
+      if (!snapshot.empty) {
+        snapshot.forEach((doc) => {
+          const docId = doc.id;
+          const docRef = firebase.firestore().collection("users").doc(docId);
+          docRef.update({
+            firstPassword: password,
+          });
+        });
+      }
+    } catch (error) {
+      console.error("Error marking user as working:", error);
     }
   };
 
@@ -142,6 +165,9 @@ export default function Signin({ navigation }) {
                 </Text>
               </TouchableOpacity>
             </View>
+            <TouchableOpacity onPress={() => navigation.push("ResetPassword")}>
+              <Text style={styles.linkText}>Forget Password?</Text>
+            </TouchableOpacity>
           </View>
           {/* )} */}
           {verifybtn ? (

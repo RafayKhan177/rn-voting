@@ -37,4 +37,5 @@ export const UserScreens = [
 export const AuthScreens = [
   { name: "Sign In", screen: "Signup" },
   { name: "Sign Up", screen: "Signin" },
+  { name: "Reset Password", screen: "ResetPassword" },
 ];

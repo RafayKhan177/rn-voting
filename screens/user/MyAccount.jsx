@@ -6,6 +6,7 @@ import ScreenHading from "../../components/ScreenHading";
 import { colors } from "../../constants";
 import firebase from "../../firebase/config";
 import AsyncStorage from "@react-native-community/async-storage";
+import { useToast } from "react-native-toast-notifications";
 
 export default function MyAccount() {
   const [userData, setUserData] = useState({});
@@ -14,24 +15,47 @@ export default function MyAccount() {
   const [isOnline, setIsOnline] = useState(true);
   const [storedUserData, setStoredUserData] = useState({});
 
+  const toast = useToast();
+  const notify = (message, type) => {
+    toast.show(message, {
+      type: type || "normal",
+      placement: "top",
+      duration: 4000,
+    });
+  };
+
   useEffect(() => {
     getUserData();
     checkInternetConnection();
   }, []);
 
-  const deleteUserAcc = async (email, pass) => {
-    const user = await firebase.auth().signInWithEmailAndPassword(email, pass);
-    // Get the reference to the users collection.
-    const usersRef = firebase.firestore().collection("users");
-
-    // Delete the user doc from the users collection.
-    await usersRef.doc(email).delete();
-    console.log(user.user.uid);
-    firebase.auth().currentUser?.delete();
+  const deleteUserAcc = async () => {
+    try {
+      const data = await AsyncStorage.getItem("userData");
+      const userData = JSON.parse(data);
+      const userCredential = await firebase
+        .auth()
+        .signInWithEmailAndPassword(userData.email, userData.firstPassword);
+      const usersRef = firebase.firestore().collection("users");
+      const querySnapshot = await usersRef
+        .where("email", "==", userData.email)
+        .get();
+      if (querySnapshot.size === 0) {
+        notify("No matching user documents found.");
+        return;
+      }
+      const deletePromises = querySnapshot.docs.map(async (docSnapshot) => {
+        await docSnapshot.ref.delete();
+      });
+      await Promise.all(deletePromises);
+      notify(`${querySnapshot.size} All details deleted successfully.`);
+      await userCredential.user.delete();
+      notify("Account deleted successfully");
+      firebase.auth().signOut();
+    } catch (error) {
+      notify("Something went wrong");
+    }
   };
-
-  // Delete the user account.
-  // await firebase.auth().delete(user.user.uid);
 
   const checkInternetConnection = () => {
     const unsubscribe = NetInfo.addEventListener((state) => {
@@ -62,7 +86,7 @@ export default function MyAccount() {
         }
       }
     } catch (error) {
-      console.error("Error fetching user data: ", error);
+      notify("Error fetching user data");
     }
   };
 
@@ -96,18 +120,18 @@ export default function MyAccount() {
       await AsyncStorage.setItem("userData", JSON.stringify(editedData));
       setUserData(editedData);
       setEditMode(false);
+      handleSignOut();
     } catch (error) {
-      console.error("Error updating user data: ", error);
+      notify("Error updating user data: ", error);
     }
   };
 
   const handleSignOut = async () => {
     try {
       await AsyncStorage.removeItem("userData");
-
       Updates.reloadAsync();
     } catch (error) {
-      console.error("Error signing out: ", error);
+      notify("Error signing out: ", error);
     }
   };
 
@@ -196,6 +220,7 @@ export default function MyAccount() {
 
         <Button title="Sign Out" onPress={handleSignOut} />
       </View>
+      <Button title="Delete My Account Permanently" onPress={deleteUserAcc} />
     </View>
   );
 }

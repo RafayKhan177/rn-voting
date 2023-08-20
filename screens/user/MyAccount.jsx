@@ -19,7 +19,7 @@ export default function MyAccount() {
   const notify = (message, type) => {
     toast.show(message, {
       type: type || "normal",
-      placement: "top",
+      placement: "bottom",
       duration: 4000,
     });
   };
@@ -51,7 +51,7 @@ export default function MyAccount() {
       notify(`${querySnapshot.size} All details deleted successfully.`);
       await userCredential.user.delete();
       notify("Account deleted successfully");
-      firebase.auth().signOut();
+      handleSignOut();
     } catch (error) {
       notify("Something went wrong");
     }
@@ -120,7 +120,6 @@ export default function MyAccount() {
       await AsyncStorage.setItem("userData", JSON.stringify(editedData));
       setUserData(editedData);
       setEditMode(false);
-      handleSignOut();
     } catch (error) {
       notify("Error updating user data: ", error);
     }

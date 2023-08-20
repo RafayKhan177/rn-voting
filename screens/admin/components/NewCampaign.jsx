@@ -16,6 +16,7 @@ import { colors } from "../../../constants";
 import firebase from "../../../firebase/config";
 import ScreenHeading from "../../../components/ScreenHading";
 import { format } from "date-fns";
+import { useToast } from "react-native-toast-notifications";
 
 export default function NewCampaign() {
   const crrDate = new Date().toISOString().slice(0, 10).replace(/-/g, "/");
@@ -32,6 +33,15 @@ export default function NewCampaign() {
   const [showStartDatePicker, setShowStartDatePicker] = useState(false);
   const [showEndDatePicker, setShowEndDatePicker] = useState(false);
 
+  const toast = useToast();
+  const notify = (message, type) => {
+    toast.show(message, {
+      type: type || "normal",
+      placement: "bottom",
+      duration: 4000,
+    });
+  };
+
   useEffect(() => {
     const fetchCollections = async () => {
       const db = firebase.firestore();
@@ -46,7 +56,7 @@ export default function NewCampaign() {
         }));
         setNominees(nomineesData);
       } catch (error) {
-        console.error("Error fetching nominees: ", error);
+        notify("Error fetching nominees");
       }
 
       try {
@@ -57,7 +67,7 @@ export default function NewCampaign() {
         }));
         setPositions(positionsData);
       } catch (error) {
-        console.error("Error fetching positions: ", error);
+        notify("Error fetching positions");
       }
     };
 
@@ -113,7 +123,7 @@ export default function NewCampaign() {
       setEndDate(null);
       Alert.alert("Campaign added successfully!");
     } catch (error) {
-      console.error("Error adding campaign: ", error);
+      notify("Error adding campaign");
       Alert.alert(
         "An error occurred while adding the campaign. Please try again."
       );
@@ -175,7 +185,7 @@ export default function NewCampaign() {
 
       Alert.alert("Campaign added successfully!");
     } catch (error) {
-      console.error("Error adding campaign: ", error);
+      notify("Error adding campaign");
       Alert.alert(
         "An error occurred while adding the campaign. Please try again."
       );

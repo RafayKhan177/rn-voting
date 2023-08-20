@@ -12,6 +12,7 @@ import { Card } from "react-native-paper";
 import { ScreenHading } from "../../components";
 import { colors } from "../../constants";
 import firebase from "../../firebase/config";
+import { useToast } from "react-native-toast-notifications";
 
 export default function ManageNominee() {
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -23,6 +24,15 @@ export default function ManageNominee() {
     picture: "",
   });
   const [nominees, setNominees] = useState([]);
+
+  const toast = useToast();
+  const notify = (message, type) => {
+    toast.show(message, {
+      type: type || "normal",
+      placement: "bottom",
+      duration: 4000,
+    });
+  };
 
   const db = firebase.firestore();
 
@@ -89,7 +99,7 @@ export default function ManageNominee() {
       await db.collection("nominees").add(nomineeDataWithPicture);
       handleDialogClose();
     } catch (error) {
-      console.error("Error saving nominee: ", error);
+      notify("Error saving nominee");
     }
   }
 
@@ -128,7 +138,7 @@ export default function ManageNominee() {
         handleDialogClose();
       }
     } catch (error) {
-      console.error("Error updating nominee: ", error);
+      notify("Error updating nominee");
     }
   };
 
@@ -141,7 +151,7 @@ export default function ManageNominee() {
     try {
       await db.collection("nominees").doc(nominee.id).delete();
     } catch (error) {
-      console.error("Error deleting nominee: ", error);
+      notify("Error deleting nominee");
     }
   };
 
@@ -151,7 +161,7 @@ export default function ManageNominee() {
         await ImagePicker.requestMediaLibraryPermissionsAsync();
 
       if (permissionResult.granted === false) {
-        alert("Permission to access the camera roll is required!");
+        notify("Permission to access the camera roll is required!");
         return;
       }
 
@@ -170,7 +180,7 @@ export default function ManageNominee() {
         }));
       }
     } catch (error) {
-      console.error("Error picking image: ", error);
+      notify("Error picking image");
     }
   };
 

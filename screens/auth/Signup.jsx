@@ -1,6 +1,5 @@
 import { useForm } from "react-hook-form";
 import {
-  Alert,
   Image,
   ScrollView,
   StyleSheet,
@@ -11,8 +10,18 @@ import {
 } from "react-native";
 import { colors } from "../../constants";
 import firebase from "../../firebase/config";
+import { useToast } from "react-native-toast-notifications";
 
 export default function Signup({ navigation }) {
+  const toast = useToast();
+  const notify = (message, type) => {
+    toast.show(message, {
+      type: type || "normal",
+      placement: "bottom",
+      duration: 4000,
+    });
+  };
+
   const {
     handleSubmit,
     formState: { errors },
@@ -39,25 +48,16 @@ export default function Signup({ navigation }) {
           firstPassword: data.password,
           knownName: data.knownName,
         });
-        showErrorAlert(
+        notify(
           "Account Created successfully & Email verification sent to your email"
         );
         navigation.push("Signin");
       } catch (error) {
-        showErrorAlert("Error creating user:", error.message);
+        notify(`Error creating Account: ${error.message}`);
       }
     } else {
-      showErrorAlert(
-        "Don't leave any field empty and make sure passwords match."
-      );
-      showErrorAlert(
-        "Don't leave any field empty and make sure passwords match."
-      );
+      notify("Don't leave any field empty and make sure passwords match.");
     }
-  };
-
-  const showErrorAlert = (title, message) => {
-    alert(title, " ", message);
   };
 
   return (

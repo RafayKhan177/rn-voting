@@ -6,7 +6,6 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-  Alert,
   ActivityIndicator,
   Image,
   ScrollView,
@@ -14,7 +13,7 @@ import {
 import { colors } from "../../constants";
 import firebase from "../../firebase/config";
 import AsyncStorage from "@react-native-community/async-storage";
-// import VerifyRD from "./VerifyRD";
+import { useToast } from "react-native-toast-notifications";
 
 export default function Signin({ navigation }) {
   const [email, setEmail] = useState("");
@@ -23,14 +22,23 @@ export default function Signin({ navigation }) {
   const [loading, setLoading] = useState(false);
   const [verifybtn, setVerifybtn] = useState(false);
 
-  const sendVerificationEmail = async (email) => {
+  const toast = useToast();
+  const notify = (message, type) => {
+    toast.show(message, {
+      type: type || "normal",
+      placement: "bottom",
+      duration: 4000,
+    });
+  };
+
+  const sendVerificationEmail = async () => {
     try {
       user.sendEmailVerification();
-      showErrorAlert("Verification email sent successfully");
+      notify("Verification email sent successfully");
       setVerifybtn(false);
       return true;
     } catch (error) {
-      showErrorAlert("Error sending verification email:", error.message);
+      notify(`Error sending verification email: ${error.message}`);
       return false;
     }
   };
@@ -56,22 +64,21 @@ export default function Signin({ navigation }) {
               Updates.reloadAsync();
             } else {
               setLoading(false);
-              showErrorAlert(
-                "Email isn't verified",
-                "Please verify your email before logging in!"
+              notify(
+                "Email isn't verified, Please verify your email before logging in!"
               );
               setVerifybtn(true);
             }
           } else {
-            showErrorAlert("User not found", "User not found. Please sign up.");
+            notify("User not found", "User not found. Please sign up.");
           }
         }
       } catch (error) {
         setLoading(false);
-        showErrorAlert(error.message);
+        notify(error.message);
       }
     } else {
-      showErrorAlert("Incomplete fields", "Please fill in all the fields.");
+      notify("Incomplete fields", "Please fill in all the fields.");
     }
   };
 
@@ -87,34 +94,12 @@ export default function Signin({ navigation }) {
     return null;
   };
 
-  const showErrorAlert = (title, message) => {
-    alert(title, message);
-    // showErrorAlert(title, message);
-  };
-
   return (
     <View style={{ flex: 1, backgroundColor: colors.backgroundPrimary }}>
       <ScrollView>
         <View style={styles.container}>
-          {/* <TouchableOpacity
-            style={styles.verifyBtn}
-            onPress={() => setVerifybtn(!verifybtn)}
-          >
-            <Text
-              style={{
-                fontSize: 20,
-                fontWeight: "900",
-                color: colors.backgroundPrimary,
-                textAlign: "center",
-              }}
-            >
-              Go to {verifybtn ? "Sign In" : "Verification"}
-            </Text>
-          </TouchableOpacity> */}
           {loading && <ActivityIndicator size="large" color={colors.primary} />}
-          {/* {verifybtn ? (
-            <VerifyRD navigation={navigation} />
-          ) : ( */}
+
           <View style={styles.inputContainer}>
             <Image
               source={require("../../assets/icon.png")}

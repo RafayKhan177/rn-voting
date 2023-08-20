@@ -11,6 +11,7 @@ import {
 import firebase from "../../firebase/config";
 import { colors } from "../../constants";
 import ScreenHeading from "../../components/ScreenHading";
+import { useToast } from "react-native-toast-notifications";
 
 const UserDetails = ({ route, navigation }) => {
   const { user } = route.params;
@@ -20,6 +21,15 @@ const UserDetails = ({ route, navigation }) => {
 
   const handleEditPress = () => {
     setIsEditing(true);
+  };
+
+  const toast = useToast();
+  const notify = (message, type) => {
+    toast.show(message, {
+      type: type || "normal",
+      placement: "bottom",
+      duration: 4000,
+    });
   };
 
   const deleteUserAcc = async (email, pass) => {
@@ -42,7 +52,7 @@ const UserDetails = ({ route, navigation }) => {
       const querySnapshot = await usersRef.where("email", "==", email).get();
 
       if (querySnapshot.size === 0) {
-        console.log("No matching user documents found.");
+        notify("No matching user documents found.");
         return;
       }
 
@@ -51,15 +61,15 @@ const UserDetails = ({ route, navigation }) => {
         await docSnapshot.ref.delete();
       });
       await Promise.all(deletePromises);
-      console.log(`${querySnapshot.size} user documents deleted successfully.`);
+      notify(`${querySnapshot.size} user documents deleted successfully.`);
 
       // Delete the current user's Firebase authentication account.
       await userCredential.user.delete();
-      console.log("User account deleted successfully.");
+      notify("User account deleted successfully.");
       firebase.auth().signOut();
       navigation.push("ManageUsers");
     } catch (error) {
-      console.error("Error deleting user:", error);
+      notify("Error deleting user");
     }
   };
 
@@ -70,7 +80,7 @@ const UserDetails = ({ route, navigation }) => {
       setIsEditing(false);
       navigation.push("ManageUsers");
     } catch (error) {
-      console.error("Error updating user data:", error);
+      notify("Error updating user data");
     }
   };
 

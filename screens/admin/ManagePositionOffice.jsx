@@ -11,6 +11,7 @@ import {
 import ScreenHading from "../../components/ScreenHading";
 import { colors } from "../../constants";
 import firebase from "../../firebase/config";
+import { useToast } from "react-native-toast-notifications";
 
 export default function ManagePositionOffice() {
   const [positions, setPositions] = useState([]);
@@ -19,6 +20,15 @@ export default function ManagePositionOffice() {
     description: "",
   });
   const [editPosition, setEditPosition] = useState(null);
+
+  const toast = useToast();
+  const notify = (message, type) => {
+    toast.show(message, {
+      type: type || "normal",
+      placement: "bottom",
+      duration: 4000,
+    });
+  };
 
   useEffect(() => {
     const db = firebase.firestore();
@@ -44,7 +54,7 @@ export default function ManagePositionOffice() {
 
   const addPosition = async () => {
     if (!newPosition.name || !newPosition.description) {
-      console.warn("Both name and description must be filled.");
+      notify("Both name and description must be filled.");
       return;
     }
 
@@ -57,7 +67,7 @@ export default function ManagePositionOffice() {
       setPositions((prevPositions) => [...prevPositions, newPositionData]);
       setNewPosition({ name: "", description: "" });
     } catch (error) {
-      console.error("Error adding position: ", error);
+      notify("Error adding position");
     }
   };
 
@@ -77,7 +87,7 @@ export default function ManagePositionOffice() {
       setEditPosition(null);
       setNewPosition({ name: "", description: "" });
     } catch (error) {
-      console.error("Error updating position: ", error);
+      notify("Error updating position");
     }
   };
 
@@ -87,7 +97,7 @@ export default function ManagePositionOffice() {
     try {
       await positionRef.delete();
     } catch (error) {
-      console.error("Error deleting position: ", error);
+      notify("Error deleting position");
     }
   };
 

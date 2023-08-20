@@ -14,6 +14,7 @@ import {
 import ScreenHading from "../../../components/ScreenHading";
 import { colors } from "../../../constants";
 import firebase from "../../../firebase/config";
+import { useToast } from "react-native-toast-notifications";
 
 export default function AllCampaign() {
   const [campaigns, setCampaigns] = useState([]);
@@ -23,6 +24,15 @@ export default function AllCampaign() {
   const [positionNames, setPositionNames] = useState({});
   const [editCampaign, setEditCampaign] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const toast = useToast();
+  const notify = (message, type) => {
+    toast.show(message, {
+      type: type || "normal",
+      placement: "bottom",
+      duration: 4000,
+    });
+  };
 
   const db = firebase.firestore();
 
@@ -39,7 +49,7 @@ export default function AllCampaign() {
         }));
         setNominees(nomineesData);
       } catch (error) {
-        showErrorAlert("Error fetching nominees: ", error);
+        notify("Error while fetching nominees");
       }
 
       try {
@@ -50,7 +60,7 @@ export default function AllCampaign() {
         }));
         setPositions(positionsData);
       } catch (error) {
-        showErrorAlert("Error fetching positions: ", error);
+        notify("Error while fetching positions");
       }
     };
 
@@ -81,7 +91,7 @@ export default function AllCampaign() {
         return positionSnap.data().name;
       }
     } catch (error) {
-      showErrorAlert("Error fetching position name:", error);
+      notify("something went wrong");
     }
     return "";
   };
@@ -117,7 +127,7 @@ export default function AllCampaign() {
         }
       }
     } catch (error) {
-      showErrorAlert("Error fetching nominee names:", error);
+      notify("something went wrong");
     }
 
     setNomineeNames(namesData);
@@ -144,12 +154,12 @@ export default function AllCampaign() {
     const dateFormatRegex = /^\d{4}\/\d{2}\/\d{2}$/;
 
     if (!startDate.match(dateFormatRegex) || !endDate.match(dateFormatRegex)) {
-      showErrorAlert("Invalid date format. Please use yyyy/mm/dd format.");
+      notify("Invalid date format. Please use yyyy/mm/dd format.");
       return;
     }
 
     if (!startDate || !endDate) {
-      showErrorAlert("Start date and end date cannot be empty.");
+      notify("Start date and end date cannot be empty.");
       return;
     }
 
@@ -159,7 +169,7 @@ export default function AllCampaign() {
       await campaignRef.update(editCampaign);
       setIsModalOpen(false);
     } catch (error) {
-      showErrorAlert("Something Went Wrong");
+      notify("Something Went Wrong");
     }
   };
 
@@ -169,7 +179,7 @@ export default function AllCampaign() {
     try {
       await campaignRef.delete();
     } catch (error) {
-      showErrorAlert("Error deleting campaign: ", error);
+      notify("Error deleting campaign");
     }
   };
 
@@ -181,10 +191,6 @@ export default function AllCampaign() {
   const handleCloseEditModal = () => {
     setEditCampaign(null);
     setIsModalOpen(false);
-  };
-
-  const showErrorAlert = (title, message) => {
-    alert(title, message);
   };
 
   return (

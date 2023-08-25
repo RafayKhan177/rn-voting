@@ -42,23 +42,24 @@ const UserDetails = ({ route, navigation }) => {
       const userCredential = await firebase
         .auth()
         .signInWithEmailAndPassword(email, pass);
+      console.log(userCredential);
       const usersRef = firebase.firestore().collection("users");
       const querySnapshot = await usersRef.where("email", "==", email).get();
       if (querySnapshot.size === 0) {
-        notify("No matching user documents found.");
+        console.log("No matching user documents found.");
         return;
       }
       const deletePromises = querySnapshot.docs.map(async (docSnapshot) => {
         await docSnapshot.ref.delete();
       });
       await Promise.all(deletePromises);
-      notify(`${querySnapshot.size} user documents deleted successfully.`);
+      console.log(`${querySnapshot.size} user documents deleted successfully.`);
       await userCredential.user.delete();
-      notify("User account deleted successfully.");
+      console.log("User account deleted successfully.");
       toggleModal();
       navigation.push("ManageUsers");
     } catch (error) {
-      notify("Error deleting user");
+      console.log("Error deleting user", error);
     }
   };
 

@@ -126,17 +126,18 @@ export default function Voting() {
       if (campaignDoc.exists) {
         const campaignData = campaignDoc.data();
         const votes = campaignData.votes || {};
+        const id = votes[userEmail];
         if (!votes[userEmail]) {
           votes[userEmail] = voteInfo.nomineeId;
           await campaignRef.update({ votes });
           toggleModal();
           showErrorAlert(
-            `"Thank You" "Your Vote for ${voteInfo.nominee} as ${voteInfo.position} is now recorded"`
+            `"Thank You" "Your Vote for  nominee as position is now recorded"`
           );
         } else {
           toggleModal();
           showErrorAlert(
-            `"Too Late to change your mind" "You already voted for ${voteInfo.nominee} as ${voteInfo.position}"`
+            `"Too Late to change your mind" "You already voted for ${nomineeNames[id]?.name} as ${voteInfo.position}"`
           );
         }
       }

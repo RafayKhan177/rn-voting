@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
 import { Button, Card } from "react-native-paper";
 import ScreenHading from "../../components/ScreenHading";
 import { colors } from "../../constants";
@@ -84,7 +84,7 @@ export default function Voting() {
     fetchData();
   }, []);
 
-  const getNomineeWithMostVotes = async (campaign) => {
+  const getNomineesWithMostVotes = async (campaign) => {
     const db = firebase.firestore();
     const votes = campaign.votes || {};
     const voteCounts = {};
@@ -94,41 +94,34 @@ export default function Voting() {
     });
 
     if (Object.keys(voteCounts).length === 0) {
-      return null;
+      return [];
     }
 
-    const nomineeIds = Object.keys(voteCounts);
-    const nomineeWithMostVotes = nomineeIds.reduce((a, b) =>
-      voteCounts[a] > voteCounts[b] ? a : b
+    const highestVoteCount = Math.max(...Object.values(voteCounts));
+    const nomineesWithMostVotes = Object.keys(voteCounts).filter(
+      (nomineeId) => voteCounts[nomineeId] === highestVoteCount
     );
 
-    const nomineeDoc = await db
-      .collection("nominees")
-      .doc(nomineeWithMostVotes)
-      .get();
-
-    if (nomineeDoc.exists) {
-      const nomineeData = nomineeDoc.data();
-      const nomineeId = Object.keys(campaign.nominees).find(
-        (key) => campaign.nominees[key] === nomineeWithMostVotes
-      );
-
-      if (nomineeId) {
-        const pictureUrl = nomineeData.picture;
+    const nomineeDataPromises = nomineesWithMostVotes.map(async (nomineeId) => {
+      const nomineeDoc = await db.collection("nominees").doc(nomineeId).get();
+      if (nomineeDoc.exists) {
+        const nomineeData = nomineeDoc.data();
         const name =
           nomineeData.firstName + " " + nomineeData.lastName ||
           "something went wrong";
-        return { name, pictureUrl };
+        return { name, pictureUrl: nomineeData.picture };
       }
-    }
+      return null;
+    });
 
-    return null;
+    const nomineeDataArray = await Promise.all(nomineeDataPromises);
+    return nomineeDataArray.filter((nomineeData) => nomineeData !== null);
   };
 
   useEffect(() => {
     const fetchNomineePictures = async () => {
       const pictures = await Promise.all(
-        campaigns.map((campaign) => getNomineeWithMostVotes(campaign))
+        campaigns.map((campaign) => getNomineesWithMostVotes(campaign))
       );
       setNomineePictures(pictures);
     };
@@ -146,45 +139,34 @@ export default function Voting() {
           ) : (
             campaigns.map((campaign, index) => {
               const nomineeWithMostVotes = nomineePictures[index];
-
-              console.log(nomineeWithMostVotes);
               return (
                 <Card key={campaign.id} style={styles.card}>
-                  <Card.Cover
-                    source={
-                      nomineeWithMostVotes && nomineeWithMostVotes.pictureUrl
-                        ? { uri: nomineeWithMostVotes.pictureUrl }
-                        : require("../../assets/businessman-character-avatar.jpg")
-                    }
-                    style={styles.cardMedia}
-                  />
+                  <Text style={styles.positionText}>
+                    Position: {positionNames[campaign.position] || "Position"}
+                  </Text>
+                  {nomineeWithMostVotes && nomineeWithMostVotes.length > 0 ? (
+                    nomineeWithMostVotes.map((nomineeData, index) => (
+                      <View key={index}>
+                        <Card.Cover
+                          source={
+                            nomineeData.pictureUrl
+                              ? { uri: nomineeData.pictureUrl }
+                              : require("../../assets/businessman-character-avatar.jpg")
+                          }
+                          style={styles.cardMedia}
+                        />
+                        <View style={styles.winnerContainer}>
+                          <Text style={styles.winnerText}>
+                            WINNER ({index + 1}) {nomineeData.name}
+                          </Text>
+                        </View>
+                      </View>
+                    ))
+                  ) : (
+                    <Text>Loading...</Text>
+                  )}
+
                   <Card.Content>
-                    <View
-                      style={{
-                        backgroundColor: colors.secoundary,
-                        borderRadius: 15,
-                        paddingHorizontal: 15,
-                        margin: 15,
-                        alignSelf: "center",
-                        paddingVertical: 5,
-                      }}
-                    >
-                      <Text
-                        style={{
-                          fontWeight: "900",
-                          color: colors.textsecoundary,
-                          fontSize: 17,
-                        }}
-                      >
-                        WINNER
-                        {nomineeWithMostVotes && nomineeWithMostVotes.name
-                          ? `: ${nomineeWithMostVotes.name}`
-                          : ": something went wrong"}
-                      </Text>
-                    </View>
-                    <Text style={styles.positionText}>
-                      Position: {positionNames[campaign.position] || "Position"}
-                    </Text>
                     {Object.values(campaign.nominees).map(
                       (nomineeId, index) => {
                         const voteCount = Object.values(
@@ -242,10 +224,13 @@ const styles = StyleSheet.create({
   positionText: {
     fontSize: 20,
     fontWeight: "900",
-    marginBottom: 8,
     color: colors.textPrimary,
     marginHorizontal: "auto",
     marginVertical: 10,
+    backgroundColor: colors.backgroundSecoundary,
+    padding: 10,
+    borderRadius: 8,
+    margin: 5,
   },
   nomineeText: {
     fontSize: 12,
@@ -260,4 +245,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     marginTop: 8,
   },
+  winnerContainer: {
+    backgroundColor: colors.secoundary,
+    borderRadius: 15,
+    paddingHorizontal: 15,
+    margin: 15,
+    alignSelf: "center",
+    paddingVertical: 5,
+  },
+  winnerText: { fontWeight: "900", color: colors.textsecoundary, fontSize: 17 },
 });
